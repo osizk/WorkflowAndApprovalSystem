@@ -1,6 +1,6 @@
 # Software Requirements Specification — Workflow and Approval System
 
-**Version:** draft 0.1, 7 November 2026. **Status:** Issue #1 draft on `codex/s1-01-srs`; no implementation or verification is claimed.
+**Version:** draft 0.1, 7 November 2026. **Status:** Issue #1 draft on `docs/s1-01-srs`; no implementation or verification is claimed.
 
 **Sources:** `docs/sprint1/group_work_specs_v1.pdf` (Theme 5 and engineering baseline) and `docs/sprint1/project_deliverable_1_v1.pdf` (Deliverable 1 rubric). This SRS is intended for Part A of the self-contained Deliverable 1 PDF.
 
