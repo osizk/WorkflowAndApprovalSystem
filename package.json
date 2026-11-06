@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
-    "test:auth": "npm run build && node --test tests/auth.test.mjs",
+    "test:auth": "npm run build && node --test tests/auth.test.mjs tests/auth-safety.test.mjs",
+    "test:auth-safety": "npm run build && node --test tests/auth-safety.test.mjs",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",

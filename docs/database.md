@@ -32,3 +32,5 @@ For migration tests, set `TEST_DATABASE_URL` explicitly to a separate, disposabl
 After generating the Prisma client and seeding, set `PUBLIC_ORIGIN` to the exact browser origin (for example `http://localhost:3000`), run `npm run build` then `npm start`. `POST /api/session` and `DELETE /api/session` require a matching `Origin` header. Login accepts JSON `login` and `password`; `GET /api/session` returns the current id and role; logout revokes the cookie. Set `PORT` if the API should listen somewhere other than 3000. Under HTTPS, the session cookie is Secure.
 
 For real API/database verification, set `TEST_DATABASE_URL` to a disposable local PostgreSQL `_test` database, run `npm run db:test:setup`, then `npm run test:auth`. The test creates and removes its own synthetic users and sessions. It does not use the development database. `TEST-01`–`TEST-03`, the exact expiry instant using a controlled clock, and the protected-role boundary are covered.
+
+`npm run test:auth-safety` runs the generic-error logging regression without a database. It confirms that a forced database error neither reaches the client nor prints sensitive error details.

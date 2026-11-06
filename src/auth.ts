@@ -1,8 +1,10 @@
-import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import type { PrismaClient, Role, User } from '@prisma/client';
 
 const lifetimeMs = 8 * 60 * 60 * 1000;
+const derivePassword = promisify(scrypt);
 type AuthRequest = Request & { authUser?: Pick<User, 'id' | 'role'> };
 
 function error(res: Response, status: number, code: string, message: string) {
@@ -17,10 +19,10 @@ function digest(token: string) {
   return createHash('sha256').update(token).digest('hex');
 }
 
-function validPassword(password: string, stored: string) {
+async function validPassword(password: string, stored: string) {
   const parts = stored.split(':');
   if (parts.length !== 3 || parts[0] !== 'scrypt' || !/^[0-9a-f]{32}$/.test(parts[1]) || !/^[0-9a-f]{128}$/.test(parts[2])) return false;
-  const actual = scryptSync(password, Buffer.from(parts[1], 'hex'), 64);
+  const actual = await derivePassword(password, Buffer.from(parts[1], 'hex'), 64) as Buffer;
   return timingSafeEqual(actual, Buffer.from(parts[2], 'hex'));
 }
 
@@ -64,7 +66,7 @@ export function createApp(db: PrismaClient, options: { origin: string; now?: () 
     }
     const login = body.login.trim().toLowerCase();
     const user = await db.user.findUnique({ where: { login } });
-    if (!user || !validPassword(body.password, user.passwordHash)) return error(res, 401, 'INVALID_CREDENTIALS', 'Invalid credentials');
+    if (!user || !await validPassword(body.password, user.passwordHash)) return error(res, 401, 'INVALID_CREDENTIALS', 'Invalid credentials');
     const token = randomBytes(32).toString('hex');
     await db.session.create({ data: { tokenDigest: digest(token), userId: user.id, expiresAt: new Date((options.now?.() ?? new Date()).getTime() + lifetimeMs) } });
     res.cookie('session', token, { ...cookieOptions, maxAge: lifetimeMs });
@@ -85,7 +87,7 @@ export function createApp(db: PrismaClient, options: { origin: string; now?: () 
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     if ('type' in err && err.type === 'entity.parse.failed') return error(res, 400, 'BAD_REQUEST', 'Malformed JSON');
-    console.error(err);
+    console.error('API request failed');
     return error(res, 500, 'INTERNAL_ERROR', 'Unexpected server error');
   });
   return app;
