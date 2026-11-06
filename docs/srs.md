@@ -6,7 +6,7 @@
 
 ## Context and actors
 
-An internal department needs a controlled way to submit purchase requests and record approval decisions. The purchase context is proposed under D-01, not prescribed by the course. A **Requester** submits and reads their own requests. An assigned **Reviewer** reads and decides requests assigned to them. Seeded synthetic accounts are sufficient for Sprint 1.
+An internal department needs a controlled way to submit purchase requests and record approval decisions. The purchase context was selected by both delegated agents under D-01; it is not prescribed by the course. A **Requester** submits and reads their own requests. An assigned **Reviewer** reads and decides requests assigned to them. Seeded synthetic accounts are sufficient for Sprint 1.
 
 ## Scope and exclusions
 
@@ -35,13 +35,13 @@ The application must use a real UI, API/application layer, and persistent databa
 | --- | --- | --- |
 | BR-01 | A request is owned by its authenticated Requester; client-supplied user IDs or roles never grant access. | Course-required |
 | BR-02 | A review decision is allowed only for the assigned, authenticated Reviewer, who must differ from the Requester. | Course-required; assignment method D-02 |
-| BR-03 | If no eligible preset Reviewer exists, submission is rejected without saving a submitted request. | Proposed D-02 |
-| BR-04 | After submission, the request cannot be edited in Sprint 1. | Proposed D-03 |
-| BR-05 | Rejection requires a nonblank reason; approval reason is optional. | Proposed D-04 |
+| BR-03 | If no eligible preset Reviewer exists, submission is rejected without saving a submitted request. | Delegated selection D-02 |
+| BR-04 | After submission, the request cannot be edited in Sprint 1. | Delegated selection D-03 |
+| BR-05 | Rejection requires a nonblank reason; approval reason is optional. | Delegated selection D-04 |
 | BR-06 | Only a submitted request may be approved or rejected. One valid decision wins and writes one history entry; any competing or repeated attempt after that leaves status and history unchanged. | Course-required transition rule |
 | BR-07 | A successful decision changes status and writes one history entry atomically. | Course-required persistence behavior |
-| BR-08 | Sprint 1 has one approval stage; later stages require an agreed change. | Proposed D-06 |
-| BR-09 | A request needs a title of 3–120 characters and purpose of 10–2,000 characters, counted after trimming outer whitespace, plus an exact THB amount from 0.01 to 1,000,000.00 with at most two decimal places. Both bounds are inclusive. | Proposed D-05 |
+| BR-08 | Sprint 1 has one approval stage; later stages require an agreed change. | Delegated selection D-06 |
+| BR-09 | A request needs a title of 3–120 characters and purpose of 10–2,000 characters, counted after trimming outer whitespace, plus an exact THB amount from 0.01 to 1,000,000.00 with at most two decimal places. Both bounds are inclusive. | Delegated selection D-05 |
 
 ## Important nonfunctional requirements
 
