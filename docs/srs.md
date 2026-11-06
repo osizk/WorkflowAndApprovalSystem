@@ -41,7 +41,7 @@ The application must use a real UI, API/application layer, and persistent databa
 | BR-06 | Only a submitted request may be approved or rejected; repeated, concurrent, or otherwise invalid decisions leave status and history unchanged. | Course-required transition rule |
 | BR-07 | A successful decision changes status and writes one history entry atomically. | Course-required persistence behavior |
 | BR-08 | Sprint 1 has one approval stage; later stages require an agreed change. | Proposed D-06 |
-| BR-09 | A request must contain a title, purpose, and positive amount; exact limits are pending D-05. | Proposed D-05 |
+| BR-09 | A request needs a title of 3–120 characters and purpose of 10–2,000 characters, counted after trimming outer whitespace, plus an exact THB amount from 0.01 to 1,000,000.00 with at most two decimal places. Both bounds are inclusive. | Proposed D-05 |
 
 ## Important nonfunctional requirements
 
@@ -62,7 +62,7 @@ The application must use a real UI, API/application layer, and persistent databa
 | D-02 | Preset eligible Reviewer; block submission if none is eligible — proposed. | Contract must define mapping and no-reviewer API response. |
 | D-03 | Lock after submission — proposed. | Contract must reject edit attempts. |
 | D-04 | Rejection reason required, approval reason optional — proposed. | Contract must define whitespace and length checks. |
-| D-05 | Title, purpose, positive amount — proposed. **Proposed limits:** title 3–120 characters, purpose 10–2,000 characters, amount 0.01–1,000,000.00 in one agreed currency with at most two decimal places. | Course brief sets no numeric limits. Pair must confirm currency and exact values before F-02 contract or coding. |
+| D-05 | Title 3–120 characters, purpose 10–2,000 characters after trimming outer whitespace; exact THB amount 0.01–1,000,000.00 with at most two decimal places — proposed through delegated agents. | Course brief sets no numeric limits. Record pair review before F-02 contract or coding; test both inclusive bounds and first invalid values. |
 | D-06 | One stage in Sprint 1 — proposed. | Any later stage needs a scoped, approved change. |
 
 Status labels describe decisions only; they do not claim implementation, test execution, teammate PR review, or release. Feature mapping and AC/TEST IDs are to be completed in Issues #2 and the Sprint 1 contracts. The final video-duration contradiction is outside Deliverable 1 and remains for instructor/TA clarification.
