@@ -1,6 +1,8 @@
 # Sprint 1 engineering contracts
 
-Version 0.1 — initial review draft for Issue #2. Applies to F-01 through F-03. Changes after review must name the changed requirement, reason, version and affected acceptance criteria and tests. Exact framework, session lifetime, and decision-reason maximum are open for review; the affected work must use the accepted values.
+Version 0.2 for Issue #2. Applies to F-01 through F-03.
+
+Revision history: v0.1 introduced AC-01–14. v0.2 resolves review findings by specifying session expiry (FR-01, AC-03 / TEST-03), reason bounds (BR-05, AC-11 / TEST-11), and payloads (FR-02–06, AC-04 / TEST-04 and AC-10 / TEST-10). It moves inventory and traceability into dedicated files without renumbering requirements or checks.
 
 ## F-01 — Identity and session
 
@@ -12,7 +14,7 @@ The login page accepts a login and password and shows a generic error for invali
 | GET /api/session | Session cookie; 200 with id and role, 401 if absent/expired |
 | DELETE /api/session | Revoke session and clear cookie; 204, including repeated logout |
 
-Verify the password against a salted hash and create a new opaque session. Store its digest with expiry server-side. Use an HttpOnly, SameSite cookie and Secure under HTTPS; check request origin for state-changing calls. Bad credentials return 401 and create no session. Protected requests derive identity from the session only.
+Verify the password against a salted hash and create a new opaque session. Store its SHA-256 digest with an absolute expiry of eight hours after login, with no renewal in Sprint 1. Reject expired sessions at or after the expiry instant and set the cookie lifetime to match. Use an HttpOnly, SameSite cookie and Secure under HTTPS; check request origin for state-changing calls. Bad credentials return 401 and create no session. Protected requests derive identity from the session only.
 
 ## F-02 — Submit and retrieve a purchase request
 
@@ -28,9 +30,17 @@ Trim outer whitespace and count Unicode code points. Accept title 3–120 and pu
 
 ## F-03 — Decide and retrieve history
 
-The reviewer sees only assigned requests. On submitted detail, display Approve and Reject, and a reason field. Require a nonblank trimmed reason for rejection. Approval may omit it. Disable decision controls while submitting and after a terminal decision; refresh detail on conflict. Both authorized roles see persisted history in detail, oldest first with a stable tie-breaker.
+The reviewer sees only assigned requests. On submitted detail, display Approve and Reject, and a reason field. Require a nonblank trimmed reason for rejection. Approval may omit it. A supplied reason must contain 1–500 Unicode code points after trimming. Omitted approval reason is stored as null. Disable decision controls while submitting and after a terminal decision; refresh detail on conflict. Both authorized roles see persisted history in detail, oldest first with a stable tie-breaker.
 
 POST /api/requests/{id}/decision accepts decision APPROVE or REJECT and optional reason; returns 200 with saved status and history. Invalid fields return 422. Requester callers receive 403 and out-of-scope or missing IDs return 404; all protected routes return 401 without a valid session. A terminal request or a lost concurrent attempt returns 409 DECISION_CONFLICT. Only the first eligible update from SUBMITTED can write the terminal status and one matching event. Transaction failure rolls back both writes. There is one stage and no return transition in Sprint 1.
+
+## Response and storage details
+
+- Session responses contain only `id` and `role` (`REQUESTER` or `REVIEWER`). The cookie is named `session`.
+- List returns `{ requests: [...] }`. Submit, detail and decision return `{ request: {...} }`. Request summary fields are `id`, `title`, `amount`, `currency` (THB), `status`, and `createdAt`. Detail adds `purpose`, `requesterId`, `reviewerId`, and `history`; submit and decision return the detail shape. Sort lists by creation time then ID descending.
+- Each history entry contains `id`, `type` (SUBMITTED, APPROVED or REJECTED), `actorId`, `createdAt`, and nullable `reason`. History sorts by creation time then ID ascending. Timestamps are ISO 8601 UTC.
+- The preset assignment is a table keyed by requester ID with a reviewer ID. Persist request amount as integer satang in [1, 100000000]. Require request and event foreign keys and enforce one terminal event per request. The service validates assigned roles and performs state changes atomically.
+- Errors use `{ error: { code, message, fields? } }`; `fields` maps invalid field names to messages. Use AUTH_REQUIRED, INVALID_CREDENTIALS, FORBIDDEN, NOT_FOUND and VALIDATION_ERROR for the corresponding common errors. Malformed JSON returns 400 BAD_REQUEST. Use generic messages for missing or out-of-scope IDs.
 
 ## Acceptance criteria and software test specification
 
@@ -40,7 +50,7 @@ Every row is planned. Use synthetic accounts and isolated deterministic fixtures
 | --- | --- | --- | --- |
 | AC-01 / TEST-01 | API | Seed both roles, log in as each, then get session | Correct identity and role; response excludes credentials |
 | AC-02 / TEST-02 | API | Submit bad password, then call a protected route without a session | 401 in both cases; no session created |
-| AC-03 / TEST-03 | API | Log in, log out, then reuse that cookie | Logout 204; reuse returns 401 |
+| AC-03 / TEST-03 | API | Log in, log out, then reuse that cookie | Logout 204; reuse returns 401. A fresh session works before eight hours and returns 401 at the expiry instant using a controlled clock |
 | AC-04 / TEST-04 | API/DB | Requester with eligible mapping submits a valid request, reloads detail | 201, assigned reviewer, persisted SUBMITTED and one submission event |
 | AC-05 / TEST-05 | API/DB | Try exact field bounds, adjacent invalid lengths/amounts, whitespace-only text and excess decimal precision | Both bounds accepted, invalid inputs 422, no invalid writes, amount round-trips exactly |
 | AC-06 / TEST-06 | API/DB | Try absent, wrong-role and self reviewer mapping | 409 for each; no request or event |
@@ -48,7 +58,7 @@ Every row is planned. Use synthetic accounts and isolated deterministic fixtures
 | AC-08 / TEST-08 | API/DB | Attempt to edit a submitted request | No supported edit operation; stored data remains unchanged |
 | AC-09 / TEST-09 | API | Two reviewers with different assignments list and read detail/history; requester attempts decision | Assigned rows only; out-of-scope detail/decision 404; requester decision 403 |
 | AC-10 / TEST-10 | API/DB | Approve without reason; reject another request with a reason; reload both | Each terminal state has one matching durable decision event |
-| AC-11 / TEST-11 | API/DB | Reject without a reason or with whitespace only | 422; no status change or event |
+| AC-11 / TEST-11 | API/DB | Reject without a reason, with whitespace only, or with 501 code points; also reject an oversized approval reason and accept a valid 500-code-point reason on a separate request | Invalid attempts return 422 and write nothing; the valid boundary returns 200 and writes one event |
 | AC-12 / TEST-12 | API/DB | Race two decisions on one request and retry the loser | One 200, remaining attempts 409, exactly one terminal event |
 | AC-13 / TEST-13 | API/DB | Force decision event insertion failure after status update | Transaction rolls back; still SUBMITTED with original history |
 | AC-14 / TEST-14 | Manual and system | Run documented setup/build/test on the release commit; complete the journey by keyboard on desktop and mobile; restart and retrieve; inspect for exposed secrets | Runnable release, reachable and labelled controls, no horizontal overflow, durable data, no secret exposure; record commands and outcomes |
