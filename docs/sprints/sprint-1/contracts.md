@@ -1,12 +1,14 @@
 # Sprint 1 engineering contracts
 
-Version 0.4 for Issue #4. Applies to F-01 through F-03.
+Version 0.5 for Issue #5. Applies to F-01 through F-03.
 
 Revision history: v0.1 introduced AC-01–14. v0.2 resolves review findings by specifying session expiry (FR-01, AC-03 / TEST-03), reason bounds (BR-05, AC-11 / TEST-11), and payloads (FR-02–06, AC-04 / TEST-04 and AC-10 / TEST-10). It moves inventory and traceability into dedicated files without renumbering requirements or checks.
 
 v0.3 adds feature scope, UI routes and database constraints for Issue #3. AC and TEST IDs are unchanged.
 
 v0.4 specifies the synthetic seed and isolated test database setup for Issue #4. It changes no AC or TEST IDs. The seed creates two Requesters and two Reviewers with preset one-to-one assignments, reads passwords from private environment variables, and preserves existing users, credentials, assignments, requests and history on rerun. Test migration setup requires an explicit local PostgreSQL URL with a database name ending `_test` and rejects a target matching the development database. See [database setup](../../database.md) for the commands and verification limits.
+
+v0.5 specifies Issue #5 implementation details before the authentication API: login lookup trims and lowercases the supplied login; seed hashes use `scrypt:<salt hex>:<hash hex>`; the API checks the Origin header on POST and DELETE against its configured public origin and rejects missing or mismatched origins with 403. Session cookies use HttpOnly, SameSite=Lax, Path=/, and eight-hour Max-Age; HTTPS adds Secure. The API accepts only `login` and `password` JSON fields for login. These details support F-01 without changing AC or TEST IDs.
 
 ## F-01 — Identity and session
 
