@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  REQUESTER
+  REVIEWER
+}
+
+enum RequestStatus {
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String @id @default(uuid()) @db.Uuid
+  login        String @unique
+  passwordHash String @map("password_hash")
+  role         Role
+
+  sessions       Session[]
+  assignment     ReviewerAssignment? @relation("AssignedRequester")
+  reviewees      ReviewerAssignment[] @relation("PresetReviewer")
+  requests       PurchaseRequest[] @relation("RequestOwner")
+  reviews        PurchaseRequest[] @relation("RequestReviewer")
+  events         RequestEvent[]
+
+  @@map("users")
+}
+
+model Session {
+  tokenDigest String   @id @map("token_digest") @db.Char(64)
+  userId      String   @map("user_id") @db.Uuid
+  expiresAt   DateTime @map("expires_at") @db.Timestamptz
+  user        User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model ReviewerAssignment {
+  requesterId String @id @map("requester_id") @db.Uuid
+  reviewerId  String @map("reviewer_id") @db.Uuid
+  requester   User   @relation("AssignedRequester", fields: [requesterId], references: [id], onDelete: Restrict)
+  reviewer    User   @relation("PresetReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+
+  @@map("reviewer_assignments")
+}
+
+model PurchaseRequest {
+  id           String        @id @default(uuid()) @db.Uuid
+  requesterId  String        @map("requester_id") @db.Uuid
+  reviewerId   String        @map("reviewer_id") @db.Uuid
+  title        String        @db.VarChar(120)
+  purpose      String        @db.VarChar(2000)
+  amountSatang Int           @map("amount_satang")
+  status       RequestStatus @default(SUBMITTED)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  requester    User          @relation("RequestOwner", fields: [requesterId], references: [id], onDelete: Restrict)
+  reviewer     User          @relation("RequestReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+  events       RequestEvent[]
+
+  @@index([requesterId, createdAt, id])
+  @@index([reviewerId, createdAt, id])
+  @@map("purchase_requests")
+}
+
+model RequestEvent {
+  id        String          @id @default(uuid()) @db.Uuid
+  requestId String          @map("request_id") @db.Uuid
+  actorId   String          @map("actor_id") @db.Uuid
+  type      RequestStatus
+  createdAt DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  reason    String?         @db.VarChar(500)
+  request   PurchaseRequest @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  actor     User            @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([requestId, createdAt, id])
+  @@map("request_events")
+}
