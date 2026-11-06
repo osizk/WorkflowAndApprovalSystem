@@ -3,7 +3,11 @@
   "private": true,
   "scripts": {
     "db:validate": "prisma validate",
-    "db:migrate": "prisma migrate deploy"
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "node scripts/seed.mjs",
+    "db:test:setup": "node scripts/test-db.mjs",
+    "test:db-guard": "node --test tests/test-db.test.mjs"
   },
   "dependencies": { "@prisma/client": "6.19.0" },
   "devDependencies": { "prisma": "6.19.0" }
