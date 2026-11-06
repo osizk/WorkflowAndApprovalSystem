@@ -38,7 +38,7 @@ The application must use a real UI, API/application layer, and persistent databa
 | BR-03 | If no eligible preset Reviewer exists, submission is rejected without saving a submitted request. | Proposed D-02 |
 | BR-04 | After submission, the request cannot be edited in Sprint 1. | Proposed D-03 |
 | BR-05 | Rejection requires a nonblank reason; approval reason is optional. | Proposed D-04 |
-| BR-06 | Only a submitted request may be approved or rejected; repeated, concurrent, or otherwise invalid decisions leave status and history unchanged. | Course-required transition rule |
+| BR-06 | Only a submitted request may be approved or rejected. One valid decision wins and writes one history entry; any competing or repeated attempt after that leaves status and history unchanged. | Course-required transition rule |
 | BR-07 | A successful decision changes status and writes one history entry atomically. | Course-required persistence behavior |
 | BR-08 | Sprint 1 has one approval stage; later stages require an agreed change. | Proposed D-06 |
 | BR-09 | A request needs a title of 3–120 characters and purpose of 10–2,000 characters, counted after trimming outer whitespace, plus an exact THB amount from 0.01 to 1,000,000.00 with at most two decimal places. Both bounds are inclusive. | Proposed D-05 |
@@ -58,11 +58,11 @@ The application must use a real UI, API/application layer, and persistent databa
 
 | ID | Choice and status | Evidence/next action |
 | --- | --- | --- |
-| D-01 | Internal purchase requests — proposed by the students' delegated agents; pair approval still to be recorded. | Confirm exact context in Issue #1/PR review. |
-| D-02 | Preset eligible Reviewer; block submission if none is eligible — proposed. | Contract must define mapping and no-reviewer API response. |
-| D-03 | Lock after submission — proposed. | Contract must reject edit attempts. |
-| D-04 | Rejection reason required, approval reason optional — proposed. | Contract must define whitespace and length checks. |
-| D-05 | Title 3–120 characters, purpose 10–2,000 characters after trimming outer whitespace; exact THB amount 0.01–1,000,000.00 with at most two decimal places — proposed through delegated agents. | Course brief sets no numeric limits. Record pair review before F-02 contract or coding; test both inclusive bounds and first invalid values. |
-| D-06 | One stage in Sprint 1 — proposed. | Any later stage needs a scoped, approved change. |
+| D-01 | Internal purchase requests — selected by both delegated agents on 7 Nov; direct student approval not independently verified. | Confirm exact context in Issue #1/PR review. |
+| D-02 | Preset eligible Reviewer; block submission if none is eligible — selected by both delegated agents. | Contract must define mapping and no-reviewer API response. |
+| D-03 | Lock after submission — selected by both delegated agents. | Contract must reject edit attempts. |
+| D-04 | Rejection reason required, approval reason optional — selected by both delegated agents. | Contract must define whitespace and length checks. |
+| D-05 | Title 3–120 characters, purpose 10–2,000 characters after trimming outer whitespace; exact THB amount 0.01–1,000,000.00 with at most two decimal places — selected by both delegated agents. | Course brief sets no numeric limits. Record pair review before F-02 contract or coding; test both inclusive bounds and first invalid values. |
+| D-06 | One stage in Sprint 1 — selected by both delegated agents. | Any later stage needs a scoped, approved change. |
 
-Status labels describe decisions only; they do not claim implementation, test execution, teammate PR review, or release. Feature mapping and AC/TEST IDs are to be completed in Issues #2 and the Sprint 1 contracts. The final video-duration contradiction is outside Deliverable 1 and remains for instructor/TA clarification.
+The delegated-agent selection applies to D-01–D-06; it records the agents' stated choices, not independently verified student approval. Contract details remain open as noted above. Status labels do not claim implementation, test execution, teammate PR review, or release. Feature mapping and AC/TEST IDs are to be completed in Issues #2 and the Sprint 1 contracts. The final video-duration contradiction is outside Deliverable 1 and remains for instructor/TA clarification.
