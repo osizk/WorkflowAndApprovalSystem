@@ -1,4 +1,4 @@
-# Requirements traceability — v0.2
+# Requirements traceability — v0.3
 
 | Feature | Sprint | SRS coverage | Depends on | Verification / gap |
 | --- | --- | --- | --- | --- |

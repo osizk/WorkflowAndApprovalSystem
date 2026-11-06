@@ -1,6 +1,6 @@
 # System-Level Software Design — Sprint 1
 
-Version 0.2, review baseline. Sources: Deliverable 1 §4.1 Parts B–E and [SRS](srs.md). Feature-level behavior and verification are in the [contracts](sprints/sprint-1/contracts.md). Decisions D-01–D-06 follow the staged SRS. The v0.2 stack and interface choices are specified below and take effect after review.
+Version 0.3, review baseline. Sources: Deliverable 1 §4.1 Parts B–E and [SRS](srs.md). Feature-level behavior and verification are in the [contracts](sprints/sprint-1/contracts.md). Decisions D-01–D-06 follow the staged SRS. The v0.3 stack and interface choices are specified below and take effect after review.
 
 ## Architecture and deployment
 
