@@ -15,4 +15,4 @@ No SRS requirement IDs were added or changed. The inventory table tracks planned
 
 ## Issue #7 — actual F-02 verification
 
-AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/requests.test.mjs), test "F-02: guarded submission, scoped retrieval and durable history". The command npm run test:requests passed 1 test with 0 failures and 0 skips on PostgreSQL 16.15, using the ea1d0a2 implementation plus the two-character title regression from this review revision. The database rejects self-assignment at schema level; the API suite exercises absent and wrong-role assignments. This is branch evidence, not the release retest.
+AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/requests.test.mjs), test "F-02: guarded submission, scoped retrieval and durable history". The command npm run test:requests passed 1 test with 0 failures and 0 skips on PostgreSQL 16.15, on exact commit c139ca9, including the two-character title regression. The database rejects self-assignment at schema level; the API suite exercises absent and wrong-role assignments. This is branch evidence, not the release retest.
