@@ -16,7 +16,8 @@
     "test:auth-ui": "npm run build && node --test tests/auth-ui.test.mjs",
     "test:requests": "npm run build && node --test tests/requests.test.mjs",
     "test:request-ui": "npm run build && node --test tests/request-ui.test.mjs",
-    "test:decisions": "npm run build && node --test tests/decisions.test.mjs"
+    "test:decisions": "npm run build && node --test tests/decisions.test.mjs",
+    "test:review-ui": "npm run build && node --test tests/review-ui.test.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, type FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RequestWorkspace } from './requests';
+import { ReviewWorkspace } from './reviews';
 import './style.css';
 
 type Identity = { id: string; role: 'REQUESTER' | 'REVIEWER' };
@@ -23,7 +24,7 @@ function App() {
     if (user.role === 'REQUESTER') {
       if (!/^\/requests(?:\/|$)/.test(window.location.pathname)) navigate('/requests');
     } else {
-      navigate('/reviews');
+      if (!/^\/reviews(?:\/|$)/.test(window.location.pathname)) navigate('/reviews');
     }
     setScreen('signed-in');
   }
@@ -116,7 +117,7 @@ function App() {
           </form>
         </>}
         {screen === 'signed-in' && identity && <>
-          {identity.role === 'REQUESTER' ? <RequestWorkspace heading={heading} /> : <h1 id="page-title" tabIndex={-1} ref={heading}>Review queue</h1>}
+          {identity.role === 'REQUESTER' ? <RequestWorkspace heading={heading} /> : <ReviewWorkspace heading={heading} />}
           <p role="status">Signed in as {identity.role === 'REQUESTER' ? 'Requester' : 'Reviewer'}.</p>
           {error && <p className="error" role="alert">{error}</p>}
           <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
