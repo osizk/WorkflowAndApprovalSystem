@@ -34,3 +34,16 @@ After generating the Prisma client and seeding, set `PUBLIC_ORIGIN` to the exact
 For real API/database verification, set `TEST_DATABASE_URL` to a disposable local PostgreSQL `_test` database, run `npm run db:test:setup`, then `npm run test:auth`. The test creates and removes its own synthetic users and sessions. It does not use the development database. `TEST-01`–`TEST-03`, the exact expiry instant using a controlled clock, and the protected-role boundary are covered.
 
 `npm run test:auth-safety` runs the generic-error logging regression without a database. It confirms that a forced database error neither reaches the client nor prints sensitive error details.
+
+## Run the login UI
+
+After generating the client, migrating, and seeding the local database, set DATABASE_URL and PUBLIC_ORIGIN in the process environment. For port 3000, use PUBLIC_ORIGIN=http://localhost:3000 and open that exact origin at /login.
+
+```sh
+npm run build
+npm start
+```
+
+The browser and API share the same origin. The server derives the destination from the authenticated role. Request and review functionality is added in the later feature issues.
+
+For the real browser check, migrate a separate local database using TEST_DATABASE_URL and run npm run test:auth-ui. Use WORKFLOW_BROWSER_CHANNEL=msedge for an installed Edge browser, or install the Playwright Chromium browser and leave the channel unset. The test starts a local server on port 55476 and cleans up its synthetic accounts and sessions.
