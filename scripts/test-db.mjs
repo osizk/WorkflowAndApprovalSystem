@@ -24,10 +24,14 @@ export function testDatabaseUrl(testUrl, developmentUrl) {
   return url.href;
 }
 
+export function developmentDatabaseUrl() {
+  const localEnv = existsSync('.env') ? parseEnv(readFileSync('.env', 'utf8')) : {};
+  return process.env.DATABASE_URL || localEnv.DATABASE_URL;
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const localEnv = existsSync('.env') ? parseEnv(readFileSync('.env', 'utf8')) : {};
-    const databaseUrl = testDatabaseUrl(process.env.TEST_DATABASE_URL, process.env.DATABASE_URL || localEnv.DATABASE_URL);
+    const databaseUrl = testDatabaseUrl(process.env.TEST_DATABASE_URL, developmentDatabaseUrl());
     const result = spawnSync(process.execPath, ['node_modules/prisma/build/index.js', 'migrate', 'deploy'], {
       stdio: 'inherit',
       env: { ...process.env, DATABASE_URL: databaseUrl },
