@@ -19,7 +19,7 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 
 ## Issue #8 — requester browser journey
 
-[tests/request-ui.test.mjs](../tests/request-ui.test.mjs), test "F-02: browser submits and retrieves a saved request", covers the real UI → API → PostgreSQL journey and retry states. Kane reported that this test passed on d6690fc with PostgreSQL 16.15, with no skips, in his PR #22 approval; pex independently ran a mocked browser smoke, not this database test. The API checks above remain separate evidence. Release retesting is still pending.
+[tests/request-ui.test.mjs](../tests/request-ui.test.mjs), test "F-02: browser submits and retrieves a saved request", covers the real UI → API → PostgreSQL journey and retry states. Kane reported that this test passed on d6690fc with PostgreSQL 16.15, with no skips, in his PR #22 approval; pex independently ran a mocked browser smoke, not this database test. The API checks above remain separate evidence. See the release verification below.
 
 ## Issue #9 — decision API verification
 
@@ -31,7 +31,7 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 
 ## Sprint 1 AC result map before release retest
 
-The results below are issue-level results reported by kane on disposable PostgreSQL 16.15, unless a row says pending. Pex wrote or reviewed tests and ran the local build and database-independent checks; pex could not rerun PostgreSQL checks on this computer. The full staging regression and release commit have not yet been verified.
+The results below are issue-level results reported by kane on disposable PostgreSQL 16.15, unless a row says pending. Pex wrote or reviewed tests and ran the local build and database-independent checks; pex could not rerun PostgreSQL checks on this computer. These rows preserve issue-level results from before release verification.
 
 | AC / planned test | Actual test file and name | Current result and limit |
 | --- | --- | --- |
@@ -48,8 +48,14 @@ The results below are issue-level results reported by kane on disposable Postgre
 | AC-11 / TEST-11 | `decisions.test.mjs`, same first test; `review-ui.test.mjs`, same browser test | Reported pass on those commits; rejection reason required, 500 accepted and 501 rejected. |
 | AC-12 / TEST-12 | `decisions.test.mjs`, “TEST-12: concurrent and repeated decisions create one terminal event” | Reported pass on 1410169. |
 | AC-13 / TEST-13 | `decisions.test.mjs`, “TEST-13: failed event insert rolls back the status update” | Reported pass on 1410169. |
-| AC-14 / TEST-14 | [journey.test.mjs](../tests/journey.test.mjs), “Sprint 1: requester to reviewer decision survives application restart”; manual keyboard, mobile, setup and secret inspection | Journey passed in the full suite on 055892d with PostgreSQL 16.15 and Edge. Pex's local keyboard/mobile and bundle checks are described below. Release retest remains pending. |
+| AC-14 / TEST-14 | [journey.test.mjs](../tests/journey.test.mjs), “Sprint 1: requester to reviewer decision survives application restart”; manual keyboard, mobile, setup and secret inspection | Journey passed in the full suite on 055892d with PostgreSQL 16.15 and Edge. Pex's local keyboard/mobile and bundle checks are described below. See the release verification below. |
 
 Issue #11 local checks on 055892d (pex, Node 24.14.0): `npm run build` passed; `npm run test:auth-safety` passed 1/1; `npm run test:db-guard` passed 2/2; `git diff --check` passed. Only `.env.example` matched the tracked environment-file check, and a scan of the browser bundle found no `DATABASE_URL`, `SEED_`, `X-API-Key` or PostgreSQL connection-string markers. Pex also drove login, request navigation, form entry and a reviewer-unavailable retry by keyboard at 390px width in Edge, with mocked API responses; controls remained reachable and no horizontal overflow appeared. This is a local UI check, not the PostgreSQL 16 journey or full release acceptance.
 
 Kane reported the full Issue #11 run on exact 055892d: migration, Prisma client generation and build passed; `npm run test:sprint1` passed 13 tests with 0 failures and 0 skips on Edge and PostgreSQL 16.15. The suite includes the real browser requester → assigned reviewer approval and retrieval after an application server restart. `tests/schema.sql` also passed and rolled back its fixtures, including the new self-assignment assertion. These are staging-branch results reported by kane, not a retest of a tagged main release or a direct observation by pex.
+
+## Sprint 1 release verification
+
+The release at [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c) passed all 13 Sprint 1 tests with zero failures or skips. PostgreSQL schema checks rolled back their fixtures. A second seed run preserved the stored rows. Both npm audit modes reported zero vulnerabilities at verification time.
+
+AC-14 keyboard replay on the released app used Edge at 1440 px and 390 px. At both widths Tab and Enter reached the labeled controls for sign-in, submission, approval, sign-out and retrieval. Visible focus and the field-associated title error were checked. The checked views had no horizontal overflow. The Requester retrieved the approved request with both history events. The automated journey independently verified persistence across application restart.
