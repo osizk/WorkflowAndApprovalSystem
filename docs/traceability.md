@@ -24,3 +24,7 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 ## Issue #9 — decision API verification
 
 [tests/decisions.test.mjs](../tests/decisions.test.mjs) covers TEST-09–13 for role isolation, reason bounds, durable decision history, concurrent attempts, and rollback after event failure. Kane ran test-first commit c6a51aa on fresh PostgreSQL 16.15: migration and build passed, and all 3 decision tests failed with 404 because the route was absent (0 skipped). On exact implementation commit 1410169, he reported migration and build passing and `npm run test:decisions` passing 3/3, with 0 failures and 0 skips. These are branch results, not a release retest.
+
+## Issue #10 — F-03 browser verification
+
+[tests/review-ui.test.mjs](../tests/review-ui.test.mjs) exercises AC-09–11 with Edge and PostgreSQL 16.15. On exact 24183a3, npm run test:review-ui passed 1/1 with zero failures or skips. It verified that a submitted request assigned to another reviewer is absent from the queue and cannot be opened, and checked reason validation, approval, rejection and persisted history after reload. AC-12–13 remain covered by the separate decision API suite. This is branch evidence.
