@@ -36,7 +36,7 @@ test('F-02: guarded submission, scoped retrieval and durable history', async () 
     const valid = { title: '  Pens ', purpose: 'Office supplies', amount: '0.01' };
     assert.equal((await call(null)).status, 401);
     assert.equal((await call(assigned, '', 'POST', valid)).status, 403);
-    for (const invalid of [{ ...valid, amount: '0.001' }, { ...valid, amount: '1000000.01' }, { ...valid, title: '  ' }, { ...valid, title: 'x'.repeat(121) }, { ...valid, purpose: 'x'.repeat(9) }, { ...valid, purpose: 'x'.repeat(2001) }, { ...valid, amount: '0.00' }, { ...valid, reviewerId: unrelated.id }]) {
+    for (const invalid of [{ ...valid, amount: '0.001' }, { ...valid, amount: '1000000.01' }, { ...valid, title: '  ' }, { ...valid, title: 'ab' }, { ...valid, title: 'x'.repeat(121) }, { ...valid, purpose: 'x'.repeat(9) }, { ...valid, purpose: 'x'.repeat(2001) }, { ...valid, amount: '0.00' }, { ...valid, reviewerId: unrelated.id }]) {
       assert.equal((await call(owner, '', 'POST', invalid)).status, 422);
     }
     assert.equal((await call(other, '', 'POST', valid)).status, 409);
