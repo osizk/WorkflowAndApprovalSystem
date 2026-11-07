@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
 import { randomBytes, randomUUID, scryptSync } from 'node:crypto';
-import { once } from 'node:events';
 import { test } from 'node:test';
 import { PrismaClient } from '@prisma/client';
 import { chromium } from 'playwright';
+import { startBrowserServer, stopBrowserServer } from './browser-server.mjs';
 import { developmentDatabaseUrl, testDatabaseUrl } from '../scripts/test-db.mjs';
 
 test('F-01: browser login, reload and logout against PostgreSQL', { timeout: 30000 }, async () => {
@@ -13,20 +12,13 @@ test('F-01: browser login, reload and logout against PostgreSQL', { timeout: 300
   const password = randomUUID();
   const salt = randomBytes(16);
   const hash = scryptSync(password, salt, 64).toString('hex');
-  const origin = 'http://127.0.0.1:55476';
   let server, browser, requester, reviewer;
   try {
     requester = await db.user.create({ data: { login: randomUUID(), role: 'REQUESTER', passwordHash: `scrypt:${salt.toString('hex')}:${hash}` } });
     reviewer = await db.user.create({ data: { login: randomUUID(), role: 'REVIEWER', passwordHash: requester.passwordHash } });
-    server = spawn(process.execPath, ['dist/server.js'], {
-      env: { ...process.env, DATABASE_URL: url, PUBLIC_ORIGIN: origin, PORT: '55476' },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    await Promise.race([
-      once(server.stdout, 'data'),
-      once(server, 'exit').then(([code]) => { throw new Error(`API exited: ${code}`); }),
-      once(server, 'error').then(([error]) => { throw error; }),
-    ]);
+    const started = await startBrowserServer(url);
+    server = started.server;
+    const { origin } = started;
     browser = await chromium.launch({ channel: process.env.WORKFLOW_BROWSER_CHANNEL || undefined });
     const page = await browser.newPage();
     page.setDefaultTimeout(5000);
@@ -53,11 +45,7 @@ test('F-01: browser login, reload and logout against PostgreSQL', { timeout: 300
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
   } finally {
     await browser?.close();
-    if (server && server.exitCode === null && server.pid) {
-      const exited = once(server, 'exit');
-      server.kill();
-      await exited;
-    }
+    await stopBrowserServer(server);
     for (const user of [requester, reviewer]) {
       if (!user) continue;
       await db.session.deleteMany({ where: { userId: user.id } });

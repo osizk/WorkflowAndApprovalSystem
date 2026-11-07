@@ -15,6 +15,14 @@ flowchart LR
 
 Use versioned migrations and synthetic accounts for local setup. Keep database connection and session settings server-side in environment variables; publish only example values. Tests run against an isolated database with deterministic fixtures. Future deployment uses HTTPS, separate runtime credentials and a persistent managed database; run migrations as a controlled release step before traffic, then check login and the full purchase journey. Containerization, hosted deployment and CI completion belong to later work.
 
+### Stack rationale
+
+A single Node.js process serves the React application and API, keeping the local setup and later container deployment small. One origin also keeps the session cookie and API requests on the same host. TypeScript provides static checks across the browser and server. PostgreSQL enforces relational constraints and lets the service update status and history in one transaction. Prisma provides a typed database client and repeatable migrations.
+
+### Planned GCP deployment
+
+Publish a container with the Node.js server and built browser assets to Artifact Registry and run it on Cloud Run over HTTPS. Configure `PUBLIC_ORIGIN` with the service URL. Store durable data in Cloud SQL for PostgreSQL and provide `DATABASE_URL` through Secret Manager and the service identity. Run migrations as a controlled release job before shifting traffic, then verify sign-in and retrieval of a persisted decision. Docker, CI, and deployment are scheduled for Lab 5.
+
 ## Data and access
 
 ```mermaid
@@ -40,6 +48,6 @@ See the [feature inventory](features.md) and [requirements traceability](traceab
 
 ## Three-sprint plan
 
-1. Sprint 1 delivers a locally runnable purchase request from seeded login through a persisted reviewer decision. Completion requires the contracts, end-to-end journey, negative tests and reviewed integration evidence.
+1. Sprint 1 includes F-01 identity and session, F-02 request submission and retrieval, and F-03 review and history. F-01 requires migrated PostgreSQL and seeded accounts; F-02 adds preset reviewer assignments and persisted requests; F-03 depends on both and on atomic decision writes. Complete the sprint when the local purchase journey, access and negative tests, and reviewed staging-to-main integration are verified.
 2. Sprint 2 adds return/revise/resubmit and list filters (F-04–05) after the Sprint 1 transition rules and ownership checks are stable. Demonstrate a revised submission and scoped filtering.
 3. Sprint 3 adds decision summaries (F-06) and hardens the accepted workflow. Verify that reports respect role and ownership rules and that the release can be reproduced.

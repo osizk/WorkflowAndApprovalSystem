@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
 import { randomBytes, randomUUID, scryptSync } from 'node:crypto';
-import { once } from 'node:events';
 import { test } from 'node:test';
 import { PrismaClient } from '@prisma/client';
 import { chromium } from 'playwright';
+import { startBrowserServer, stopBrowserServer } from './browser-server.mjs';
 import { developmentDatabaseUrl, testDatabaseUrl } from '../scripts/test-db.mjs';
 
 test('F-03: reviewer rejects an assigned request and reads persisted history', { timeout: 30000 }, async () => {
@@ -13,21 +12,14 @@ test('F-03: reviewer rejects an assigned request and reads persisted history', {
   const password = randomUUID();
   const salt = randomBytes(16);
   const hash = `scrypt:${salt.toString('hex')}:${scryptSync(password, salt, 64).toString('hex')}`;
-  const origin = 'http://127.0.0.1:55478';
   let server, browser, requester, reviewer, unrelated;
   try {
     requester = await db.user.create({ data: { login: randomUUID(), role: 'REQUESTER', passwordHash: hash } });
     reviewer = await db.user.create({ data: { login: randomUUID(), role: 'REVIEWER', passwordHash: hash } });
     unrelated = await db.user.create({ data: { login: randomUUID(), role: 'REVIEWER', passwordHash: hash } });
-    server = spawn(process.execPath, ['dist/server.js'], {
-      env: { ...process.env, DATABASE_URL: url, PUBLIC_ORIGIN: origin, PORT: '55478' },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    await Promise.race([
-      once(server.stdout, 'data'),
-      once(server, 'exit').then(([code]) => { throw new Error(`API exited: ${code}`); }),
-      once(server, 'error').then(([error]) => { throw error; }),
-    ]);
+    const started = await startBrowserServer(url);
+    server = started.server;
+    const { origin } = started;
     browser = await chromium.launch({ channel: process.env.WORKFLOW_BROWSER_CHANNEL || undefined });
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     page.setDefaultTimeout(5000);
@@ -72,11 +64,7 @@ test('F-03: reviewer rejects an assigned request and reads persisted history', {
     await page.getByText('Request not found.').waitFor();
   } finally {
     await browser?.close();
-    if (server && server.exitCode === null && server.pid) {
-      const exited = once(server, 'exit');
-      server.kill();
-      await exited;
-    }
+    await stopBrowserServer(server);
     if (requester) {
       await db.requestEvent.deleteMany({ where: { request: { requesterId: requester.id } } });
       await db.purchaseRequest.deleteMany({ where: { requesterId: requester.id } });

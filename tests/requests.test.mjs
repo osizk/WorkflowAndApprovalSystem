@@ -55,16 +55,30 @@ test('F-02: guarded submission, scoped retrieval and durable history', async () 
     assert.equal(request.history[0].actorId, owner.id);
     assert.equal(request.history[0].type, 'SUBMITTED');
     assert.equal((await call(owner, '/' + request.id, 'PATCH', valid)).status, 404);
-    for (const who of [other, unrelated]) {
-      assert.deepEqual(await (await call(who)).json(), { requests: [] });
-      assert.equal((await call(who, '/' + request.id)).status, 404);
-    }
+    await db.reviewerAssignment.update({
+      where: { requesterId: other.id },
+      data: { reviewerId: unrelated.id },
+    });
+    const otherCreated = await call(other, '', 'POST', { ...valid, title: 'Second request' });
+    assert.equal(otherCreated.status, 201);
+    const { request: otherRequest } = await otherCreated.json();
+    assert.equal(otherRequest.requesterId, other.id);
+    assert.equal(otherRequest.reviewerId, unrelated.id);
+
     assert.equal((await call(owner, '/invalid-id')).status, 404);
     await db.$disconnect();
-    for (const who of [owner, assigned]) {
-      assert.deepEqual(await (await call(who, '/' + request.id)).json(), { request });
-      const { requests } = await (await call(who)).json();
-      assert.deepEqual(requests.map(({ id }) => id), [request.id]);
+    for (const [who, visible, privateRequest] of [
+      [owner, request, otherRequest],
+      [other, otherRequest, request],
+      [assigned, request, otherRequest],
+      [unrelated, otherRequest, request],
+    ]) {
+      assert.deepEqual(await (await call(who, '/' + visible.id)).json(), { request: visible });
+      assert.equal((await call(who, '/' + privateRequest.id)).status, 404);
+      const list = await call(who);
+      assert.equal(list.status, 200);
+      const { requests } = await list.json();
+      assert.deepEqual(requests.map(({ id }) => id), [visible.id]);
       assert.equal('history' in requests[0], false);
     }
     const upper = await call(owner, '', 'POST', { title: 'x'.repeat(120), purpose: 'x'.repeat(2000), amount: '1000000.00' });
