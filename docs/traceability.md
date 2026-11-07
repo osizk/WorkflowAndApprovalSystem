@@ -23,4 +23,4 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 
 ## Issue #9 — decision API verification
 
-[tests/decisions.test.mjs](../tests/decisions.test.mjs) plans TEST-09–13 for role isolation, reason bounds, durable decision history, concurrent attempts, and rollback after event failure. Kane ran the test-first commit c6a51aa on fresh PostgreSQL 16.15: migration and build passed, and all 3 decision tests failed with 404 because the route was absent (0 skipped). This is the reported red baseline; a green run on the implementation commit is pending.
+[tests/decisions.test.mjs](../tests/decisions.test.mjs) covers TEST-09–13 for role isolation, reason bounds, durable decision history, concurrent attempts, and rollback after event failure. Kane ran test-first commit c6a51aa on fresh PostgreSQL 16.15: migration and build passed, and all 3 decision tests failed with 404 because the route was absent (0 skipped). On exact implementation commit 1410169, he reported migration and build passing and `npm run test:decisions` passing 3/3, with 0 failures and 0 skips. These are branch results, not a release retest.
