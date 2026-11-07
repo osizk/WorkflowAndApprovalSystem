@@ -14,7 +14,7 @@ npm run db:migrate
 Run the SQL verification only on a fresh disposable database whose name ends in _test, after applying the migration:
 
 ```sh
-psql -X -d "$DATABASE_URL" -f tests/schema.sql
+psql -X -d "$TEST_DATABASE_URL" -f tests/schema.sql
 ```
 
 The script inserts deterministic fixtures inside a transaction and rolls them back. It checks ownership references, self-review, amount limits, blank rejection reasons, transaction rollback and duplicate terminal events. It is not a substitute for the session, API authorization or concurrent decision tests in the feature contracts.
@@ -44,7 +44,7 @@ npm run build
 npm start
 ```
 
-The browser and API share the same origin. The server derives the destination from the authenticated role. Reviewer decisions are added in a later feature issue.
+The browser and API share the same origin. The server derives the destination from the authenticated role. Assigned reviewers can decide requests at /reviews and /reviews/{id}.
 
 Requester pages are `/requests`, `/requests/new`, and `/requests/{id}`. The form shows validation and reviewer-unavailable errors without clearing entered values; a successful submission opens the saved read-only detail. `npm run test:request-ui` checks the browser journey against the isolated `TEST_DATABASE_URL` after `npm run db:test:setup`. The test creates and removes its own synthetic users and request.
 
