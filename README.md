@@ -41,4 +41,4 @@ The integrated suite builds the server and browser bundle, then runs guard, auth
 
 ## Release and scope
 
-The Sprint 1 release is identified by its immutable commit on main and the reference recorded in the Deliverable 1 report. This increment covers one approval stage and local execution. Return/revise, richer filtering, reports and hosted deployment are later work. Dependency audit findings in the pinned Prisma CLI tree require a separate reviewed tooling update.
+The Sprint 1 release is identified by its immutable commit on main and the reference recorded in the Deliverable 1 report. This increment covers one approval stage and local execution. Return/revise, richer filtering, reports and hosted deployment are later work. PR #29 updated the Sprint 1 release at [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c). Both npm audit and npm audit --omit=dev reported zero vulnerabilities when checked on that release.
