@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, type FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
+import { RequestWorkspace } from './requests';
 import './style.css';
 
 type Identity = { id: string; role: 'REQUESTER' | 'REVIEWER' };
@@ -19,7 +20,11 @@ function App() {
 
   function showIdentity(user: Identity) {
     setIdentity(user);
-    navigate(user.role === 'REQUESTER' ? '/requests' : '/reviews');
+    if (user.role === 'REQUESTER') {
+      if (!/^\/requests(?:\/|$)/.test(window.location.pathname)) navigate('/requests');
+    } else {
+      navigate('/reviews');
+    }
     setScreen('signed-in');
   }
 
@@ -90,7 +95,7 @@ function App() {
 
   return (
     <main>
-      <section aria-labelledby="page-title">
+      <section className={screen === 'signed-in' && identity?.role === 'REQUESTER' ? 'workspace-shell' : undefined} aria-labelledby="page-title">
         <p className="product">Workflow and Approval System</p>
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>
@@ -111,7 +116,7 @@ function App() {
           </form>
         </>}
         {screen === 'signed-in' && identity && <>
-          <h1 id="page-title" tabIndex={-1} ref={heading}>{identity.role === 'REQUESTER' ? 'My requests' : 'Review queue'}</h1>
+          {identity.role === 'REQUESTER' ? <RequestWorkspace heading={heading} /> : <h1 id="page-title" tabIndex={-1} ref={heading}>Review queue</h1>}
           <p role="status">Signed in as {identity.role === 'REQUESTER' ? 'Requester' : 'Reviewer'}.</p>
           {error && <p className="error" role="alert">{error}</p>}
           <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
