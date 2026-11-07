@@ -44,6 +44,8 @@ npm run build
 npm start
 ```
 
-The browser and API share the same origin. The server derives the destination from the authenticated role. Request and review functionality is added in the later feature issues.
+The browser and API share the same origin. The server derives the destination from the authenticated role. Reviewer decisions are added in a later feature issue.
+
+Requester pages are `/requests`, `/requests/new`, and `/requests/{id}`. The form shows validation and reviewer-unavailable errors without clearing entered values; a successful submission opens the saved read-only detail. `npm run test:request-ui` checks the browser journey against the isolated `TEST_DATABASE_URL` after `npm run db:test:setup`. The test creates and removes its own synthetic users and request.
 
 For the real browser check, migrate a separate local database using TEST_DATABASE_URL and run npm run test:auth-ui. Use WORKFLOW_BROWSER_CHANNEL=msedge for an installed Edge browser, or install the Playwright Chromium browser and leave the channel unset. The test starts a local server on port 55476 and cleans up its synthetic accounts and sessions.

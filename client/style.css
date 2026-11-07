@@ -19,12 +19,21 @@ section {
   border: 1px solid #c8dbcf;
   border-radius: 18px;
 }
+.workspace-shell { width: min(100%, 720px); }
+.workspace { overflow-wrap: anywhere; }
+.workspace a { color: #174b37; font-weight: 700; }
+.request-list { list-style: none; padding: 0; display: grid; gap: 12px; }
+.request-list li { border: 1px solid #c8dbcf; border-radius: 8px; padding: 12px; display: grid; gap: 4px; }
+.request-list span { color: #385847; }
+.request-detail { margin-top: 20px; }
+.request-detail ol { padding-left: 24px; }
 .product { font-size: .875rem; font-weight: 700; margin-top: 0; }
 h1 { line-height: 1.15; margin: .5rem 0; }
 form { display: grid; gap: .5rem; margin-top: 1.5rem; }
 label { font-weight: 650; }
-input, button { font: inherit; min-height: 44px; border-radius: 8px; }
-input { width: 100%; border: 1px solid #718e7d; padding: 8px 12px; margin-bottom: .35rem; }
+input, textarea, button { font: inherit; min-height: 44px; border-radius: 8px; }
+input, textarea { width: 100%; border: 1px solid #718e7d; padding: 8px 12px; margin-bottom: .35rem; }
+textarea { min-height: 120px; resize: vertical; }
 button {
   border: 1px solid #174b37;
   padding: 8px 14px;

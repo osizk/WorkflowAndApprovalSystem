@@ -11,7 +11,7 @@ const app = createApp(db, { origin });
 const webRoot = resolve('client-dist');
 
 app.use('/assets', express.static(resolve(webRoot, 'assets')));
-app.get(['/', '/login', '/requests', '/reviews'], (_req, res) => {
+app.get(['/', '/login', '/requests', '/requests/new', '/requests/:id', '/reviews'], (_req, res) => {
   res.sendFile('index.html', { root: webRoot });
 });
 app.listen(port, () => console.log(`API listening on port ${port}`));

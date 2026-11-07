@@ -16,3 +16,7 @@ No SRS requirement IDs were added or changed. The inventory table tracks planned
 ## Issue #7 — actual F-02 verification
 
 AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/requests.test.mjs), test "F-02: guarded submission, scoped retrieval and durable history". The command npm run test:requests passed 1 test with 0 failures and 0 skips on PostgreSQL 16.15, on exact commit c139ca9, including the two-character title regression. The database rejects self-assignment at schema level; the API suite exercises absent and wrong-role assignments. This is branch evidence, not the release retest.
+
+## Issue #8 — requester browser journey
+
+[tests/request-ui.test.mjs](../tests/request-ui.test.mjs), test "F-02: browser submits and retrieves a saved request", is planned for the real UI → API → PostgreSQL journey and retry states. It is not yet executed on a database; record its tested commit and result after the isolated run. The API checks above remain separate evidence.
