@@ -21,7 +21,7 @@
     "test:sprint1": "npm run build && node --test --test-concurrency=1 tests/test-db.test.mjs tests/auth.test.mjs tests/auth-safety.test.mjs tests/auth-ui.test.mjs tests/requests.test.mjs tests/request-ui.test.mjs tests/decisions.test.mjs tests/review-ui.test.mjs tests/journey.test.mjs"
   },
   "dependencies": {
-    "@prisma/client": "6.19.0",
+    "@prisma/client": "6.19.3",
     "express": "5.1.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
@@ -32,8 +32,13 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "playwright": "1.65.0",
-    "prisma": "6.19.0",
+    "prisma": "6.19.3",
     "typescript": "5.9.3",
     "vite": "7.3.7"
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.1"
+    }
   }
 }
