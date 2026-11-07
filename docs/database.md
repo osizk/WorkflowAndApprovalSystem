@@ -14,7 +14,7 @@ npm run db:migrate
 Run the SQL verification only on a fresh disposable database whose name ends in _test, after applying the migration:
 
 ```sh
-psql -X -d "$DATABASE_URL" -f tests/schema.sql
+psql -X -d "$TEST_DATABASE_URL" -f tests/schema.sql
 ```
 
 The script inserts deterministic fixtures inside a transaction and rolls them back. It checks ownership references, self-review, amount limits, blank rejection reasons, transaction rollback and duplicate terminal events. It is not a substitute for the session, API authorization or concurrent decision tests in the feature contracts.
@@ -23,7 +23,7 @@ The requester and assigned reviewer are retained on every purchase request. The 
 
 ## Synthetic seed and test database (Issue #4)
 
-After migration, set `SEED_REQUESTER1_PASSWORD`, `SEED_REQUESTER2_PASSWORD`, `SEED_REVIEWER1_PASSWORD`, and `SEED_REVIEWER2_PASSWORD` privately to values of at least 12 characters, then run `npm run db:seed`. The seed creates `requester1`, `requester2`, `reviewer1`, and `reviewer2`; each requester has the matching reviewer assigned. Passwords are salted with Node's scrypt and stored as `scrypt:<salt hex>:<hash hex>`. The login implementation must verify this format. Repeating the seed preserves existing passwords, roles, assignments, requests and history. It never prints passwords. Do not commit the password values or a local environment file.
+After migration, set `SEED_REQUESTER1_PASSWORD`, `SEED_REQUESTER2_PASSWORD`, `SEED_REVIEWER1_PASSWORD`, and `SEED_REVIEWER2_PASSWORD` privately to values of at least 12 characters, then run `node --env-file=.env scripts/seed.mjs` from the repository root. If DATABASE_URL is already exported, `npm run db:seed` also works. The seed creates `requester1`, `requester2`, `reviewer1`, and `reviewer2`; each requester has the matching reviewer assigned. Passwords are salted with Node's scrypt and stored as `scrypt:<salt hex>:<hash hex>`. The login implementation must verify this format. Repeating the seed preserves existing passwords, roles, assignments, requests and history. It never prints passwords. Do not commit the password values or a local environment file.
 
 For migration tests, set `TEST_DATABASE_URL` explicitly to a separate, disposable **local** PostgreSQL database whose name ends in `_test`, then run `npm run db:test:setup`. This command refuses missing, remote, or non-`_test` targets, URL routing options, and a target matching the development database even across loopback aliases or an omitted default port. It reads the development URL from the process or local `.env`; it never falls back to that URL for tests. Run `npm run test:db-guard` to check these guards. The SQL fixture verification still uses `psql -X -d "$TEST_DATABASE_URL" -f tests/schema.sql` after setup. Never point the test URL at development or production data.
 
@@ -44,7 +44,7 @@ npm run build
 npm start
 ```
 
-The browser and API share the same origin. The server derives the destination from the authenticated role. Reviewer decisions are added in a later feature issue.
+The browser and API share the same origin. The server derives the destination from the authenticated role. Assigned reviewers can decide requests at /reviews and /reviews/{id}.
 
 Requester pages are `/requests`, `/requests/new`, and `/requests/{id}`. The form shows validation and reviewer-unavailable errors without clearing entered values; a successful submission opens the saved read-only detail. `npm run test:request-ui` checks the browser journey against the isolated `TEST_DATABASE_URL` after `npm run db:test:setup`. The test creates and removes its own synthetic users and request.
 
