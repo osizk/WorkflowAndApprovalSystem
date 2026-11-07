@@ -11,4 +11,8 @@
 | Release checks | 1 | NFR-06; cross-feature NFR-01, NFR-03–04 | F-01–03 | AC-14 / TEST-14 |
 | Additional approval stages | Unscheduled | FR-08 candidate | Scope approval | Outside baseline |
 
-No SRS requirement IDs were added or changed. All verification rows are planned; actual test paths, results and tested release commit will be recorded after execution.
+No SRS requirement IDs were added or changed. The inventory table tracks planned verification. Issue-level evidence is recorded below as it becomes available; the tested release commit and release results will be recorded separately.
+
+## Issue #7 — actual F-02 verification
+
+AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/requests.test.mjs), test "F-02: guarded submission, scoped retrieval and durable history". The command npm run test:requests passed 1 test with 0 failures and 0 skips on PostgreSQL 16.15, on exact commit c139ca9, including the two-character title regression. The database rejects self-assignment at schema level; the API suite exercises absent and wrong-role assignments. This is branch evidence, not the release retest.
