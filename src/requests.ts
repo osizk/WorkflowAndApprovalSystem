@@ -3,6 +3,7 @@ import type { Express, RequestHandler, Response } from 'express';
 import type { AuthRequest } from './auth.js';
 
 type Fields = Record<string, string>;
+const uuidPattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 
 function fail(res: Response, status: number, code: string, message: string, fields?: Fields) {
   return res.status(status).json({ error: { code, message, ...(fields && { fields }) } });
@@ -30,6 +31,28 @@ function parsePurchase(body: unknown) {
     fields.amount = 'Enter THB 0.01 to 1,000,000.00 with at most two decimal places.';
   }
   return Object.keys(fields).length ? { fields } : { value: { title, purpose, amountSatang } };
+}
+
+function parseDecision(body: unknown) {
+  const fields: Fields = {};
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { fields: { body: 'Provide a decision object.' } };
+  }
+  const input = body as Record<string, unknown>;
+  if (Object.keys(input).some((key) => !['decision', 'reason'].includes(key))) fields.body = 'Unexpected decision fields.';
+  if (input.decision !== 'APPROVE' && input.decision !== 'REJECT') fields.decision = 'Choose APPROVE or REJECT.';
+  let reason: string | null = null;
+  if (Object.hasOwn(input, 'reason')) {
+    if (typeof input.reason !== 'string') fields.reason = 'Enter 1 to 500 characters.';
+    else {
+      reason = input.reason.trim();
+      if ([...reason].length < 1 || [...reason].length > 500) fields.reason = 'Enter 1 to 500 characters.';
+    }
+  }
+  if (input.decision === 'REJECT' && !reason) fields.reason = 'A rejection reason is required.';
+  if (Object.keys(fields).length) return { fields };
+  const status: 'APPROVED' | 'REJECTED' = input.decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+  return { value: { status, reason } };
 }
 
 function summarize(request: PurchaseRequest) {
@@ -61,7 +84,7 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     const user = (req as AuthRequest).authUser!;
     const id = req.params.id;
     const notFound = () => fail(res, 404, 'NOT_FOUND', 'Request not found');
-    if (typeof id !== 'string' || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(id)) return notFound();
+    if (typeof id !== 'string' || !uuidPattern.test(id)) return notFound();
     const scope = user.role === 'REQUESTER' ? { requesterId: user.id } : { reviewerId: user.id };
     const request = await db.purchaseRequest.findFirst({
       where: { id, ...scope },
@@ -92,5 +115,29 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     });
     if (!request) return fail(res, 409, 'REVIEWER_UNAVAILABLE', 'No eligible reviewer is available');
     return res.status(201).json({ request: requestDetail(request) });
+  });
+
+  app.post('/api/requests/:id/decision', session, async (req, res) => {
+    const user = (req as AuthRequest).authUser!;
+    if (user.role !== 'REVIEWER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const id = req.params.id;
+    const notFound = () => fail(res, 404, 'NOT_FOUND', 'Request not found');
+    if (typeof id !== 'string' || !uuidPattern.test(id)) return notFound();
+    const assigned = await db.purchaseRequest.findFirst({ where: { id, reviewerId: user.id } });
+    if (!assigned) return notFound();
+    if (assigned.requesterId === user.id) return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const parsed = parseDecision(req.body);
+    if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the decision fields', parsed.fields);
+    const result = await db.$transaction(async (tx) => {
+      const updated = await tx.purchaseRequest.updateMany({
+        where: { id, reviewerId: user.id, requesterId: { not: user.id }, status: 'SUBMITTED' },
+        data: { status: parsed.value.status },
+      });
+      if (updated.count !== 1) return null;
+      await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: parsed.value.status, reason: parsed.value.reason } });
+      return tx.purchaseRequest.findUniqueOrThrow({ where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } } });
+    });
+    if (!result) return fail(res, 409, 'DECISION_CONFLICT', 'Request has already been decided');
+    return res.json({ request: requestDetail(result) });
   });
 }
