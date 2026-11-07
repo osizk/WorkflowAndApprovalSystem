@@ -1,6 +1,6 @@
 # Workflow and Approval System
 
-CPE 334 Theme 5, Team EN-037 (DoubleP). Sprint 1 supports internal purchase requests: a Requester submits a request, an assigned Reviewer approves or rejects it, and authorized users can retrieve its saved status and history.
+CPE 334 Theme 5. Sprint 1 supports internal purchase requests: a Requester submits a request, an assigned Reviewer approves or rejects it, and authorized users can retrieve its saved status and history.
 
 Read the [SRS](docs/srs.md), [system design](docs/system-sds.md), [feature inventory](docs/features.md), [traceability](docs/traceability.md), and [Sprint 1 contracts](docs/sprints/sprint-1/contracts.md).
 
@@ -18,7 +18,7 @@ npm run db:migrate
 Set SEED_REQUESTER1_PASSWORD, SEED_REQUESTER2_PASSWORD, SEED_REVIEWER1_PASSWORD, and SEED_REVIEWER2_PASSWORD privately in the current shell. Each synthetic password must be at least 12 characters. Then run:
 
 ```sh
-npm run db:seed
+node --env-file=.env scripts/seed.mjs
 npm run build
 node --env-file=.env dist/server.js
 ```
