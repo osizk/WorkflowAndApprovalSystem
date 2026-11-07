@@ -48,4 +48,8 @@ The browser and API share the same origin. The server derives the destination fr
 
 Requester pages are `/requests`, `/requests/new`, and `/requests/{id}`. The form shows validation and reviewer-unavailable errors without clearing entered values; a successful submission opens the saved read-only detail. `npm run test:request-ui` checks the browser journey against the isolated `TEST_DATABASE_URL` after `npm run db:test:setup`. The test creates and removes its own synthetic users and request.
 
+## Reviewer decision API (Issue #9)
+
+An assigned Reviewer sends `POST /api/requests/{id}/decision` with JSON `{"decision":"APPROVE"}` or `{"decision":"REJECT","reason":"..."}`. The server derives identity from the session, rejects requester and unrelated reviewer calls, and writes the terminal state and history event in one transaction. Repeated or lost concurrent decisions return 409. Run `npm run test:decisions` only against the explicit disposable `TEST_DATABASE_URL` after test migration setup. The test covers role scope, reason bounds, concurrent decisions, and rollback after a forced event insert failure.
+
 For the real browser check, migrate a separate local database using TEST_DATABASE_URL and run npm run test:auth-ui. Use WORKFLOW_BROWSER_CHANNEL=msedge for an installed Edge browser, or install the Playwright Chromium browser and leave the channel unset. The test starts a local server on port 55476 and cleans up its synthetic accounts and sessions.

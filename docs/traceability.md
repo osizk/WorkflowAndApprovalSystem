@@ -19,4 +19,8 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 
 ## Issue #8 — requester browser journey
 
-[tests/request-ui.test.mjs](../tests/request-ui.test.mjs), test "F-02: browser submits and retrieves a saved request", is planned for the real UI → API → PostgreSQL journey and retry states. It is not yet executed on a database; record its tested commit and result after the isolated run. The API checks above remain separate evidence.
+[tests/request-ui.test.mjs](../tests/request-ui.test.mjs), test "F-02: browser submits and retrieves a saved request", covers the real UI → API → PostgreSQL journey and retry states. Kane reported that this test passed on d6690fc with PostgreSQL 16.15, with no skips, in his PR #22 approval; pex independently ran a mocked browser smoke, not this database test. The API checks above remain separate evidence. Release retesting is still pending.
+
+## Issue #9 — decision API verification
+
+[tests/decisions.test.mjs](../tests/decisions.test.mjs) plans TEST-09–13 for role isolation, reason bounds, durable decision history, concurrent attempts, and rollback after event failure. Kane ran the test-first commit c6a51aa on fresh PostgreSQL 16.15: migration and build passed, and all 3 decision tests failed with 404 because the route was absent (0 skipped). This is the reported red baseline; a green run on the implementation commit is pending.
