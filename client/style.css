@@ -45,3 +45,7 @@ button {
 button:disabled { opacity: .65; cursor: wait; }
 :focus-visible { outline: 3px solid #30714e; outline-offset: 3px; }
 .error { color: #a32626; margin: 0; }
+
+.decision-controls { display: grid; gap: .5rem; margin-block: 1rem; }
+.decision-controls p { margin: 0; }
+.decision-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
