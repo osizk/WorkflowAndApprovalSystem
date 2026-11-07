@@ -17,7 +17,8 @@
     "test:requests": "npm run build && node --test tests/requests.test.mjs",
     "test:request-ui": "npm run build && node --test tests/request-ui.test.mjs",
     "test:decisions": "npm run build && node --test tests/decisions.test.mjs",
-    "test:review-ui": "npm run build && node --test tests/review-ui.test.mjs"
+    "test:review-ui": "npm run build && node --test tests/review-ui.test.mjs",
+    "test:sprint1": "npm run build && node --test --test-concurrency=1 tests/test-db.test.mjs tests/auth.test.mjs tests/auth-safety.test.mjs tests/auth-ui.test.mjs tests/requests.test.mjs tests/request-ui.test.mjs tests/decisions.test.mjs tests/review-ui.test.mjs tests/journey.test.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
