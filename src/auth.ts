@@ -3,9 +3,11 @@ import { promisify } from 'node:util';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import type { PrismaClient, Role, User } from '@prisma/client';
 
+import { mountRequestRoutes } from './requests.js';
+
 const lifetimeMs = 8 * 60 * 60 * 1000;
 const derivePassword = promisify(scrypt);
-type AuthRequest = Request & { authUser?: Pick<User, 'id' | 'role'> };
+export type AuthRequest = Request & { authUser?: Pick<User, 'id' | 'role'> };
 
 function error(res: Response, status: number, code: string, message: string) {
   return res.status(status).json({ error: { code, message } });
@@ -84,6 +86,8 @@ export function createApp(db: PrismaClient, options: { origin: string; now?: () 
     res.clearCookie('session', cookieOptions);
     res.status(204).end();
   });
+
+  mountRequestRoutes(app, db, requireSession(db, options.now));
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     if ('type' in err && err.type === 'entity.parse.failed') return error(res, 400, 'BAD_REQUEST', 'Malformed JSON');
