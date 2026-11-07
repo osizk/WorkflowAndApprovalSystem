@@ -37,6 +37,7 @@ test('F-03: reviewer rejects an assigned request and reads persisted history', {
     } });
     const hidden = await db.purchaseRequest.create({ data: {
       requesterId: requester.id, reviewerId: unrelated.id, title: 'Hidden request', purpose: 'Office supplies', amountSatang: 120,
+      events: { create: { actorId: requester.id, type: 'SUBMITTED' } },
     } });
     const approval = await db.purchaseRequest.create({ data: {
       requesterId: requester.id, reviewerId: reviewer.id, title: 'Paper', purpose: 'Office supplies', amountSatang: 120,
