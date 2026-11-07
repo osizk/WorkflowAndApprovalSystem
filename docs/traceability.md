@@ -28,3 +28,24 @@ AC-04–08 / TEST-04–08 are exercised by [tests/requests.test.mjs](../tests/re
 ## Issue #10 — F-03 browser verification
 
 [tests/review-ui.test.mjs](../tests/review-ui.test.mjs) exercises AC-09–11 with Edge and PostgreSQL 16.15. On exact 24183a3, npm run test:review-ui passed 1/1 with zero failures or skips. It verified that a submitted request assigned to another reviewer is absent from the queue and cannot be opened, and checked reason validation, approval, rejection and persisted history after reload. AC-12–13 remain covered by the separate decision API suite. This is branch evidence.
+
+## Sprint 1 AC result map before release retest
+
+The results below are issue-level results reported by kane on disposable PostgreSQL 16.15, unless a row says pending. Pex wrote or reviewed tests and ran the local build and database-independent checks; pex could not rerun PostgreSQL checks on this computer. The full staging regression and release commit have not yet been verified.
+
+| AC / planned test | Actual test file and name | Current result and limit |
+| --- | --- | --- |
+| AC-01 / TEST-01 | [auth.test.mjs](../tests/auth.test.mjs), “TEST-01 to TEST-03: login, current identity, role isolation and logout” | Reported pass on b6d2413; both roles and current identity. |
+| AC-02 / TEST-02 | `auth.test.mjs`, same test | Reported pass on b6d2413; wrong password and anonymous request. |
+| AC-03 / TEST-03 | `auth.test.mjs`, same test plus “TEST-03: expired session and wrong origin are refused” | Reported pass on b6d2413; logout and controlled expiry boundary. |
+| AC-04 / TEST-04 | [requests.test.mjs](../tests/requests.test.mjs), “F-02: guarded submission, scoped retrieval and durable history”; [request-ui.test.mjs](../tests/request-ui.test.mjs), “F-02: browser submits and retrieves a saved request” | API reported pass on c139ca9; browser reported pass on d6690fc. |
+| AC-05 / TEST-05 | `requests.test.mjs`, same API test | Reported pass on c139ca9; amount and text bounds. |
+| AC-06 / TEST-06 | `requests.test.mjs`, same API test; [schema.sql](../tests/schema.sql), reviewer self-assignment check | Absent and wrong-role mapping return 409. Contract v0.6 clarifies that the database rejects self mapping before submission; the new explicit constraint assertion awaits its PostgreSQL run. |
+| AC-07 / TEST-07 | `requests.test.mjs`, same API test | Reported pass on c139ca9; owner scope and reviewer creation denial. |
+| AC-08 / TEST-08 | `requests.test.mjs`, same API test | Reported pass on c139ca9; edit route unsupported and saved detail unchanged. |
+| AC-09 / TEST-09 | [decisions.test.mjs](../tests/decisions.test.mjs), “TEST-09–11: assigned review, reason bounds, durable history and role isolation”; [review-ui.test.mjs](../tests/review-ui.test.mjs), “F-03: reviewer rejects an assigned request and reads persisted history” | API reported pass on 1410169; browser reported pass on 24183a3. |
+| AC-10 / TEST-10 | `decisions.test.mjs`, same first test; `review-ui.test.mjs`, same browser test | Reported pass on those commits; approval and rejection history. |
+| AC-11 / TEST-11 | `decisions.test.mjs`, same first test; `review-ui.test.mjs`, same browser test | Reported pass on those commits; rejection reason required, 500 accepted and 501 rejected. |
+| AC-12 / TEST-12 | `decisions.test.mjs`, “TEST-12: concurrent and repeated decisions create one terminal event” | Reported pass on 1410169. |
+| AC-13 / TEST-13 | `decisions.test.mjs`, “TEST-13: failed event insert rolls back the status update” | Reported pass on 1410169. |
+| AC-14 / TEST-14 | [journey.test.mjs](../tests/journey.test.mjs), “Sprint 1: requester to reviewer decision survives application restart”; manual keyboard, mobile, setup and secret inspection | New test pending PostgreSQL 16 run. Manual checks and release retest pending. |

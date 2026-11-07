@@ -19,6 +19,11 @@ DECLARE
   reviewer uuid := '00000000-0000-0000-0000-000000000002';
 BEGIN
   BEGIN
+    UPDATE reviewer_assignments SET reviewer_id = owner_id WHERE requester_id = owner_id;
+    RAISE EXCEPTION 'self-assignment accepted';
+  EXCEPTION WHEN check_violation THEN NULL;
+  END;
+  BEGIN
     UPDATE purchase_requests SET reviewer_id = owner_id WHERE id = req;
     RAISE EXCEPTION 'self-review accepted';
   EXCEPTION WHEN check_violation THEN NULL;

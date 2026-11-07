@@ -1,6 +1,6 @@
 # Sprint 1 engineering contracts
 
-Version 0.5 for Issue #5. Applies to F-01 through F-03.
+Version 0.6 for Issue #11. Applies to F-01 through F-03.
 
 Revision history: v0.1 introduced AC-01–14. v0.2 resolves review findings by specifying session expiry (FR-01, AC-03 / TEST-03), reason bounds (BR-05, AC-11 / TEST-11), and payloads (FR-02–06, AC-04 / TEST-04 and AC-10 / TEST-10). It moves inventory and traceability into dedicated files without renumbering requirements or checks.
 
@@ -9,6 +9,8 @@ v0.3 adds feature scope, UI routes and database constraints for Issue #3. AC and
 v0.4 specifies the synthetic seed and isolated test database setup for Issue #4. It changes no AC or TEST IDs. The seed creates two Requesters and two Reviewers with preset one-to-one assignments, reads passwords from private environment variables, and preserves existing users, credentials, assignments, requests and history on rerun. Test migration setup requires an explicit local PostgreSQL URL with a database name ending `_test` and rejects a target matching the development database. See [database setup](../../database.md) for the commands and verification limits.
 
 v0.5 specifies Issue #5 implementation details before the authentication API: login lookup trims and lowercases the supplied login; seed hashes use `scrypt:<salt hex>:<hash hex>`; the API checks the Origin header on POST and DELETE against its configured public origin and rejects missing or mismatched origins with 403. Session cookies use HttpOnly, SameSite=Lax, Path=/, and eight-hour Max-Age; HTTPS adds Secure. The API accepts only `login` and `password` JSON fields for login. These details support F-01 without changing AC or TEST IDs.
+
+v0.6 clarifies AC-06 / TEST-06 after Issue #11 review discussion. The API returns 409 with no writes for absent and wrong-role preset assignments. The database constraint refuses a self assignment before submission, so there is no reachable self-assignment HTTP case to return 409. Keep the stable AC/TEST IDs and verify the database refusal separately. This clarification records the delegated agents' interpretation; direct student approval was not independently observed.
 
 ## F-01 — Identity and session
 
@@ -40,7 +42,7 @@ The requester list shows owned requests and links to detail. The form accepts ti
 | GET /api/requests | Session only; 200 with role-scoped list in newest-first order |
 | GET /api/requests/{id} | Request ID; 200 with role-scoped detail including status and history |
 
-Trim outer whitespace and count Unicode code points. Accept title 3–120 and purpose 10–2,000 characters, inclusive. Accept plain decimal strings with up to two fractional digits and value THB 0.01–1,000,000.00 inclusive; store in integer satang and return a two-place decimal string. Invalid fields return 422. Ignore no ownership or status claims: reject unexpected input keys with 422. Resolve the preset reviewer server-side. Missing, wrong-role or self reviewer returns 409 REVIEWER_UNAVAILABLE and writes neither a request nor event. Success persists SUBMITTED and its initial event together. No edit operation is exposed in Sprint 1.
+Trim outer whitespace and count Unicode code points. Accept title 3–120 and purpose 10–2,000 characters, inclusive. Accept plain decimal strings with up to two fractional digits and value THB 0.01–1,000,000.00 inclusive; store in integer satang and return a two-place decimal string. Invalid fields return 422. Ignore no ownership or status claims: reject unexpected input keys with 422. Resolve the preset reviewer server-side. Missing or wrong-role mapping returns 409 REVIEWER_UNAVAILABLE and writes neither a request nor event. A self mapping is refused by the database constraint before submission. Success persists SUBMITTED and its initial event together. No edit operation is exposed in Sprint 1.
 
 ## F-03 — Decide and retrieve history
 
@@ -83,7 +85,7 @@ Every row is planned. Use synthetic accounts and isolated deterministic fixtures
 | AC-03 / TEST-03 | API | Log in, log out, then reuse that cookie | Logout 204; reuse returns 401. A fresh session works before eight hours and returns 401 at the expiry instant using a controlled clock |
 | AC-04 / TEST-04 | API/DB | Requester with eligible mapping submits a valid request, reloads detail | 201, assigned reviewer, persisted SUBMITTED and one submission event |
 | AC-05 / TEST-05 | API/DB | Try exact field bounds, adjacent invalid lengths/amounts, whitespace-only text and excess decimal precision | Both bounds accepted, invalid inputs 422, no invalid writes, amount round-trips exactly |
-| AC-06 / TEST-06 | API/DB | Try absent, wrong-role and self reviewer mapping | 409 for each; no request or event |
+| AC-06 / TEST-06 | API/DB | Try absent and wrong-role mapping through the API; try self mapping at the database constraint | API cases return 409 without writes; database rejects self mapping before submission |
 | AC-07 / TEST-07 | API | Two requesters submit, then one lists and reads the other ID; reviewer attempts creation | List contains only own requests; detail 404; creation 403 |
 | AC-08 / TEST-08 | API/DB | Attempt to edit a submitted request | No supported edit operation; stored data remains unchanged |
 | AC-09 / TEST-09 | API | Two reviewers with different assignments list and read detail/history; requester attempts decision | Assigned rows only; out-of-scope detail/decision 404; requester decision 403 |

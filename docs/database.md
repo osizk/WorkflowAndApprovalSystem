@@ -52,4 +52,8 @@ Requester pages are `/requests`, `/requests/new`, and `/requests/{id}`. The form
 
 An assigned Reviewer sends `POST /api/requests/{id}/decision` with JSON `{"decision":"APPROVE"}` or `{"decision":"REJECT","reason":"..."}`. The server derives identity from the session, rejects requester and unrelated reviewer calls, and writes the terminal state and history event in one transaction. Repeated or lost concurrent decisions return 409. Run `npm run test:decisions` only against the explicit disposable `TEST_DATABASE_URL` after test migration setup. The test covers role scope, reason bounds, concurrent decisions, and rollback after a forced event insert failure.
 
+## Sprint 1 integration checks (Issue #11)
+
+Set `TEST_DATABASE_URL` to a separate disposable local PostgreSQL 16 database ending in `_test`, then run `npm run db:test:setup` and `npm run test:sprint1`. Set `WORKFLOW_BROWSER_CHANNEL=msedge` if using an installed Edge browser. The suite runs the database guard, authentication, request, decision and browser tests in one sequence. Its final browser test submits a request, approves it as the assigned reviewer, stops and restarts the application server, then retrieves the saved status and history. Record the exact tested staging commit, command output, pass/fail/skip counts and any environmental difference from the Node 22/PostgreSQL 16 baseline.
+
 For the real browser check, migrate a separate local database using TEST_DATABASE_URL and run npm run test:auth-ui. Use WORKFLOW_BROWSER_CHANNEL=msedge for an installed Edge browser, or install the Playwright Chromium browser and leave the channel unset. The test starts a local server on port 55476 and cleans up its synthetic accounts and sessions.
