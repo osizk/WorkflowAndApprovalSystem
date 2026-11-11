@@ -35,3 +35,8 @@ test('reads development database from local .env before migrating', () => {
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+// C-02 deliberately fails only on this temporary demonstration branch.
+test('Lab 5 C-02: required check blocks a failing PR', () => {
+  assert.fail('Intentional Lab 5 C-02 failure; never merge this demonstration branch.');
+});
