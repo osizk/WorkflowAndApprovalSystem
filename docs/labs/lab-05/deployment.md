@@ -78,3 +78,45 @@ applied migration `20261107000000_initial_schema`, and ran the application
 with a healthy PostgreSQL container. The login page returned HTTP 200.
 Record the commit, build and migration output, and both service states from
 `docker compose ps` when repeating the check.
+
+## Google Cloud release
+
+The first deployment in Issue #40 creates the Artifact Registry repository,
+Cloud Run service and migration job, and connects the service and job to Cloud
+SQL. Configure the service's public URL as `PUBLIC_ORIGIN`. Configure both
+the service and migration job to receive `DATABASE_URL` from Secret Manager.
+Set the migration job command to `npm run db:migrate`. Seed synthetic demo
+accounts during initial setup using the team's private seed configuration.
+
+Before enabling the release workflow, configure a Google Cloud Workload
+Identity Federation provider to trust this GitHub repository on
+`refs/heads/main` and allow its deploy service account to authenticate. That
+account needs permission to push the image and update the existing Cloud Run
+service and migration job, direct service traffic to the new revision, run the
+job, and act as the Cloud Run runtime identities where required. The runtime
+identities need access to Cloud SQL and the database secret they use.
+
+Set these GitHub Actions repository variables from the provisioned resources.
+
+| Variable | Value |
+| --- | --- |
+| `GCP_PROJECT_ID` | Shared Google Cloud project ID |
+| `GCP_REGION` | Region containing Artifact Registry and Cloud Run |
+| `GCP_ARTIFACT_REPOSITORY` | Docker repository name in Artifact Registry |
+| `GCP_RUN_SERVICE` | Existing public Cloud Run service name |
+| `GCP_MIGRATION_JOB` | Existing Cloud Run migration job name |
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Full resource name of the Workload Identity Federation provider |
+| `GCP_DEPLOY_SERVICE_ACCOUNT` | Deploy service account email |
+| `GCP_DEPLOY_ENABLED` | Set to `true` once the resources and access are verified |
+
+Merge a teammate-reviewed feature PR into `lab5-staging`. Open and review a
+release PR from `lab5-staging` into `main`, then merge it after the required
+check passes. The workflow verifies the resulting `main` commit, publishes the
+image tagged with its commit SHA, and runs migrations using the image digest.
+After migration succeeds, it updates the existing service and checks that the
+new revision receives all traffic, serves the expected digest, and responds at
+`/login`. The workflow can also be dispatched from `main` in Actions.
+
+For C-06, record the staging PR, release PR, Actions run, and Cloud Run revision.
+The Actions run summary lists the commit, image digest, serving revision, and
+public URL. Compare the summary with the revision shown in Cloud Run.
