@@ -1,0 +1,129 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/ci-docker.yml
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && vars.GCP_DEPLOY_ENABLED == 'true'
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PROJECT: ${{ vars.GCP_PROJECT_ID }}
+      REGION: ${{ vars.GCP_REGION }}
+      REGISTRY: ${{ vars.GCP_ARTIFACT_REPOSITORY }}
+      SERVICE: ${{ vars.GCP_RUN_SERVICE }}
+      MIGRATION_JOB: ${{ vars.GCP_MIGRATION_JOB }}
+
+    steps:
+      - name: Check deployment settings
+        shell: bash
+        env:
+          PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          DEPLOYER: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+        run: |
+          for key in PROJECT REGION REGISTRY SERVICE MIGRATION_JOB PROVIDER DEPLOYER; do
+            if [[ -z "${!key}" ]]; then
+              echo "Missing deployment setting: $key" >&2
+              exit 1
+            fi
+          done
+
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Build release image
+        run: docker build --tag workflow-approval:release .
+
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@26f734c2779b00b7dda794207734c511110a4368 # v3.0.0
+
+      - name: Publish image and resolve its digest
+        id: publish
+        shell: bash
+        run: |
+          host="$REGION-docker.pkg.dev"
+          image="$host/$PROJECT/$REGISTRY/workflow-approval"
+          tag="$image:$GITHUB_SHA"
+          gcloud auth configure-docker "$host" --quiet
+          docker tag workflow-approval:release "$tag"
+          docker push "$tag"
+          digest="$(gcloud artifacts docker images describe "$tag" \
+            --project "$PROJECT" --format='value(image_summary.digest)')"
+          if [[ ! "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
+            echo "Artifact Registry did not return a valid image digest" >&2
+            exit 1
+          fi
+          printf 'image=%s@%s\n' "$image" "$digest" >> "$GITHUB_OUTPUT"
+
+      - name: Apply migrations before updating Cloud Run
+        shell: bash
+        env:
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: |
+          gcloud run jobs update "$MIGRATION_JOB" --image "$IMAGE" \
+            --project "$PROJECT" --region "$REGION" --quiet
+          gcloud run jobs execute "$MIGRATION_JOB" --wait \
+            --project "$PROJECT" --region "$REGION" --quiet
+
+      - name: Deploy and verify the serving revision
+        shell: bash
+        env:
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: |
+          gcloud run services update "$SERVICE" --image "$IMAGE" \
+            --project "$PROJECT" --region "$REGION" --quiet
+          gcloud run services update-traffic "$SERVICE" --to-latest \
+            --project "$PROJECT" --region "$REGION" --quiet
+          revision="$(gcloud run services describe "$SERVICE" \
+            --project "$PROJECT" --region "$REGION" \
+            --format='value(status.latestReadyRevisionName)')"
+          serving="$(gcloud run services describe "$SERVICE" \
+            --project "$PROJECT" --region "$REGION" --format=json \
+            | jq -er '.status.traffic[] | select(.percent == 100) | .revisionName')"
+          if [[ -z "$revision" || "$serving" != "$revision" ]]; then
+            echo "The latest ready revision is not serving all traffic" >&2
+            exit 1
+          fi
+          resolved="$(gcloud run revisions describe "$revision" \
+            --project "$PROJECT" --region "$REGION" \
+            --format='value(status.imageDigest)')"
+          if [[ "${resolved##*@}" != "${IMAGE##*@}" ]]; then
+            echo "The serving revision image does not match the published digest" >&2
+            exit 1
+          fi
+          url="$(gcloud run services describe "$SERVICE" \
+            --project "$PROJECT" --region "$REGION" --format='value(status.url)')"
+          [[ "$url" == https://* ]]
+          curl --fail --silent --show-error --retry 4 --max-time 20 \
+            --output /dev/null "$url/login"
+          {
+            printf '### Google Cloud release\n\n'
+            printf -- '- Commit: `%s`\n' "$GITHUB_SHA"
+            printf -- '- Image: `%s`\n' "$IMAGE"
+            printf -- '- Serving revision: `%s`\n' "$revision"
+            printf -- '- URL: %s\n' "$url"
+          } >> "$GITHUB_STEP_SUMMARY"
