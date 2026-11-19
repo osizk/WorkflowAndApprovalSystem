@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 BASH = shutil.which('bash')
@@ -40,22 +41,31 @@ class ReleaseTests(unittest.TestCase):
             stub.chmod(0o755)
         self.env = dict(os.environ,
                         PROJECT_ID='cpe-se-course-2026', REGION='asia-southeast1',
-                        IMAGE_TAG='1' * 40, DRY_RUN='0', ROLLBACK='false', SEED_DEMO_DATA='false',
+                        DRY_RUN='0', ROLLBACK='false', SEED_DEMO_DATA='false',
                         SERVICE_NAME='scd928edd', MIGRATE_JOB_NAME='scd928edd-migrate',
                         STUB_DIR=self.directory.as_posix(), STUB_LOG=self.log.as_posix(),
                         STUB_DIGEST='asia-southeast1-docker.pkg.dev/cpe-se-course-2026/scd928edd/scd928edd@sha256:' + 'a' * 64,
                         PYTHON=Path(sys.executable).as_posix())
         self.env.pop('GITHUB_ENV', None)
+        self.env.pop('IMAGE_TAG', None)
 
-    def run_script(self, script='deploy/release.sh', args='', cwd=ROOT):
+    def run_script(self, script=None, args='', cwd=ROOT):
+        if script is None:
+            if self.env['ROLLBACK'] == 'true':
+                script = 'deploy/release.sh'
+                self.env.setdefault('IMAGE_TAG', '1' * 40)
+            else:
+                script = 'deploy/deploy.sh'
+                cwd = self.reviewed_checkout()
+                if self.env['SEED_DEMO_DATA'] == 'true':
+                    args = '--demo'
         # Git Bash converts the stub directory once; Linux uses the native path.
         prefix = 'd="$STUB_DIR"; if command -v cygpath >/dev/null; then d="$(cygpath -u "$d")"; fi; export PATH="$d:$PATH"; '
         return subprocess.run([BASH, '-c', prefix + 'bash ' + script + ' ' + args],
                               cwd=cwd, env=self.env, text=True, capture_output=True, timeout=30)
 
     def reviewed_checkout(self):
-        checkout = self.directory / 'checkout'
-        checkout.mkdir()
+        checkout = Path(tempfile.mkdtemp(prefix='checkout-', dir=self.directory))
         paths = ['.gitignore', 'Dockerfile', 'package.json', 'deploy/deploy.sh', 'deploy/release.sh']
         for name in paths:
             target = checkout / name
@@ -73,8 +83,15 @@ class ReleaseTests(unittest.TestCase):
         git('config', 'core.excludesFile', '/dev/null')
         git('add', '--', *paths)
         git('-c', 'core.hooksPath=/dev/null', 'commit', '-m', 'Reviewed fixture')
-        self.env['IMAGE_TAG'] = git('rev-parse', 'HEAD')
         return checkout
+
+    def test_starter_kit_deploy_entrypoint_contains_all_three_steps(self):
+        script = (ROOT / 'deploy/deploy.sh').read_text(encoding='utf-8')
+        build = script.index('docker push ')
+        migrate = script.index('gcloud run jobs execute ')
+        update = script.index('gcloud run services update ')
+        self.assertLess(build, migrate)
+        self.assertLess(migrate, update)
 
     def test_generated_auth_file_does_not_block_reviewed_checkout(self):
         checkout = self.reviewed_checkout()
@@ -107,6 +124,7 @@ class ReleaseTests(unittest.TestCase):
         result = self.run_script()
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.log.read_text()
+        self.assertLess(calls.index('push '), calls.index('run jobs execute'))
         self.assertLess(calls.index('run jobs execute'), calls.index('run services update scd928edd '))
         self.assertEqual(calls.count('--image ' + self.env['STUB_DIGEST']), 2)
         self.assertIn('PUBLIC_ORIGIN=https://scd928edd-test.asia-southeast1.run.app', calls)
@@ -119,6 +137,7 @@ class ReleaseTests(unittest.TestCase):
         result = self.run_script()
         self.assertNotEqual(result.returncode, 0)
         calls = self.log.read_text()
+        self.assertIn('run jobs execute', calls)
         self.assertNotIn('run services update ', calls)
         self.assertNotIn('run services update-traffic', calls)
 
@@ -147,12 +166,10 @@ class ReleaseTests(unittest.TestCase):
     def test_wrong_project_or_team_is_refused_before_cloud_calls(self):
         for key, value in [('PROJECT_ID', 'another-project'), ('SERVICE_NAME', 'another-team'), ('IMAGE_TAG', 'latest')]:
             with self.subTest(key=key):
-                old = self.env[key]
-                self.env[key] = value
-                result = self.run_script()
+                with patch.dict(self.env, {key: value}):
+                    result = self.run_script()
                 self.assertNotEqual(result.returncode, 0)
                 self.assertEqual(self.log.read_text(), '')
-                self.env[key] = old
 
     def test_image_from_another_registry_is_refused(self):
         self.env['STUB_DIGEST'] = self.env['STUB_DIGEST'].replace('/scd928edd/scd928edd@', '/other/other@')
