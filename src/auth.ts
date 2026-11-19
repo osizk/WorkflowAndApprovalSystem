@@ -54,6 +54,18 @@ export function createApp(db: PrismaClient, options: { origin: string; now?: () 
   const secure = new URL(options.origin).protocol === 'https:';
   const cookieOptions = { httpOnly: true, sameSite: 'lax' as const, secure, path: '/' };
   app.use(express.json());
+  app.get('/api/health', (_req, res) => {
+    res.set('Cache-Control', 'no-store').json({ status: 'ok' });
+  });
+  app.get('/api/ready', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try {
+      await db.$queryRaw`SELECT 1`;
+      res.json({ db: 'connected' });
+    } catch {
+      res.status(503).json({ db: 'unavailable' });
+    }
+  });
   app.use((req, res, next) => {
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) && req.get('origin') !== options.origin) {
       return error(res, 403, 'FORBIDDEN', 'Invalid request origin');
