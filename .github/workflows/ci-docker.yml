@@ -1,0 +1,59 @@
+name: CI and Docker Build
+
+on:
+  pull_request:
+    branches: [lab5-staging, main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-docker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: workflow_test
+          POSTGRES_USER: workflow_ci
+          POSTGRES_PASSWORD: local-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U workflow_ci -d workflow_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      TEST_DATABASE_URL: postgresql://workflow_ci:local-ci-only@127.0.0.1:5432/workflow_test
+
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies and generate Prisma client
+        run: |
+          npm ci
+          npm run db:generate
+
+      - name: Install Chromium for browser tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Apply test database migrations
+        run: npm run db:test:setup
+
+      - name: Build and run Sprint 1 tests
+        run: npm run test:sprint1
+
+      - name: Build Docker image
+        run: docker build --tag workflow-approval:ci .

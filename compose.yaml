@@ -1,0 +1,40 @@
+name: workflow-approval-lab5
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: workflow_dev
+      POSTGRES_USER: workflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD first}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workflow -d workflow_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    image: workflow-approval:lab5
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://workflow:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD first}@db:5432/workflow_dev?schema=public"
+    command: ["npm", "run", "db:migrate"]
+
+  app:
+    image: workflow-approval:lab5
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://workflow:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD first}@db:5432/workflow_dev?schema=public"
+      PUBLIC_ORIGIN: "http://localhost:18080"
+    ports:
+      - "127.0.0.1:18080:3000"
+
+volumes:
+  pgdata:
