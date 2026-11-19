@@ -47,11 +47,61 @@ class ReleaseTests(unittest.TestCase):
                         PYTHON=Path(sys.executable).as_posix())
         self.env.pop('GITHUB_ENV', None)
 
-    def run_script(self, script='deploy/release.sh', args=''):
+    def run_script(self, script='deploy/release.sh', args='', cwd=ROOT):
         # Git Bash converts the stub directory once; Linux uses the native path.
         prefix = 'd="$STUB_DIR"; if command -v cygpath >/dev/null; then d="$(cygpath -u "$d")"; fi; export PATH="$d:$PATH"; '
         return subprocess.run([BASH, '-c', prefix + 'bash ' + script + ' ' + args],
-                              cwd=ROOT, env=self.env, text=True, capture_output=True, timeout=30)
+                              cwd=cwd, env=self.env, text=True, capture_output=True, timeout=30)
+
+    def reviewed_checkout(self):
+        checkout = self.directory / 'checkout'
+        checkout.mkdir()
+        paths = ['.gitignore', 'Dockerfile', 'package.json', 'deploy/deploy.sh', 'deploy/release.sh']
+        for name in paths:
+            target = checkout / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((ROOT / name).read_bytes())
+
+        def git(*args):
+            return subprocess.run(['git', *args], cwd=checkout, text=True,
+                                  capture_output=True, check=True).stdout.strip()
+
+        git('init', '--initial-branch=main')
+        git('config', 'user.name', 'Lab 5 fixture')
+        git('config', 'user.email', 'lab5-fixture@example.invalid')
+        git('config', 'core.autocrlf', 'false')
+        git('config', 'core.excludesFile', '/dev/null')
+        git('add', '--', *paths)
+        git('-c', 'core.hooksPath=/dev/null', 'commit', '-m', 'Reviewed fixture')
+        self.env['IMAGE_TAG'] = git('rev-parse', 'HEAD')
+        return checkout
+
+    def test_generated_auth_file_does_not_block_reviewed_checkout(self):
+        checkout = self.reviewed_checkout()
+        # Synthetic marker only; never create or read actual credentials in tests.
+        (checkout / 'gha-creds-review-fixture.json').write_text('{"fixture": true}')
+        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = self.log.read_text()
+        self.assertIn('build --platform linux/amd64', calls)
+        self.assertIn('run jobs execute', calls)
+
+    def test_unrelated_untracked_file_still_blocks_before_cloud_calls(self):
+        checkout = self.reviewed_checkout()
+        (checkout / 'unreviewed.txt').write_text('Unreviewed change')
+        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Use a clean reviewed checkout', result.stderr)
+        self.assertEqual(self.log.read_text(), '')
+
+    def test_tracked_change_still_blocks_before_cloud_calls(self):
+        checkout = self.reviewed_checkout()
+        with (checkout / 'package.json').open('a') as changed:
+            changed.write('\n')
+        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Use a clean reviewed checkout', result.stderr)
+        self.assertEqual(self.log.read_text(), '')
 
     def test_normal_release_migrates_before_service_and_pins_digest(self):
         result = self.run_script()
