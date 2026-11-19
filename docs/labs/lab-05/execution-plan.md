@@ -1,15 +1,48 @@
 # Lab 5 execution plan
 
-Kane runs Docker locally. Pex uses the Google Cloud Console and Cloud Shell in the browser. Pex opens the team's Free Trial and shares one Google Cloud project with Kane, who signs in using his own Gmail account. Both members take part in the deployment and verification and record their contributions in the relevant Issues and PRs.
+Updated for the course shared-cloud announcement and team Starter Kit
+`scd928edd`. The announced Lab 5/Lab 6 deadline is 22 November 2026.
+Kane takes over implementation, deployment preparation, testing and the PDF.
+Pex remains the peer reviewer for Kane-authored PRs. Record each student's
+actual contribution. Do not claim a live deployment from an offline preview.
 
-## Start here
+1. **Reuse completed work.** #34/PR #35 provide Docker and clean-clone evidence;
+   #36/PR #37 provide PR CI. #39 is closed with the blocked-merge demonstration
+   in closed, unmerged PR #43. Retain those records rather than repeating them.
+2. **Release the Docker/CI baseline.** Pex reviews PR #47 from `lab5-staging`
+   to `main` and merges only after required checks and approval. Kane does not
+   merge their own PR. Preparation of #46 can continue while #47 awaits review.
+3. **Continue #41/PR #46.** Keep `feature/lab5-41-cloud-release` and target
+   `lab5-staging`. Adapt the course Kit for the existing app, preserving its
+   Dockerfile and CI workflow. Verify scripts, image, app tests and dry runs
+   before requesting review. Include the revised deployment guide in this PR.
+4. **Check #44 against real portal status.** Replace the previous personal
+   Free Trial/manual infrastructure plan with the shared course project
+   `cpe-se-course-2026`. Inspect the group's resources and GitHub configuration;
+   do not infer missing setup from the repository-check screenshot. Complete
+   only missing steps. If an operation needs the registered portal account,
+   Pex handles that access step. Do not create SQL/IAM/resources or share login
+   credentials. A portal check does not block local code preparation.
+5. **First live deployment, #40.** After reviewed release into `main` and
+   verified resource/configuration readiness, run the main workflow. Initial
+   account seeding uses existing private secret slots. Migrate before service
+   update. Verify the public app and database, and retain commit/digest/revision
+   evidence before marking #40 Done.
+6. **Automatic release, #41.** Deliver a visible change through a reviewed
+   staging PR and reviewed release PR. Compare its Actions run, image and
+   serving revision. Keep #41 open until the real C-06 evidence exists, even
+   if PR #46 has merged to staging.
+7. **Live workflow and PDF, #42.** Verify requester submission, assigned-reviewer
+   decision and a forbidden action on the public URL. Compare the same ID,
+   status and history after restart and redeploy. Assemble Answer Parts 0–4,
+   direct evidence links and readable screenshots, and record actual member
+   contributions. Do not mark it complete while live evidence is pending.
 
-1. [#44 — Set up the shared Google Cloud project](https://github.com/osizk/WorkflowAndApprovalSystem/issues/44). Pex opens the Free Trial, creates the project, enables trial billing, shares the Project ID, grants Kane Editor access, and sets a budget alert before Cloud SQL provisioning. Kane verifies access from his own account. Record the project, access, and budget evidence in the Issue.
-2. [#39 — Verify the required CI check](https://github.com/osizk/WorkflowAndApprovalSystem/issues/39). This can start alongside #44. Pex, or a repository admin, configures the rule on `main` to require the GitHub Actions check `test-and-docker` and teammate review. Once the rule is active, Kane marks [PR #43](https://github.com/osizk/WorkflowAndApprovalSystem/pull/43) ready for review, captures GitHub explicitly showing the failed required check blocking merge, records the CI run and commit for C-02, then closes the test PR without merging. Before #40, open a release PR from `lab5-staging` into `main` for the existing Docker and CI changes. Pex reviews and merges after CI passes. Keep both the passing release run and the failed demonstration run.
-3. [#40 — Deploy to Google Cloud for the first time](https://github.com/osizk/WorkflowAndApprovalSystem/issues/40). After #44 and the initial release into `main`, Pex leads the setup of Artifact Registry, Cloud SQL, Secret Manager, the migration job, and Cloud Run in Cloud Shell. Kane checks the build and migration commands against the released commit, then tests login and request submission at the public URL. Record the URL, revision, release commit, and Cloud SQL connection evidence.
-4. [#41 — Deploy reviewed commits automatically](https://github.com/osizk/WorkflowAndApprovalSystem/issues/41). Kane prepares the GitHub Actions workflow on a feature branch from `lab5-staging`. Pex configures Workload Identity Federation and the deploy permissions in Google Cloud, then reviews the workflow. The workflow tests the `main` commit, publishes its image, applies migrations, and updates Cloud Run. Release a visible change via a reviewed staging PR and a reviewed release PR. Verify that the Actions run, image, and serving revision match the released commit for C-06. Record the cloud settings and release steps in `deployment.md`.
-5. [#42 — Verify the live workflow and assemble the PDF](https://github.com/osizk/WorkflowAndApprovalSystem/issues/42). Begin collecting C-04 evidence once #40 has a working URL. Kane signs in as Requester and submits a synthetic purchase request. Pex signs in as the assigned Reviewer and records a decision. Capture one rule rejection or access restriction. After #41, verify that the same request ID, status, and history are visible after an app restart and again after a redeploy for C-05. Kane assembles Answer Parts 0–4, and Pex checks the evidence links and screenshots.
+Move board cards immediately with `gh project item-edit` as work changes:
+Started, PR Review, Fixing after requested changes, and Done only with evidence.
+Link the PR in the Issue's Development section before PR Review. Keep existing
+Issues and branches; create a new branch only for a distinct required change.
+Use a new staging-to-main release PR after #46, not a duplicate workflow PR.
 
-[#34 — Docker](https://github.com/osizk/WorkflowAndApprovalSystem/issues/34) and [#36 — PR CI](https://github.com/osizk/WorkflowAndApprovalSystem/issues/36) are complete on staging. Reuse the clean checkout evidence for C-03 and the passing PR run for C-01. [#38](https://github.com/osizk/WorkflowAndApprovalSystem/issues/38) tracks the full Lab 5 effort.
-
-Use the existing temporary branch for #39. Use a feature branch for the workflow in #41 and a branch for the visible release change. Track cloud setup and evidence collection in their Issues. Create a branch for #40 or #42 only if that work changes repository files.
+The parent #38 was closed for the planning change; that does not mean #40,
+#41 and #42 are complete. The live Issues and evidence determine completion.

@@ -1,0 +1,126 @@
+# Adapted from the course Starter Kit for scd928edd.
+name: Deploy demo
+
+on:
+  pull_request:
+    branches: [lab5-staging, main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Rollback to the full commit SHA of an existing image. Empty deploys current main.'
+        type: string
+        required: false
+        default: ''
+      seed_demo_data:
+        description: 'Initial demo accounts only. Requires all four team secret slots to be populated.'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('deploy-demo-pr-{0}', github.event.pull_request.number) || 'deploy-demo' }}
+  cancel-in-progress: false
+
+jobs:
+  deployment-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6
+        with:
+          python-version: '3.13'
+      - name: Check Bash syntax and offline release/smoke behavior
+        run: |
+          bash -n deploy/deploy.sh deploy/release.sh
+          python3 -B -m unittest discover -s deploy/tests -p 'test_*.py' -v
+
+  test:
+    if: github.ref == 'refs/heads/main' && !inputs.image_tag
+    uses: ./.github/workflows/ci-docker.yml
+
+  deploy:
+    needs: [test, deployment-checks]
+    if: >-
+      always() && !cancelled() && github.ref == 'refs/heads/main' &&
+      needs.deployment-checks.result == 'success' &&
+      (needs.test.result == 'success' ||
+       (github.event_name == 'workflow_dispatch' && inputs.image_tag != '' && needs.test.result == 'skipped'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: demo
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      REGION: ${{ vars.GCP_REGION }}
+      SERVICE_NAME: scd928edd
+      MIGRATE_JOB_NAME: scd928edd-migrate
+      IMAGE_TAG: ${{ inputs.image_tag || github.sha }}
+      ROLLBACK: ${{ inputs.image_tag != '' }}
+      SEED_DEMO_DATA: ${{ inputs.seed_demo_data && 'true' || 'false' }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate deployment settings
+        env:
+          WIF_PROVIDER: ${{ vars.WIF_PROVIDER }}
+          WIF_SERVICE_ACCOUNT: ${{ vars.WIF_SERVICE_ACCOUNT }}
+        run: |
+          [[ "$PROJECT_ID" == cpe-se-course-2026 && "$REGION" == asia-southeast1 ]]
+          test -n "$WIF_PROVIDER" && test -n "$WIF_SERVICE_ACCOUNT"
+          [[ "$IMAGE_TAG" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$ROLLBACK" != true || "$SEED_DEMO_DATA" != true ]]
+
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@26f734c2779b00b7dda794207734c511110a4368 # v3
+
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6
+        with:
+          python-version: '3.13'
+
+      - name: Build, migrate and deploy reviewed main
+        if: env.ROLLBACK != 'true'
+        shell: bash
+        run: |
+          args=()
+          if [[ "$SEED_DEMO_DATA" == true ]]; then args+=(--demo); fi
+          DRY_RUN=0 bash deploy/deploy.sh "${args[@]}"
+
+      - name: Roll back to an existing image
+        if: env.ROLLBACK == 'true'
+        run: bash deploy/release.sh
+
+      - name: Smoke test public URL
+        env:
+          SMOKE_LOGIN: ${{ vars.SMOKE_LOGIN }}
+          SMOKE_PASSWORD: ${{ secrets.SMOKE_PASSWORD }}
+        run: python3 -B deploy/smoke_test.py "$SERVICE_URL"
+
+      - name: Record deployment
+        shell: bash
+        run: |
+          {
+            echo '### Workflow and Approval System deployment'
+            printf -- '- Commit image tag: `%s`\n' "$IMAGE_TAG"
+            printf -- '- Digest: `%s`\n' "$DEPLOYED_IMAGE"
+            printf -- '- Serving revision: `%s`\n' "$DEPLOYED_REVISION"
+            printf -- '- Rollback: %s\n' "$ROLLBACK"
+            printf -- '- URL: %s\n' "$SERVICE_URL"
+            echo '- Required smoke checks passed: health, database readiness, HTML and anonymous access restriction.'
+            echo '- See the smoke step for the optional signed-in check result.'
+          } >> "$GITHUB_STEP_SUMMARY"
