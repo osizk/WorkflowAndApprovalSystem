@@ -141,6 +141,16 @@ class ReleaseTests(unittest.TestCase):
         self.assertNotIn('run services update ', calls)
         self.assertNotIn('run services update-traffic', calls)
 
+    def test_release_existing_image_respects_false_rollback(self):
+        self.env.update(ROLLBACK='false', IMAGE_TAG='1' * 40)
+        result = self.run_script('deploy/release.sh')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = self.log.read_text()
+        self.assertIn('npm run db:migrate', calls)
+        self.assertLess(calls.index('run jobs execute'), calls.index('run services update scd928edd '))
+        self.assertNotIn('build --', calls)
+        self.assertNotIn('push ', calls)
+
     def test_rollback_does_not_migrate_seed_or_build(self):
         self.env['ROLLBACK'] = 'true'
         result = self.run_script()

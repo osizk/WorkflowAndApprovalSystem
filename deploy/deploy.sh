@@ -7,12 +7,14 @@ PROJECT_ID="${PROJECT_ID:-cpe-se-course-2026}"
 REGION="${REGION:-asia-southeast1}"
 ROLLBACK="${ROLLBACK:-false}"
 SEED_DEMO_DATA=false
+USE_EXISTING_IMAGE=false
 SERVICE_NAME="${SERVICE_NAME:-scd928edd}"
 MIGRATE_JOB_NAME="${MIGRATE_JOB_NAME:-scd928edd-migrate}"
 for arg in "$@"; do
   case "$arg" in
     --demo) SEED_DEMO_DATA=true ;;
-    *) echo 'Usage: bash deploy/deploy.sh [--demo]' >&2; exit 1 ;;
+    --existing-image) USE_EXISTING_IMAGE=true ;;
+    *) echo 'Usage: bash deploy/deploy.sh [--demo] [--existing-image]' >&2; exit 1 ;;
   esac
 done
 [[ "$DRY_RUN" == 0 || "$DRY_RUN" == 1 ]] || { echo 'DRY_RUN must be 0 or 1' >&2; exit 1; }
@@ -21,8 +23,8 @@ done
 [[ "$SERVICE_NAME" == scd928edd && "$MIGRATE_JOB_NAME" == scd928edd-migrate ]] || { echo 'Use assigned team resources only' >&2; exit 1; }
 [[ "$ROLLBACK" == true || "$ROLLBACK" == false ]] || { echo 'Invalid rollback mode' >&2; exit 1; }
 [[ "$ROLLBACK" != true || "$SEED_DEMO_DATA" != true ]] || { echo 'Rollback must not seed' >&2; exit 1; }
-if [[ "$ROLLBACK" == true ]]; then
-  : "${IMAGE_TAG:?Required for rollback}"
+if [[ "$ROLLBACK" == true || "$USE_EXISTING_IMAGE" == true ]]; then
+  : "${IMAGE_TAG:?Required when deploying an existing image}"
 elif [[ "$DRY_RUN" == 1 ]]; then
   IMAGE_TAG="${IMAGE_TAG:-0000000000000000000000000000000000000000}"
 else
@@ -43,7 +45,7 @@ PREFIX="$REGION-docker.pkg.dev/$PROJECT_ID/scd928edd/scd928edd"
 IMAGE="$PREFIX:$IMAGE_TAG"
 
 # 9. Build and push the reviewed commit.
-if [[ "$ROLLBACK" == false ]]; then
+if [[ "$ROLLBACK" == false && "$USE_EXISTING_IMAGE" == false ]]; then
   if [[ "$DRY_RUN" == 0 ]]; then
     gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --region "$REGION" >/dev/null
     gcloud run jobs describe "$MIGRATE_JOB_NAME" --project "$PROJECT_ID" --region "$REGION" >/dev/null

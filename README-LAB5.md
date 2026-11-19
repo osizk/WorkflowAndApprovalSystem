@@ -49,8 +49,8 @@ health, การเชื่อมต่อฐานข้อมูล, HTML �
 - `deploy/deploy.sh`: preview by default. Builds and pushes a reviewed main
   commit, pins the digest, runs the existing migration job, then updates Cloud
   Run and verifies the serving revision.
-- `deploy/release.sh`: rollback entry point for an existing image. Skips the
-  build, migration and seed.
+- `deploy/release.sh`: deploys an existing image. Runs migrations by default.
+  Set `ROLLBACK=true` to skip migration and seed.
 - `.github/workflows/deploy.yml`: offline PR checks and main-only deployment
   using the course Workload Identity Federation configuration.
 - `deploy/smoke_test.py`: public checks and optional signed-in checks.
