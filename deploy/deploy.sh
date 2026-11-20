@@ -249,7 +249,36 @@ revision="$(gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID"
 serving="$(gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --region "$REGION" --format=json | "${PYTHON:-python3}" -c 'import json,sys; s=json.load(sys.stdin); t=s["status"]["traffic"]; print(next((x.get("revisionName", "") for x in t if x.get("percent")==100), ""))')"
 [[ -n "$revision" && "$serving" == "$revision" ]] || { echo 'Latest ready revision is not serving all traffic' >&2; exit 1; }
 resolved="$(gcloud run revisions describe "$revision" --project "$PROJECT_ID" --region "$REGION" --format='value(status.imageDigest)')"
-[[ "${resolved##*@}" == "${DIGEST_IMAGE##*@}" ]] || { echo 'Serving image differs from the release image' >&2; exit 1; }
+resolved_digest="${resolved##*@}"
+expected_digest="${DIGEST_IMAGE##*@}"
+[[ "$resolved" == "$IMAGE_PREFIX@sha256:"* && "$resolved_digest" =~ ^sha256:[a-f0-9]{64}$ ]] || { echo 'Cloud Run returned an invalid serving image digest' >&2; exit 1; }
+if [[ "$resolved_digest" != "$expected_digest" ]]; then
+  # Cloud Run can report the platform-specific child digest when the pushed
+  # linux/amd64 image was published as an OCI index (for example, with a
+  # BuildKit attestation). Accept it only when the exact digest is the amd64
+  # child of the immutable index we deployed.
+  manifest="$(docker buildx imagetools inspect --raw "$DIGEST_IMAGE")"
+  if ! printf '%s' "$manifest" | "${PYTHON:-python3}" -c '
+import json, sys
+
+try:
+    index = json.load(sys.stdin)
+except (json.JSONDecodeError, TypeError):
+    sys.exit(1)
+
+expected = sys.argv[1]
+for descriptor in index.get("manifests", []):
+    platform = descriptor.get("platform") or {}
+    if (descriptor.get("digest") == expected
+            and platform.get("os") == "linux"
+            and platform.get("architecture") == "amd64"):
+        sys.exit(0)
+sys.exit(1)
+' "$resolved_digest"; then
+    echo 'Serving image differs from the release image' >&2
+    exit 1
+  fi
+fi
 printf 'Commit: %s\nImage: %s\nRevision: %s\nService URL: %s\n' "$IMAGE_TAG" "$DIGEST_IMAGE" "$revision" "$SERVICE_URL"
 if [[ -n "${GITHUB_ENV:-}" ]]; then
   printf 'SERVICE_URL=%s\nDEPLOYED_IMAGE=%s\nDEPLOYED_REVISION=%s\n' "$SERVICE_URL" "$DIGEST_IMAGE" "$revision" >> "$GITHUB_ENV"

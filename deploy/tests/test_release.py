@@ -1,5 +1,6 @@
 """Exercise the real Bash scripts with fake cloud commands; no live cloud calls."""
 import os
+import json
 import re
 from pathlib import Path
 import shutil
@@ -19,6 +20,7 @@ set -eu
 printf '%s ' "$@" >> "$STUB_LOG"
 printf '\n' >> "$STUB_LOG"
 case "$*" in
+  'buildx imagetools inspect --raw '*) printf '%s\n' "${STUB_MANIFEST_JSON:-}" ;;
   'artifacts docker images describe '*) printf '%s\n' "$STUB_DIGEST" ;;
   'run jobs execute '*) exit "${STUB_MIGRATE_EXIT:-0}" ;;
   'run services describe '*--format=json*) printf '{"status":{"traffic":[{"revisionName":"%s","percent":100}]}}\n' "${STUB_TRAFFIC_REVISION:-scd928edd-00001-test}" ;;
@@ -201,6 +203,40 @@ class ReleaseTests(unittest.TestCase):
     def test_serving_digest_must_match(self):
         self.env['STUB_SERVING_DIGEST'] = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
         result = self.run_script()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Serving image differs', result.stderr)
+
+    def test_serving_linux_amd64_child_of_pushed_index_is_accepted(self):
+        child = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
+        self.env['STUB_SERVING_DIGEST'] = child
+        self.env['STUB_MANIFEST_JSON'] = json.dumps({
+            'schemaVersion': 2,
+            'mediaType': 'application/vnd.oci.image.index.v1+json',
+            'manifests': [{
+                'digest': child.rsplit('@', 1)[1],
+                'platform': {'os': 'linux', 'architecture': 'amd64'},
+            }],
+        })
+
+        result = self.run_script()
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('buildx imagetools inspect --raw', self.log.read_text())
+
+    def test_serving_child_for_wrong_platform_is_rejected(self):
+        child = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
+        self.env['STUB_SERVING_DIGEST'] = child
+        self.env['STUB_MANIFEST_JSON'] = json.dumps({
+            'schemaVersion': 2,
+            'mediaType': 'application/vnd.oci.image.index.v1+json',
+            'manifests': [{
+                'digest': child.rsplit('@', 1)[1],
+                'platform': {'os': 'linux', 'architecture': 'arm64'},
+            }],
+        })
+
+        result = self.run_script()
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Serving image differs', result.stderr)
 
