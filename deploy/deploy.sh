@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==============================================================================
-# WorkflowAndApprovalSystem — Idempotent Google Cloud Run Deployment Script
+# TokTickIT — Idempotent Google Cloud Run Deployment Script
 # ==============================================================================
 # Usage:
 #   ./deploy/deploy.sh [--demo]
@@ -113,16 +113,14 @@ IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE_NAME}:$
 
 # Secret Manager secret names (values are never stored in this repo).
 SECRET_DB_URL="scd928edd-database-url"
-SECRET_REQUESTER1_PASS="scd928edd-app-secret-1"
-SECRET_REQUESTER2_PASS="scd928edd-app-secret-2"
-SECRET_REVIEWER1_PASS="scd928edd-app-secret-3"
-SECRET_REVIEWER2_PASS="scd928edd-app-secret-4"
+SECRET_ADMIN_PASS="scd928edd-admin-password"
+SECRET_DEMO_PASS="scd928edd-demo-password"
 
 GENERATED_ADMIN_PASSWORD=""
 GENERATED_DEMO_PASSWORD=""
 
 echo "=================================================================="
-echo "Workflow and Approval System Cloud Run Deployment"
+echo "TokTickIT Cloud Run Deployment"
 echo "Project : ${PROJECT_ID}"
 echo "Region  : ${REGION}"
 echo "Demo    : ${SEED_DEMO_DATA}"
@@ -132,11 +130,9 @@ echo "=================================================================="
 # ==============================================================================
 # Portal/TA pre-provisions infrastructure and public service IAM (Guide 5.3 steps 1–8, 5.4).
 # These names must exist. Never create or modify project-level IAM here.
-JOB_SECRETS="DATABASE_URL=${SECRET_DB_URL}:latest"
-MIGRATION_COMMAND="npm run db:migrate"
+JOB_SECRETS="DATABASE_URL=${SECRET_DB_URL}:latest,ADMIN_PASSWORD=${SECRET_ADMIN_PASS}:latest"
 if [ "$SEED_DEMO_DATA" = "true" ]; then
-  JOB_SECRETS="${JOB_SECRETS},SEED_REQUESTER1_PASSWORD=${SECRET_REQUESTER1_PASS}:latest,SEED_REQUESTER2_PASSWORD=${SECRET_REQUESTER2_PASS}:latest,SEED_REVIEWER1_PASSWORD=${SECRET_REVIEWER1_PASS}:latest,SEED_REVIEWER2_PASSWORD=${SECRET_REVIEWER2_PASS}:latest"
-  MIGRATION_COMMAND="npm run db:migrate && npm run db:seed"
+  JOB_SECRETS="${JOB_SECRETS},DEMO_USER_PASSWORD=${SECRET_DEMO_PASS}:latest"
 fi
 if [ "$DRY_RUN" != "1" ]; then
   gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --region "$REGION" >/dev/null
@@ -158,7 +154,7 @@ fi
 # 10. Create/Update & Execute Cloud Run Job for Migration + Non-destructive Seed
 #     ⭐ IMPORTANT: if this job fails the script stops BEFORE deploying the
 #        service, so a broken migration never reaches users.
-#     CHANGE ME: `--args` (npm run db:migrate; optional npm run db:seed) is
+#     CHANGE ME: `--args` (prisma migrate deploy && npm run prisma:seed) is
 #        Prisma/npm specific — use your stack's migrate/seed command.
 #     deploy.yml / release.sh later re-run this same job (name: scd928edd-migrate).
 # ==============================================================================
@@ -170,7 +166,7 @@ run_cmd gcloud run jobs update "$MIGRATE_JOB_NAME" \
   --set-secrets "$JOB_SECRETS" \
   --set-env-vars "NODE_ENV=production,TZ=Asia/Bangkok,SEED_DEMO_DATA=${SEED_DEMO_DATA}" \
   --command "sh" \
-  --args "-c,${MIGRATION_COMMAND}" \
+  --args "-c,npx prisma migrate deploy && npm run prisma:seed" \
   --max-retries 1 \
   --task-timeout 300s \
   --project "$PROJECT_ID"
@@ -221,8 +217,9 @@ printf '%s\n' "Deployment Completed!"
 printf '%s\n' "Service URL    : ${SERVICE_URL}"
 printf '%s\n' "Health Check   : ${SERVICE_URL}/api/health"
 printf '%s\n' "Readiness Check: ${SERVICE_URL}/api/ready"
-printf '%s\n' "Database secret: ${SECRET_DB_URL} (value remains in Secret Manager)."
+printf '%s\n' "Admin Email    : john.smith@example.com (mustChangePassword: true)"
+printf '%s\n' "Admin Password : Stored in Secret Manager: ${SECRET_ADMIN_PASS} (not printed)."
 if [ "$SEED_DEMO_DATA" = "true" ]; then
-  printf '%s\n' "Initial account passwords: stored in the team app-secret slots (not printed)."
+  printf '%s\n' "Demo Password  : Stored in Secret Manager: ${SECRET_DEMO_PASS} (not printed)."
 fi
 printf '%s\n' "=================================================================="
