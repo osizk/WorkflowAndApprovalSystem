@@ -58,7 +58,7 @@ class ReleaseTests(unittest.TestCase):
                 script = 'deploy/release.sh'
                 self.env.setdefault('IMAGE_TAG', '1' * 40)
             else:
-                script = 'deploy/deploy.sh'
+                script = 'deploy/release.sh'
                 cwd = self.reviewed_checkout()
                 if self.env['SEED_DEMO_DATA'] == 'true':
                     args = '--demo'
@@ -110,7 +110,7 @@ class ReleaseTests(unittest.TestCase):
         checkout = self.reviewed_checkout()
         # Synthetic marker only; never create or read actual credentials in tests.
         (checkout / 'gha-creds-review-fixture.json').write_text('{"fixture": true}')
-        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        result = self.run_script('deploy/release.sh', cwd=checkout)
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.log.read_text()
         self.assertIn('build --platform linux/amd64', calls)
@@ -119,7 +119,7 @@ class ReleaseTests(unittest.TestCase):
     def test_unrelated_untracked_file_still_blocks_before_cloud_calls(self):
         checkout = self.reviewed_checkout()
         (checkout / 'unreviewed.txt').write_text('Unreviewed change')
-        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        result = self.run_script('deploy/release.sh', cwd=checkout)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Use a clean reviewed checkout', result.stderr)
         self.assertEqual(self.log.read_text(), '')
@@ -128,7 +128,7 @@ class ReleaseTests(unittest.TestCase):
         checkout = self.reviewed_checkout()
         with (checkout / 'package.json').open('a') as changed:
             changed.write('\n')
-        result = self.run_script('deploy/deploy.sh', cwd=checkout)
+        result = self.run_script('deploy/release.sh', cwd=checkout)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Use a clean reviewed checkout', result.stderr)
         self.assertEqual(self.log.read_text(), '')
@@ -157,7 +157,7 @@ class ReleaseTests(unittest.TestCase):
 
     def test_release_existing_image_respects_false_rollback(self):
         self.env.update(ROLLBACK='false', IMAGE_TAG='1' * 40)
-        result = self.run_script('deploy/release.sh')
+        result = self.run_script('deploy/release.sh', '--existing-image')
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.log.read_text()
         self.assertIn('npm run db:migrate', calls)
@@ -252,7 +252,7 @@ class ReleaseTests(unittest.TestCase):
         result = self.run_script('deploy/deploy.sh', '--demo')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.log.read_text(), '')
-        self.assertIn('Preview completed', result.stdout)
+        self.assertIn('Dry Run : 1', result.stdout)
 
     def test_rollback_with_seed_is_refused_before_cloud_calls(self):
         self.env.update(ROLLBACK='true', SEED_DEMO_DATA='true')
