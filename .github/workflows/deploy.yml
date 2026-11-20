@@ -1,5 +1,7 @@
-# Adapted from the course Starter Kit for scd928edd.
-name: Deploy demo
+# Based on the Student Cloud Portal workflow for team scd928edd.
+# Keep deploy.yml on main, the demo environment, and id-token: write for WIF.
+# The app-specific release script manages port 3000, migration and Cloud Run.
+name: Deploy to Google Cloud
 
 on:
   pull_request:
@@ -39,7 +41,8 @@ jobs:
           python-version: '3.13'
       - name: Check Bash syntax and offline release/smoke behavior
         run: |
-          bash -n deploy/deploy.sh deploy/release.sh
+          bash -n deploy/deploy.sh
+          bash -n deploy/release.sh
           python3 -B -m unittest discover -s deploy/tests -p 'test_*.py' -v
 
   test:
@@ -62,8 +65,11 @@ jobs:
     env:
       PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
       REGION: ${{ vars.GCP_REGION }}
+      # Names of your team's resources (assigned by the portal)
       SERVICE_NAME: scd928edd
       MIGRATE_JOB_NAME: scd928edd-migrate
+      AR_REPOSITORY: scd928edd
+      IMAGE_NAME: scd928edd
       IMAGE_TAG: ${{ inputs.image_tag || github.sha }}
       ROLLBACK: ${{ inputs.image_tag != '' }}
       SEED_DEMO_DATA: ${{ inputs.seed_demo_data && 'true' || 'false' }}
@@ -72,17 +78,21 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate deployment settings
+      - name: Check settings and Dockerfile
         env:
           WIF_PROVIDER: ${{ vars.WIF_PROVIDER }}
           WIF_SERVICE_ACCOUNT: ${{ vars.WIF_SERVICE_ACCOUNT }}
         run: |
+          for name in PROJECT_ID REGION WIF_PROVIDER WIF_SERVICE_ACCOUNT; do
+            [ -n "${!name}" ] || { echo "Missing GitHub variable for $name (see the portal, Team resources tab)"; exit 1; }
+          done
           [[ "$PROJECT_ID" == cpe-se-course-2026 && "$REGION" == asia-southeast1 ]]
-          test -n "$WIF_PROVIDER" && test -n "$WIF_SERVICE_ACCOUNT"
           [[ "$IMAGE_TAG" =~ ^[0-9a-f]{40}$ ]]
           [[ "$ROLLBACK" != true || "$SEED_DEMO_DATA" != true ]]
+          [ -f Dockerfile ] || { echo 'No Dockerfile at the root of the repository'; exit 1; }
 
-      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+      - name: Sign in to Google Cloud (no key file)
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
         with:
           workload_identity_provider: ${{ vars.WIF_PROVIDER }}
           service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
@@ -93,17 +103,28 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Build, migrate and deploy reviewed main
+      - name: Build and push the image
+        if: env.ROLLBACK != 'true'
+        run: |
+          test -z "$(git status --porcelain --untracked-files=normal)"
+          gcloud run services describe "$SERVICE_NAME" --project "$PROJECT_ID" --region "$REGION" >/dev/null
+          gcloud run jobs describe "$MIGRATE_JOB_NAME" --project "$PROJECT_ID" --region "$REGION" >/dev/null
+          gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+          IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPOSITORY/$IMAGE_NAME:$GITHUB_SHA"
+          docker build --platform linux/amd64 --build-arg "APP_COMMIT=$GITHUB_SHA" --tag "$IMAGE" .
+          docker push "$IMAGE"
+
+      - name: Migrate and deploy reviewed main image
         if: env.ROLLBACK != 'true'
         shell: bash
         run: |
           args=()
           if [[ "$SEED_DEMO_DATA" == true ]]; then args+=(--demo); fi
-          DRY_RUN=0 bash deploy/release.sh "${args[@]}"
+          DRY_RUN=0 bash deploy/release.sh --existing-image "${args[@]}"
 
       - name: Roll back to an existing image
         if: env.ROLLBACK == 'true'
-        run: bash deploy/release.sh
+        run: DRY_RUN=0 bash deploy/release.sh
 
       - name: Smoke test public URL
         env:

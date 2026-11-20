@@ -27,7 +27,7 @@ Portal และ TA จัดเตรียมทรัพยากรและ
 4. ให้เพื่อน review PR #46 เข้า `lab5-staging` แล้วเปิด release PR เข้า `main`
    หลัง CI ผ่านและเพื่อนอนุมัติจึง merge ห้ามเจ้าของ PR merge เอง
 5. ใช้ [คู่มือ deploy](docs/labs/lab-05/deployment.md#course-shared-google-cloud)
-   ตรวจทรัพยากรและค่าที่ Portal เตรียมให้ แล้วใช้ workflow `Deploy demo`
+   ตรวจทรัพยากรและค่าที่ Portal เตรียมให้ แล้วใช้ workflow `Deploy to Google Cloud`
    จาก `main` เพื่อ deploy จริง การผ่าน dry run ยังไม่ใช่ผล deploy
 
 จุดที่ปรับจากตัวอย่างแล้ว ได้แก่ port 3000, คำสั่ง db:migrate/db:seed,
