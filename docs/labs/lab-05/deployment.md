@@ -71,6 +71,12 @@ request and history remain.
 | `TEST_DATABASE_URL` | Points automated tests at a separate disposable database. | Yes | Set a local PostgreSQL URL whose database name ends in `_test`. |
 | `WORKFLOW_BROWSER_CHANNEL` | Selects the browser used by Playwright tests. | No | Set to `msedge` for Edge, or leave unset when using Playwright Chromium. |
 
+`.env.example` lists the local runtime, Compose, seed and test variables with
+placeholders. Replace them only in the ignored local `.env` file or current
+shell. The deployment build receives the reviewed commit SHA as `APP_COMMIT`;
+the UI displays its first 12 characters so a grader can identify the release.
+The full SHA remains available in the deployment workflow summary.
+
 ## C-03 evidence
 
 The local clean-clone check at commit `8629b96` built the application image,
@@ -192,7 +198,8 @@ existing service, and send all traffic to the new ready revision. The serving
 image must match the pinned digest. If Cloud Run reports a platform-specific
 digest for an OCI index, the script accepts it only when that exact digest is
 listed for `linux/amd64` in the pinned index; an unlisted digest or wrong
-platform fails. They neither create infrastructure nor change IAM.
+platform fails. The same full SHA is built into the UI and displayed as a short
+release marker. They neither create infrastructure nor change IAM.
 A public smoke check verifies `/api/health`, `/api/ready` (a real database
 query), `/login`, and anonymous `/api/session` rejection.
 

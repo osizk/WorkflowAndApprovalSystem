@@ -139,6 +139,7 @@ class ReleaseTests(unittest.TestCase):
         calls = self.log.read_text()
         self.assertLess(calls.index('push '), calls.index('run jobs execute'))
         self.assertLess(calls.index('run jobs execute'), calls.index('run services update scd928edd '))
+        self.assertRegex(calls, r'build --platform linux/amd64 --build-arg APP_COMMIT=[0-9a-f]{40} --tag ')
         self.assertEqual(calls.count('--image ' + self.env['STUB_DIGEST']), 2)
         self.assertIn('PUBLIC_ORIGIN=https://scd928edd-test.asia-southeast1.run.app', calls)
         self.assertNotIn('--set-env-vars', calls)

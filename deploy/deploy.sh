@@ -166,7 +166,7 @@ fi
 # ==============================================================================
 if [[ "$ROLLBACK" == false && "$USE_EXISTING_IMAGE" == false ]]; then
   run_cmd gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
-  run_cmd docker build --platform linux/amd64 --tag "$IMAGE_URI" .
+  run_cmd docker build --platform linux/amd64 --build-arg "APP_COMMIT=$IMAGE_TAG" --tag "$IMAGE_URI" .
   run_cmd docker push "$IMAGE_URI"
 fi
 if [ "$DRY_RUN" != "1" ]; then
@@ -257,7 +257,10 @@ if [[ "$resolved_digest" != "$expected_digest" ]]; then
   # linux/amd64 image was published as an OCI index (for example, with a
   # BuildKit attestation). Accept it only when the exact digest is the amd64
   # child of the immutable index we deployed.
-  manifest="$(docker buildx imagetools inspect --raw "$DIGEST_IMAGE")"
+  if ! manifest="$(docker buildx imagetools inspect --raw "$DIGEST_IMAGE")"; then
+    echo 'Could not verify the released image manifest' >&2
+    exit 1
+  fi
   if ! printf '%s' "$manifest" | "${PYTHON:-python3}" -c '
 import json, sys
 
@@ -266,8 +269,13 @@ try:
 except (json.JSONDecodeError, TypeError):
     sys.exit(1)
 
+if not isinstance(index, dict):
+    sys.exit(1)
+
 expected = sys.argv[1]
 for descriptor in index.get("manifests", []):
+    if not isinstance(descriptor, dict):
+        continue
     platform = descriptor.get("platform") or {}
     if (descriptor.get("digest") == expected
             and platform.get("os") == "linux"
