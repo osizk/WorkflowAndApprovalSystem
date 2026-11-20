@@ -99,7 +99,7 @@ jobs:
         run: |
           args=()
           if [[ "$SEED_DEMO_DATA" == true ]]; then args+=(--demo); fi
-          DRY_RUN=0 bash deploy/deploy.sh "${args[@]}"
+          DRY_RUN=0 bash deploy/release.sh "${args[@]}"
 
       - name: Roll back to an existing image
         if: env.ROLLBACK == 'true'
