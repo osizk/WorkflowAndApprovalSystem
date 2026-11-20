@@ -71,6 +71,12 @@ request and history remain.
 | `TEST_DATABASE_URL` | Points automated tests at a separate disposable database. | Yes | Set a local PostgreSQL URL whose database name ends in `_test`. |
 | `WORKFLOW_BROWSER_CHANNEL` | Selects the browser used by Playwright tests. | No | Set to `msedge` for Edge, or leave unset when using Playwright Chromium. |
 
+`.env.example` lists the local runtime, Compose, seed and test variables with
+placeholders. Replace them only in the ignored local `.env` file or current
+shell. The deployment build receives the reviewed commit SHA as `APP_COMMIT`;
+the UI displays its first 12 characters so a grader can identify the release.
+The full SHA remains available in the deployment workflow summary.
+
 ## C-03 evidence
 
 The local clean-clone check at commit `8629b96` built the application image,
@@ -173,8 +179,9 @@ python -B -m unittest discover -s deploy/tests -p 'test_*.py' -v
 
 Preview mode calls neither gcloud nor Docker and requires no Cloud account.
 Offline tests substitute cloud commands, test migration failure, digest and
-traffic verification, rollback isolation, team restrictions and cookie logout.
-They do not prove access to the real course project.
+traffic verification (including OCI-index child membership and platform),
+rollback isolation, team restrictions and cookie logout. They do not prove
+access to the real course project.
 
 ### Reviewed release and optional manual deployment
 
@@ -187,8 +194,12 @@ into `main`. The PR author must not merge their own PR.
 Each push to `main` runs the application CI and offline deployment checks,
 then builds an image tagged with the full commit SHA. The scripts resolve its
 immutable digest, update and execute the existing migration job, update the
-existing service, send all traffic to the new ready revision, and compare the
-serving image digest. They neither create infrastructure nor change IAM.
+existing service, and send all traffic to the new ready revision. The serving
+image must match the pinned digest. If Cloud Run reports a platform-specific
+digest for an OCI index, the script accepts it only when that exact digest is
+listed for `linux/amd64` in the pinned index; an unlisted digest or wrong
+platform fails. The same full SHA is built into the UI and displayed as a short
+release marker. They neither create infrastructure nor change IAM.
 A public smoke check verifies `/api/health`, `/api/ready` (a real database
 query), `/login`, and anonymous `/api/session` rejection.
 
@@ -237,5 +248,8 @@ and the installed Microsoft Edge browser; TypeScript/Vite build; Bash syntax;
 workflow actionlint; and a Docker image build. The image applied the migration,
 seeded synthetic accounts in a separate temporary database, and passed the
 real HTTP smoke checks including cookie login, request listing and logout.
-These are local results. Course Portal readiness, WIF authentication and a
-live Cloud Run release remain unverified until the real deployment is run.
+On 20 November 2026, the updated offline release/smoke suite passed 25 tests
+with no failures or skips, and both deployment scripts passed Bash syntax
+checking. These are local results. Course Portal readiness, WIF authentication
+and a live Cloud Run release remain unverified until the real deployment is
+run.
