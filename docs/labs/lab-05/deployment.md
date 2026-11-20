@@ -159,7 +159,7 @@ Coordinate with any existing use of slots 1–4 before assigning them. If a slot
 or permission is missing, ask the TA; do not create new secret resources or
 change IAM. The scripts reference secret names only and never fetch values.
 
-For the first release with accounts, manually run **Deploy demo** from `main`,
+For the first release with accounts, manually run **Deploy to Google Cloud** from `main`,
 leave `image_tag` empty, and select `seed_demo_data`. This runs migrations and
 then the idempotent seed before updating the service. A failed migration or
 seed aborts deployment. Subsequent pushes migrate without seeding. Existing
@@ -226,7 +226,7 @@ tag that differs from HEAD. GitHub Actions also verifies its main event SHA.
 
 ### Rollback and evidence
 
-For rollback, manually run **Deploy demo** from `main` with `image_tag` set
+For rollback, manually run **Deploy to Google Cloud** from `main` with `image_tag` set
 to a full commit SHA whose image already exists. Leave seed disabled. The
 workflow skips application tests/build and the release skips migration/seed;
 it changes the service image and traffic, verifies the digest, and runs smoke
