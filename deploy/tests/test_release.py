@@ -1,5 +1,6 @@
 """Exercise the real Bash scripts with fake cloud commands; no live cloud calls."""
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -92,6 +93,16 @@ class ReleaseTests(unittest.TestCase):
         update = script.index('gcloud run services update ')
         self.assertLess(build, migrate)
         self.assertLess(migrate, update)
+
+    def test_course_command_preview_redacts_password_arguments(self):
+        script = (ROOT / 'deploy/deploy.sh').read_text(encoding='utf-8')
+        helper = re.search(r'run_cmd\(\) \{.*?\n\}', script, re.DOTALL).group(0)
+        marker = 'SYNTHETIC_REDACTION_FIXTURE'
+        result = subprocess.run([BASH, '-c', 'DRY_RUN=1\n' + helper +
+                                 '\nrun_cmd echo --password=' + marker],
+                                text=True, capture_output=True, check=True)
+        self.assertIn('--password=<REDACTED>', result.stdout)
+        self.assertNotIn(marker, result.stdout + result.stderr)
 
     def test_generated_auth_file_does_not_block_reviewed_checkout(self):
         checkout = self.reviewed_checkout()
