@@ -1,5 +1,7 @@
 """Exercise the real Bash scripts with fake cloud commands; no live cloud calls."""
 import os
+import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -18,6 +20,7 @@ set -eu
 printf '%s ' "$@" >> "$STUB_LOG"
 printf '\n' >> "$STUB_LOG"
 case "$*" in
+  'buildx imagetools inspect --raw '*) printf '%s\n' "${STUB_MANIFEST_JSON:-}" ;;
   'artifacts docker images describe '*) printf '%s\n' "$STUB_DIGEST" ;;
   'run jobs execute '*) exit "${STUB_MIGRATE_EXIT:-0}" ;;
   'run services describe '*--format=json*) printf '{"status":{"traffic":[{"revisionName":"%s","percent":100}]}}\n' "${STUB_TRAFFIC_REVISION:-scd928edd-00001-test}" ;;
@@ -93,6 +96,16 @@ class ReleaseTests(unittest.TestCase):
         self.assertLess(build, migrate)
         self.assertLess(migrate, update)
 
+    def test_course_command_preview_redacts_password_arguments(self):
+        script = (ROOT / 'deploy/deploy.sh').read_text(encoding='utf-8')
+        helper = re.search(r'run_cmd\(\) \{.*?\n\}', script, re.DOTALL).group(0)
+        marker = 'SYNTHETIC_REDACTION_FIXTURE'
+        result = subprocess.run([BASH, '-c', 'DRY_RUN=1\n' + helper +
+                                 '\nrun_cmd echo --password=' + marker],
+                                text=True, capture_output=True, check=True)
+        self.assertIn('--password=<REDACTED>', result.stdout)
+        self.assertNotIn(marker, result.stdout + result.stderr)
+
     def test_generated_auth_file_does_not_block_reviewed_checkout(self):
         checkout = self.reviewed_checkout()
         # Synthetic marker only; never create or read actual credentials in tests.
@@ -126,6 +139,7 @@ class ReleaseTests(unittest.TestCase):
         calls = self.log.read_text()
         self.assertLess(calls.index('push '), calls.index('run jobs execute'))
         self.assertLess(calls.index('run jobs execute'), calls.index('run services update scd928edd '))
+        self.assertRegex(calls, r'build --platform linux/amd64 --build-arg APP_COMMIT=[0-9a-f]{40} --tag ')
         self.assertEqual(calls.count('--image ' + self.env['STUB_DIGEST']), 2)
         self.assertIn('PUBLIC_ORIGIN=https://scd928edd-test.asia-southeast1.run.app', calls)
         self.assertNotIn('--set-env-vars', calls)
@@ -190,6 +204,40 @@ class ReleaseTests(unittest.TestCase):
     def test_serving_digest_must_match(self):
         self.env['STUB_SERVING_DIGEST'] = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
         result = self.run_script()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Serving image differs', result.stderr)
+
+    def test_serving_linux_amd64_child_of_pushed_index_is_accepted(self):
+        child = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
+        self.env['STUB_SERVING_DIGEST'] = child
+        self.env['STUB_MANIFEST_JSON'] = json.dumps({
+            'schemaVersion': 2,
+            'mediaType': 'application/vnd.oci.image.index.v1+json',
+            'manifests': [{
+                'digest': child.rsplit('@', 1)[1],
+                'platform': {'os': 'linux', 'architecture': 'amd64'},
+            }],
+        })
+
+        result = self.run_script()
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('buildx imagetools inspect --raw', self.log.read_text())
+
+    def test_serving_child_for_wrong_platform_is_rejected(self):
+        child = self.env['STUB_DIGEST'].replace('a' * 64, 'b' * 64)
+        self.env['STUB_SERVING_DIGEST'] = child
+        self.env['STUB_MANIFEST_JSON'] = json.dumps({
+            'schemaVersion': 2,
+            'mediaType': 'application/vnd.oci.image.index.v1+json',
+            'manifests': [{
+                'digest': child.rsplit('@', 1)[1],
+                'platform': {'os': 'linux', 'architecture': 'arm64'},
+            }],
+        })
+
+        result = self.run_script()
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Serving image differs', result.stderr)
 

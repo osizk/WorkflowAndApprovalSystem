@@ -23,6 +23,7 @@ test('F-01: browser login, reload and logout against PostgreSQL', { timeout: 300
     const page = await browser.newPage();
     page.setDefaultTimeout(5000);
     assert.equal((await page.goto(`${origin}/login`)).status(), 200);
+    await page.getByText('Release local', { exact: true }).waitFor();
     await page.getByLabel('Login').fill(requester.login);
     await page.getByLabel('Password').fill('invalid-password');
     await page.getByRole('button', { name: 'Sign in' }).click();

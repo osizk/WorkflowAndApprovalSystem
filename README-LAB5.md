@@ -58,3 +58,19 @@ health, การเชื่อมต่อฐานข้อมูล, HTML �
 
 No secret values are included. Preserve portal environment variables with
 `--update-env-vars` and secret bindings with `--update-secrets`.
+
+## Starter Kit layout compatibility
+
+The Portal rejected `deploy/deploy.sh` on main at `1d9648c` even after the
+three deployment steps were placed in that file. The script now starts from
+the supplied team Starter Kit scaffold, retaining its named resource settings,
+image URI, command helper and step 9–11 layout. App-specific migration, optional
+four-account seeding, existing-image release, rollback and verification remain.
+The Kit's example admin/demo secret names are metadata only; this application
+uses the four account slots described above and does not bind example passwords.
+
+Offline tests validate behavior, not the Portal's private recognition rules.
+After peer review and release through `lab5-staging` into `main`, rerun the
+Portal repository check and record the checked SHA and result. Until that real
+check passes, this change is a compatibility candidate, not proof of acceptance.
+The separate WIF attribute-condition rejection is not fixed by this script.

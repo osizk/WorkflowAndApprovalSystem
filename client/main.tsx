@@ -4,6 +4,8 @@ import { RequestWorkspace } from './requests';
 import { ReviewWorkspace } from './reviews';
 import './style.css';
 
+const releaseCommit = import.meta.env.VITE_APP_COMMIT || 'local';
+
 type Identity = { id: string; role: 'REQUESTER' | 'REVIEWER' };
 type Screen = 'loading' | 'unavailable' | 'login' | 'signed-in';
 
@@ -122,6 +124,7 @@ function App() {
           {error && <p className="error" role="alert">{error}</p>}
           <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
         </>}
+        <p className="release-info">Release <code title={releaseCommit}>{releaseCommit === 'local' ? releaseCommit : releaseCommit.slice(0, 12)}</code></p>
       </section>
     </main>
   );

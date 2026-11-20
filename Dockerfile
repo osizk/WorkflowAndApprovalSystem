@@ -11,6 +11,8 @@ RUN npm ci
 
 COPY . .
 RUN npm run db:generate
+ARG APP_COMMIT=local
+ENV VITE_APP_COMMIT=${APP_COMMIT}
 RUN npm run build
 
 EXPOSE 3000

@@ -45,6 +45,8 @@ button {
 button:disabled { opacity: .65; cursor: wait; }
 :focus-visible { outline: 3px solid #30714e; outline-offset: 3px; }
 .error { color: #a32626; margin: 0; }
+.release-info { margin-bottom: 0; color: #385847; font-size: .75rem; overflow-wrap: anywhere; }
+.release-info code { font-size: inherit; }
 
 .decision-controls { display: grid; gap: .5rem; margin-block: 1rem; }
 .decision-controls p { margin: 0; }
