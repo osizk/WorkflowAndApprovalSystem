@@ -1,0 +1,115 @@
+{
+  "scope": "Product Team developer verification; independent ClassPulse retest remains pending.",
+  "checks": [
+    {
+      "name": "health",
+      "observedAtUtc": "2026-11-24T15:37:46.748614+00:00",
+      "path": "/api/health",
+      "requestBytes": 0,
+      "status": 200,
+      "body": {
+        "status": "ok"
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "database readiness",
+      "observedAtUtc": "2026-11-24T15:37:46.911613+00:00",
+      "path": "/api/ready",
+      "requestBytes": 0,
+      "status": 200,
+      "body": {
+        "db": "connected"
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "signed-out protected session",
+      "observedAtUtc": "2026-11-24T15:37:47.043613+00:00",
+      "path": "/api/session",
+      "requestBytes": 0,
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "AUTH_REQUIRED",
+          "message": "Sign in required"
+        }
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "WF-BUG-001 boundary 102400",
+      "observedAtUtc": "2026-11-24T15:37:47.233185+00:00",
+      "path": "/api/session",
+      "requestBytes": 102400,
+      "status": 422,
+      "body": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Login and password are required"
+        }
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "WF-BUG-001 boundary 102401",
+      "observedAtUtc": "2026-11-24T15:37:47.486225+00:00",
+      "path": "/api/session",
+      "requestBytes": 102401,
+      "status": 413,
+      "body": {
+        "error": {
+          "code": "PAYLOAD_TOO_LARGE",
+          "message": "Request body is too large"
+        }
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "malformed JSON unchanged",
+      "observedAtUtc": "2026-11-24T15:37:47.606860+00:00",
+      "path": "/api/session",
+      "requestBytes": 1,
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "BAD_REQUEST",
+          "message": "Malformed JSON"
+        }
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    },
+    {
+      "name": "health after rejected bodies",
+      "observedAtUtc": "2026-11-24T15:37:47.719884+00:00",
+      "path": "/api/health",
+      "requestBytes": 0,
+      "status": 200,
+      "body": {
+        "status": "ok"
+      },
+      "passed": true,
+      "releaseId": "WF-FIX-001",
+      "sourceCommit": "ad2cbef67decf9953219694898327dea0bb66034",
+      "revision": "scd928edd-00008-9zd"
+    }
+  ]
+}

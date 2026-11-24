@@ -1,0 +1,15 @@
+✔ WF-BUG-001: oversized JSON returns 413 before authentication or database access (320.6666ms)
+✔ database failure returns a generic error and logs no sensitive details (14.5333ms)
+✔ health responds without querying the database (137.1633ms)
+✔ readiness runs a database query before reporting connected (29.392ms)
+✔ readiness rejects a failed database without exposing connection details (26.6949ms)
+✔ requires an explicit disposable test database distinct from development (4.7438ms)
+✔ reads development database from local .env before migrating (165.5858ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 712.5528

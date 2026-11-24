@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T13:45:30.307Z\",\"identity\":{\"status\":200,\"id\":5,\"role\":\"RESPONDENT\"},\"candidate\":2147483647,\"guardedProbe\":{\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Record not found\"}}},\"originalCase\":{\"at\":\"2026-11-24T13:45:30.379Z\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Record not found\"}}}}\n```"
+    }
+  ]
+}

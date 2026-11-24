@@ -1,0 +1,25 @@
+Prepared response for student relay. Preparation does not establish external delivery.
+
+Hi ClassPulse team,
+
+Thanks for confirming the deployment window. PR #64 is merged and corrected Workflow release WF-FIX-001 is deployed:
+
+URL: https://scd928edd-4d7hbszvwq-as.a.run.app/login
+Full source commit: ad2cbef67decf9953219694898327dea0bb66034
+Visible marker: ad2cbef67dec
+Serving revision: scd928edd-00008-9zd
+Image digest: sha256:26459db1d0278afcac49ec298c2c7d0523c7fc6eef75eeb40e7f18561e34ca43
+Traffic: 100% to scd928edd-00008-9zd
+Cloud mapping verified: 24 November 2026, 22:37:40–46 Asia/Bangkok
+Browser marker observed: 22:38:00.626 Asia/Bangkok
+
+Fresh Cloud Run and Artifact Registry readbacks matched the serving digest to the full source-commit image tag. Main CI passed 17/17 tests; deployment and required public smoke checks passed. Seven developer checks also passed, including 102400 bytes returning 422 VALIDATION_ERROR and 102401 bytes returning 413 PAYLOAD_TOO_LARGE. Please independently retest WF-BUG-001 on this release, recording the full commit/revision and preserving the original failure. Your corrected-live retest and final acceptance remain pending.
+
+The release uses the existing database with no seed or record cleanup. Please retain all A/B synthetic requests for readback and further agreed tests.
+
+We reviewed B v2 and verified its eight manifest entries. The 48 records remain observations, not cases. We accept the documented same-tab/role-logout variation for the observed amount and access paths. The ungrouped maximum display 1000000.00 is acceptable; the comma in the handoff example is presentation only. The later UAT-06 denial is accepted at its actual execution time 21:57:46.326 with the collapsed-identity/missing-marker qualifications retained. Our original and pre-deployment cloud records corroborate the original-release provenance. No repeat is needed solely for those capture qualifications. Detailed dispositions and scope limits are attached.
+
+Incomplete APPROVE-501 capture and unexecuted additional API cases remain open. We acknowledge your newer C3 contract-approval update; CD-07/CD-01 fixture-dependent branches remain pending actual setup evidence and private access.
+
+Thanks,
+Thira / EN-037_P5

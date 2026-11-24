@@ -1,0 +1,32 @@
+{"observedAt":"2026-11-24T10:23:51.830Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102400,"status":422,"response":{"error":{"code":"VALIDATION_ERROR","message":"Login and password are required"}}}
+✔ WF-BUG-001 control at 100 KiB returns a client validation error (223.5978ms)
+{"observedAt":"2026-11-24T10:23:51.977Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102401,"status":500,"response":{"error":{"code":"INTERNAL_ERROR","message":"Unexpected server error"}}}
+✖ WF-BUG-001 oversized login body preserves the HTTP 413 rejection (146.0676ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.68
+
+✖ failing tests:
+
+test at lab6-evidence\workflow\WF-BUG-001\oversized-login.test.mjs:33:1
+✖ WF-BUG-001 oversized login body preserves the HTTP 413 rejection (146.0676ms)
+  AssertionError [ERR_ASSERTION]: A body above the existing parser limit should return Payload Too Large
+  
+  500 !== 413
+  
+      at TestContext.<anonymous> (file:///C:/Users/KEN/Documents/ChatGPT/Software%20Engineer/lab6-evidence/workflow/WF-BUG-001/oversized-login.test.mjs:35:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 413,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

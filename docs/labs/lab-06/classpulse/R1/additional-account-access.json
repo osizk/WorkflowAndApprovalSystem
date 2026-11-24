@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Script ran on page and returned:\n```json\n{\"operator\":\"Codex\",\"attemptsPerAccount\":1,\"results\":[{\"at\":\"2026-11-24T10:57:05.409Z\",\"account\":\"ben.kim@classpulse.test\",\"loginStatus\":200,\"role\":\"OWNER\",\"identity\":{\"status\":200,\"id\":2,\"email\":\"ben.kim@classpulse.test\",\"role\":\"OWNER\"},\"logoutStatus\":204},{\"at\":\"2026-11-24T10:57:05.642Z\",\"account\":\"student2@classpulse.test\",\"loginStatus\":200,\"role\":\"RESPONDENT\",\"identity\":{\"status\":200,\"id\":5,\"email\":\"student2@classpulse.test\",\"role\":\"RESPONDENT\"},\"logoutStatus\":204},{\"at\":\"2026-11-24T10:57:05.892Z\",\"account\":\"student3@classpulse.test\",\"loginStatus\":200,\"role\":\"RESPONDENT\",\"identity\":{\"status\":200,\"id\":4,\"email\":\"student3@classpulse.test\",\"role\":\"RESPONDENT\"},\"logoutStatus\":204}]}\n```"
+    }
+  ]
+}

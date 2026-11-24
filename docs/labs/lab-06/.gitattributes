@@ -1,0 +1,4 @@
+# Preserve report/evidence bytes so SHA256SUMS.json also matches GitHub blobs.
+* -text whitespace=cr-at-eol
+# TAP assertion output includes intentional whitespace-only lines. Keep raw logs.
+workflow/WF-BUG-001/*-output.txt -whitespace
