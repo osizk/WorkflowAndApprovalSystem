@@ -1,10 +1,12 @@
 # Lab 6 plan from preparation to submission
 
+Latest independent-retest checkpoint: ClassPulse A independently retested WF-BUG-001 on WF-FIX-001 at 23:03:13.097–23:03:15.462 Bangkok on 24 November. The unchanged original reproducer passed 2/2 (102400 bytes -> 422; 102401 bytes -> 413), and five supplemental checks passed. All 25 package hashes verified. WF-BUG-001 is fixed and independently verified, closed as completed. This is scoped defect closure; remaining agreed Workflow coverage, whole-product acceptance and ClassPulse CD-01/CD-07 fixtures remain pending. See [independent retest disposition](workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md).
+
 Working plan for Thira Rungruangkaset and Ashira Sansoda, prepared on 24 November 2026, Asia/Bangkok UTC+7.
 
 This is the end-to-end working plan. Update status and evidence references as work actually happens. Execution, communication and acceptance records reflect actual actions and retain their limitations.
 
-Current checkpoint after corrected deployment on 24 November: original ClassPulse UAT-01–12 behavior observations and agreed CD-08 checks are recorded; fixture-dependent CD-01/CD-07 branches remain pending. Workflow WF-BUG-001 was independently reproduced, corrected with meaningful RED/GREEN and peer-approved PRs #63/#64, and deployed as WF-FIX-001 (source ad2cbef67decf9953219694898327dea0bb66034). Seven developer checks passed on the corrected release. ClassPulse independent corrected-live retest, remaining agreed coverage, final acceptance and the submission PDF remain pending. LAB-6-CURRENT-STATUS.md contains the latest checkpoint; the initial preparation snapshot below is retained as history.
+Current checkpoint after corrected deployment on 24 November: original ClassPulse UAT-01–12 behavior observations and agreed CD-08 checks are recorded; fixture-dependent CD-01/CD-07 branches remain pending. Workflow WF-BUG-001 was independently reproduced, corrected with meaningful RED/GREEN and peer-approved PRs #63/#64, and deployed as WF-FIX-001 (source ad2cbef67decf9953219694898327dea0bb66034). Seven developer checks passed on the corrected release. ClassPulse independent corrected-live retest is now accepted PASS and the finding closed. Remaining agreed coverage, final acceptance and the submission PDF remain pending. LAB-6-CURRENT-STATUS.md contains the latest checkpoint; the initial preparation snapshot below is retained as history.
 
 Branch policy: use the shared lab6 branch for Lab 6 integration. Open working branches named codex/lab6-* from lab6 and target lab6 in their PRs. Run review and CI there. Release reviewed changes from lab6 into main only after coordinating the deployment window. main remains the deployment branch. Earlier PRs #63/#64 used the prior staging route before this policy was requested; their deployed evidence remains preserved.
 
@@ -244,8 +246,8 @@ Existing files
 
 ## 15 Immediate next work after corrected deployment
 
-1. Share the verified WF-FIX-001 release and B-evidence dispositions with ClassPulse through the student channel. The prepared response has not been sent by preparing these files.
-2. Receive ClassPulse's independent WF-BUG-001 retest on full source ad2cbef67decf9953219694898327dea0bb66034, recording revision/digest, actual results, evidence and operator. Preserve the original failure separately.
+1. Send the prepared acknowledgement of ClassPulse A's accepted independent retest through the student channel. Preparation does not establish delivery.
+2. Preserve the accepted ClassPulse independent WF-BUG-001 retest and original failure separately. Record the closed finding disposition without treating it as whole-product acceptance.
 3. Account for remaining agreed Workflow additions, including the incomplete APPROVE-501 capture and unexecuted API branches, before the partner's final acceptance.
 4. Wait for actual ClassPulse CD-07 third-respondent and CD-01 inactive-account setup evidence/private access, then execute the remaining agreed branches. Retain controlled-session and other coverage limits explicitly.
 5. Complete final coverage and finding dispositions for ClassPulse. If no genuine finding exists after thorough agreed coverage, follow the instructor's controlled educational-exercise process rather than inventing a natural defect.

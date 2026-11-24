@@ -1,0 +1,18 @@
+{"name":"health before","atUtc":"2026-11-24T16:03:14.878Z","path":"/api/health","status":200,"body":{"status":"ok"}}
+✔ health before affected regression (170.2597ms)
+{"name":"database readiness","atUtc":"2026-11-24T16:03:15.016Z","path":"/api/ready","status":200,"body":{"db":"connected"}}
+✔ database readiness remains available (136.6919ms)
+{"name":"signed-out session","atUtc":"2026-11-24T16:03:15.065Z","path":"/api/session","status":401,"body":{"error":{"code":"AUTH_REQUIRED","message":"Sign in required"}}}
+✔ signed-out identity remains denied (48.7768ms)
+{"name":"malformed JSON","atUtc":"2026-11-24T16:03:15.115Z","path":"/api/session","status":400,"body":{"error":{"code":"BAD_REQUEST","message":"Malformed JSON"}}}
+✔ malformed JSON remains a safe client error (49.4361ms)
+{"name":"health after","atUtc":"2026-11-24T16:03:15.163Z","path":"/api/health","status":200,"body":{"status":"ok"}}
+✔ health after rejected malformed body (48.0636ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 603.077

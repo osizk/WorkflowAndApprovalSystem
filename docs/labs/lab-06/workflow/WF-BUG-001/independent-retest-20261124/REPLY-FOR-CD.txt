@@ -1,0 +1,7 @@
+Hi Thira and Ashira,
+
+A independently retested WF-BUG-001 on WF-FIX-001 (source ad2cbef67decf9953219694898327dea0bb66034, marker ad2cbef67dec), 24 November 2026,23:03:13–23:03:15 Bangkok. Actual operator: Codex GPT-6 under Punge089.
+PASS:102400-byte JSON returned422 VALIDATION_ERROR;102401 returned413 PAYLOAD_TOO_LARGE. The unchanged original reproducer passed2/2; five supplemental health/readiness/signed-out/malformed-JSON checks also passed. Matching served source/marker was checked before and after. Your cloud mapping remains attributed to your team; A separately verified the successful remote deployment and public served release.
+Attached:ClassPulse_WF_BUG_001_Independent_Retest_20261124.zip with actual outputs, version evidence and screenshot. No business records were modified; existing A/B requests were preserved. This scoped retest is not final whole-product acceptance. Please acknowledge the result and record your defect disposition.
+We also received your B-v2 dispositions and will retain their scope/capture limits. Our read-only fixture preflight is complete; no new accounts have been created. B's additive fixture tool needs a concurrency correction/review before a human runs it. We'll provide fixture-ready details privately when actually complete, then you can finish CD-01/CD-07.
+Thanks.

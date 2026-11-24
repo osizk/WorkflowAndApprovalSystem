@@ -1,8 +1,12 @@
 # Lab 6 working report
 
+Latest independent-retest checkpoint: ClassPulse A independently retested WF-BUG-001 on WF-FIX-001 at 23:03:13.097–23:03:15.462 Bangkok on 24 November. The unchanged original reproducer passed 2/2 (102400 bytes -> 422; 102401 bytes -> 413), and five supplemental checks passed. All 25 package hashes verified. WF-BUG-001 is fixed and independently verified, closed as completed. This is scoped defect closure; remaining agreed Workflow coverage, whole-product acceptance and ClassPulse CD-01/CD-07 fixtures remain pending. See [independent retest disposition](workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md).
+
 Team EN-037_P5: Thira Rungruangkaset, 67070503419 (D / HolyThiccDaddy), and Ashira Sansoda, 67070503445 (C / osizk). Checkpoint: 24 November 2026, Asia/Bangkok.
 
 Our product is Workflow and Approval System. We independently test ClassPulse; ClassPulse independently tests Workflow. This is the repository working report. The final assessed PDF, independent corrected-live retest and final acceptance are not complete.
+
+Latest ClassPulse fixture update: read-only preflight is complete, but no accounts have been created. The additive fixture tool needs a concurrency correction/review before authorized human execution. CD-01/CD-07 wait for actual setup evidence and private access.
 
 ## Part A: preparation and handoff
 
@@ -48,7 +52,7 @@ See [original finding](workflow/WF-BUG-001/ORIGINAL-FINDING.md), [A disposition]
 | Main CI and deployment | Run 45426749596 succeeded: 17 tests passed, zero failed/skipped, Docker built, migration/release and required smoke checks passed |
 | Corrected live record | WF-FIX-001, marker ad2cbef67dec, revision scd928edd-00008-9zd, digest sha256:26459db1d0278afcac49ec298c2c7d0523c7fc6eef75eeb40e7f18561e34ca43, 100% traffic |
 | Fresh verification | Cloud mapping completed 22:37:46.488 Bangkok; browser marker observed 22:38:00.626; seven developer checks passed, including 102401 bytes returning 413 |
-| Independent corrected-live retest | Pending actual ClassPulse execution and evidence |
+| Independent corrected-live retest | ClassPulse A: original reproducer 2/2 PASS plus 5/5 supplemental checks at 23:03:13–15 Bangkok; finding closed as fixed/independently verified |
 
 The release uses the existing database with no seed or record cleanup. Individual A/B records have not all received a new authenticated readback in the public smoke checks. Preserve them for partner comparison. The optional restart and other unexecuted controlled checks remain unexecuted.
 
@@ -58,6 +62,6 @@ Repository evidence: [Issue #62](https://github.com/osizk/WorkflowAndApprovalSys
 
 ## Remaining assessed work
 
-Receive the independent corrected-live retest, complete or disposition all agreed additional branches, finish the fixture-dependent ClassPulse tests, reconcile findings and record both products' actual acceptance decisions. If thorough ClassPulse coverage yields no genuine defect, follow the instructor's applicable controlled exercise process; do not invent a natural bug. Assemble and visually inspect the self-contained PDF, confirm the course deadline and retain the actual submission receipt.
+Retain the accepted independent corrected-live retest and closed finding; complete or disposition all agreed additional branches, finish the fixture-dependent ClassPulse tests, reconcile findings and record both products' actual acceptance decisions. If thorough ClassPulse coverage yields no genuine defect, follow the instructor's applicable controlled exercise process; do not invent a natural bug. Assemble and visually inspect the self-contained PDF, confirm the course deadline and retain the actual submission receipt.
 
 The required actual contribution and tool-use declaration is in [CONTRIBUTIONS.md](CONTRIBUTIONS.md). It accompanies the recorded evidence and will be included once in the final PDF.

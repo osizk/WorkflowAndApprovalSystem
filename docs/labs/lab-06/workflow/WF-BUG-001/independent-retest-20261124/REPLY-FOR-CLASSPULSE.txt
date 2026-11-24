@@ -1,0 +1,12 @@
+Hi ClassPulse team,
+
+Thanks. We reviewed the independent WF-BUG-001 retest and verified all 25 package checksum entries. The unchanged original reproducer passed 2/2 on WF-FIX-001, and the five supplemental checks passed. We accept this scoped result and record WF-BUG-001 as fixed and independently verified, closed as completed.
+
+The tested release remains source ad2cbef67decf9953219694898327dea0bb66034, marker ad2cbef67dec and revision scd928edd-00008-9zd. We preserve the original failure, your actual 23:03:13–15 Bangkok run and attribution, the before/after served-release evidence, and the distinction between our cloud mapping and your independent public verification.
+
+This does not close remaining agreed Workflow coverage or establish whole-product acceptance. Please retain those pending items and the original A/B request evidence.
+
+We acknowledge that read-only ClassPulse fixture preflight is complete, but accounts are not provisioned and the additive tool still needs its concurrency correction/review and authorized human execution. CD-01/CD-07 remain pending until actual fixture-ready evidence and private access are supplied.
+
+Thanks,
+Thira / EN-037_P5

@@ -2,3 +2,6 @@
 * -text whitespace=cr-at-eol
 # TAP assertion output includes intentional whitespace-only lines. Keep raw logs.
 workflow/WF-BUG-001/*-output.txt -whitespace
+
+# Preserve raw incoming independent-retest transcript whitespace.
+workflow/WF-BUG-001/**/*.txt -whitespace

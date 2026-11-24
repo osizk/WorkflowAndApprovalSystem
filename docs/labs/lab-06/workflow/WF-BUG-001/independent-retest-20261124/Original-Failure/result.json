@@ -1,0 +1,42 @@
+{
+  "reporter": "ClassPulse Student A/Punge089; actual operator Codex",
+  "origin": "https://scd928edd-4d7hbszvwq-as.a.run.app",
+  "reported_source": "82a4806b5291b57ad7e76a28fb7d40e1e947b9a6",
+  "observed_marker": "82a4806b5291",
+  "cloud_mapping_verified": false,
+  "tests": 2,
+  "passed": 1,
+  "failed": 1,
+  "skipped": 0,
+  "exit_code": 1,
+  "observations": [
+    {
+      "observedAt": "2026-11-24T12:09:37.819Z",
+      "origin": "https://scd928edd-4d7hbszvwq-as.a.run.app",
+      "requestBytes": 102400,
+      "status": 422,
+      "response": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Login and password are required"
+        }
+      }
+    },
+    {
+      "observedAt": "2026-11-24T12:09:37.992Z",
+      "origin": "https://scd928edd-4d7hbszvwq-as.a.run.app",
+      "requestBytes": 102401,
+      "status": 500,
+      "response": {
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "Unexpected server error"
+        }
+      }
+    }
+  ],
+  "independent_confirmation": true,
+  "original_discovery": "Workflow Product Team",
+  "fixed": false,
+  "independent_retest_complete": false
+}

@@ -1,0 +1,32 @@
+{
+  "verified": 25,
+  "files": [
+    "Independent-Retest/INDEPENDENT-RETEST.md",
+    "Independent-Retest/boundary-actual-output.txt",
+    "Independent-Retest/browser-marker-after.json",
+    "Independent-Retest/browser-marker-after.txt",
+    "Independent-Retest/corrected-login-marker.jpg",
+    "Independent-Retest/initial-bootstrap-marker-not-rendered.json",
+    "Independent-Retest/marker-after.json",
+    "Independent-Retest/marker-before.json",
+    "Independent-Retest/oversized-login.test.mjs",
+    "Independent-Retest/result.json",
+    "Independent-Retest/run-retest.mjs",
+    "Independent-Retest/supplemental-actual-output.txt",
+    "Independent-Retest/supplemental.test.mjs",
+    "Original-Failure/INDEPENDENT-CONFIRMATION.md",
+    "Original-Failure/actual-output.txt",
+    "Original-Failure/exit-code.txt",
+    "Original-Failure/marker-time.json",
+    "Original-Failure/result.json",
+    "Original-Failure/signed-out-follow-up.json",
+    "REPLY-FOR-CD.txt",
+    "Release/CORRECTED-RELEASE-WF-FIX-001.md",
+    "Release/corrected-serving-version.json",
+    "Release/workflow-deploy45426749596.json",
+    "Release/workflow-pr64-merged.json",
+    "START-HERE.txt"
+  ],
+  "reproducerUnchanged": true,
+  "originalFailureMatchesPriorEvidence": true
+}
