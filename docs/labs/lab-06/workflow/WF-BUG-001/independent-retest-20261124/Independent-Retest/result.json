@@ -1,0 +1,122 @@
+{
+  "releaseId": "WF-FIX-001",
+  "source": "ad2cbef67decf9953219694898327dea0bb66034",
+  "marker": "ad2cbef67dec",
+  "revision": "scd928edd-00008-9zd",
+  "digest": "sha256:26459db1d0278afcac49ec298c2c7d0523c7fc6eef75eeb40e7f18561e34ca43",
+  "trafficPercent": 100,
+  "cloudMappingProvenance": "C/D supplied fresh read-only mapping; A checked matching public marker before/after and remote successful deployment, not an independent A cloud readback",
+  "operator": "Codex GPT-6 under Student A/Punge089",
+  "startedAtUtc": "2026-11-24T16:03:13.097Z",
+  "completedAtUtc": "2026-11-24T16:03:15.462Z",
+  "originalReproducerSha256": "13adcb704d406d0580a49d77b222a90d9a25fed3a691f7df852c507735c93be4",
+  "originalBoundaryTestCount": 2,
+  "originalBoundaryExitCode": 0,
+  "supplementalTestCount": 5,
+  "supplementalExitCode": 0,
+  "oversizedEnvelopeCorrect": true,
+  "observations": [
+    {
+      "observedAt": "2026-11-24T16:03:14.150Z",
+      "origin": "https://scd928edd-4d7hbszvwq-as.a.run.app",
+      "requestBytes": 102400,
+      "status": 422,
+      "response": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Login and password are required"
+        }
+      }
+    },
+    {
+      "observedAt": "2026-11-24T16:03:14.342Z",
+      "origin": "https://scd928edd-4d7hbszvwq-as.a.run.app",
+      "requestBytes": 102401,
+      "status": 413,
+      "response": {
+        "error": {
+          "code": "PAYLOAD_TOO_LARGE",
+          "message": "Request body is too large"
+        }
+      }
+    }
+  ],
+  "supplementalObservations": [
+    {
+      "name": "health before",
+      "atUtc": "2026-11-24T16:03:14.878Z",
+      "path": "/api/health",
+      "status": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    {
+      "name": "database readiness",
+      "atUtc": "2026-11-24T16:03:15.016Z",
+      "path": "/api/ready",
+      "status": 200,
+      "body": {
+        "db": "connected"
+      }
+    },
+    {
+      "name": "signed-out session",
+      "atUtc": "2026-11-24T16:03:15.065Z",
+      "path": "/api/session",
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "AUTH_REQUIRED",
+          "message": "Sign in required"
+        }
+      }
+    },
+    {
+      "name": "malformed JSON",
+      "atUtc": "2026-11-24T16:03:15.115Z",
+      "path": "/api/session",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "BAD_REQUEST",
+          "message": "Malformed JSON"
+        }
+      }
+    },
+    {
+      "name": "health after",
+      "atUtc": "2026-11-24T16:03:15.163Z",
+      "path": "/api/health",
+      "status": 200,
+      "body": {
+        "status": "ok"
+      }
+    }
+  ],
+  "markerBefore": {
+    "label": "marker-before",
+    "atUtc": "2026-11-24T16:03:13.567Z",
+    "status": 200,
+    "marker": "ad2cbef67dec",
+    "servedSource": "ad2cbef67decf9953219694898327dea0bb66034",
+    "assetPath": "/assets/index-DLsT6V-I.js",
+    "assetSha256": "b8692139d7a58e062510cdbf25e01daf39c6f54fd8df0c9e8960984bede00335",
+    "method": "Full source constant in same-origin served SPA bundle; rendered footer separately observed in the browser"
+  },
+  "markerAfter": {
+    "label": "marker-after",
+    "atUtc": "2026-11-24T16:03:15.460Z",
+    "status": 200,
+    "marker": "ad2cbef67dec",
+    "servedSource": "ad2cbef67decf9953219694898327dea0bb66034",
+    "assetPath": "/assets/index-DLsT6V-I.js",
+    "assetSha256": "b8692139d7a58e062510cdbf25e01daf39c6f54fd8df0c9e8960984bede00335",
+    "method": "Full source constant in same-origin served SPA bundle; rendered footer separately observed in the browser"
+  },
+  "retestPassed": true,
+  "wholeProductAcceptance": false,
+  "applicationRecordsModified": false,
+  "credentialsUsed": false,
+  "priorFailurePreserved": true
+}

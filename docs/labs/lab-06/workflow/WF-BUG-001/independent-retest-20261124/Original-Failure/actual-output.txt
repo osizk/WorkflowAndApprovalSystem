@@ -1,0 +1,32 @@
+{"observedAt":"2026-11-24T12:09:37.819Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102400,"status":422,"response":{"error":{"code":"VALIDATION_ERROR","message":"Login and password are required"}}}
+✔ WF-BUG-001 control at 100 KiB returns a client validation error (1510.3229ms)
+{"observedAt":"2026-11-24T12:09:37.992Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102401,"status":500,"response":{"error":{"code":"INTERNAL_ERROR","message":"Unexpected server error"}}}
+✖ WF-BUG-001 oversized login body preserves the HTTP 413 rejection (164.5245ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1878.4092
+
+✖ failing tests:
+
+test at autopilot\wf-bug-001-confirmation\oversized-login.test.mjs:33:1
+✖ WF-BUG-001 oversized login body preserves the HTTP 413 rejection (164.5245ms)
+  AssertionError [ERR_ASSERTION]: A body above the existing parser limit should return Payload Too Large
+  
+  500 !== 413
+  
+      at TestContext.<anonymous> (file:///C:/Users/MSII/OneDrive/Desktop/Soft_eng/classpulse/autopilot/wf-bug-001-confirmation/oversized-login.test.mjs:35:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 413,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

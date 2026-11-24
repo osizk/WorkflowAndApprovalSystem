@@ -1,0 +1,10 @@
+{
+  "label": "marker-after",
+  "atUtc": "2026-11-24T16:03:15.460Z",
+  "status": 200,
+  "marker": "ad2cbef67dec",
+  "servedSource": "ad2cbef67decf9953219694898327dea0bb66034",
+  "assetPath": "/assets/index-DLsT6V-I.js",
+  "assetSha256": "b8692139d7a58e062510cdbf25e01daf39c6f54fd8df0c9e8960984bede00335",
+  "method": "Full source constant in same-origin served SPA bundle; rendered footer separately observed in the browser"
+}

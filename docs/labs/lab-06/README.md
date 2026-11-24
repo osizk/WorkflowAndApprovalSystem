@@ -1,6 +1,6 @@
 # Lab 6: independent UAT and defect management
 
-Working report and evidence checkpoint, 24 November 2026. Independent corrected-live retest, final acceptance and the self-contained submission PDF remain pending.
+Working report and evidence checkpoint, 24 November 2026. WF-BUG-001 independent corrected-live retest passed and the finding is closed. Remaining agreed coverage, whole-product acceptance and the self-contained PDF remain pending.
 
 **ClassPulse testers: begin with the [testing checklist and handoff](handoff/TESTER-START-HERE.md).** It links the current release, original cases, agreed additional cases, remaining tests and blank result/finding/acceptance forms. REPORT.md and PLAN.md describe our work; the handoff gives your execution instructions.
 
@@ -17,6 +17,7 @@ Working report and evidence checkpoint, 24 November 2026. Independent corrected-
 | [ClassPulse CD-08 evidence](classpulse/R1/CD08-missing-ID-result.json) | Completed guarded and original missing-ID observations |
 | [Workflow original finding](workflow/WF-BUG-001/ORIGINAL-FINDING.md) | Original WF-BUG-001 reproduction and impact |
 | [Workflow correction status](workflow/WF-BUG-001/CORRECTION-STATUS.md) | RED/GREEN, regression, review, CI, release and independent-retest state |
+| [Independent retest disposition](workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md) | Accepted 2/2 original boundary retest plus five supplemental checks; scoped finding closure |
 | [Corrected release WF-FIX-001](workflow/WF-BUG-001/CORRECTED-RELEASE-WF-FIX-001.md) | Verified full source, browser marker, serving revision, digest, traffic and time |
 | [Partner A setup disposition](partner-reviews/A3-SETUP-DISPOSITION.md) | Accepted A3 setup variation; its historical correction status is superseded |
 | [Partner B evidence disposition](partner-reviews/B-V2-DISPOSITION.md) | Same-tab setup, amount display and later UAT-06 provenance qualifications |

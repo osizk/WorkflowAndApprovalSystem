@@ -1,0 +1,12 @@
+{"observedAt":"2026-11-24T16:03:14.150Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102400,"status":422,"response":{"error":{"code":"VALIDATION_ERROR","message":"Login and password are required"}}}
+✔ WF-BUG-001 control at 100 KiB returns a client validation error (278.354ms)
+{"observedAt":"2026-11-24T16:03:14.342Z","origin":"https://scd928edd-4d7hbszvwq-as.a.run.app","requestBytes":102401,"status":413,"response":{"error":{"code":"PAYLOAD_TOO_LARGE","message":"Request body is too large"}}}
+✔ WF-BUG-001 oversized login body preserves the HTTP 413 rejection (189.8334ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 713.1126

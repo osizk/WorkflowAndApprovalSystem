@@ -4,12 +4,13 @@ Checkpoint: after WF-FIX-001 deployment, 24 November 2026. This is a Product Tea
 
 ## Priority for the corrected release
 
-- [ ] Independently execute WF-BUG-001/control (102400 bytes -> 422 VALIDATION_ERROR).
-- [ ] Independently execute WF-BUG-001/oversized (102401 bytes -> 413 PAYLOAD_TOO_LARGE).
-- [ ] Record WF-FIX-001, full source/revision, actual operator/time, byte counts, actual responses and evidence; preserve the original failure.
+- [x] ClassPulse A independently completed WF-BUG-001/control (102400 bytes -> 422 VALIDATION_ERROR).
+- [x] ClassPulse A independently completed WF-BUG-001/oversized (102401 bytes -> 413 PAYLOAD_TOO_LARGE).
+- [x] Received and verified WF-FIX-001 full version, actual run metadata/responses and original failure. See [closed finding disposition](../workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md).
 - [ ] Complete or explicitly disposition remaining agreed additional coverage below.
 - [ ] Agree affected regression/repeat scope for the new release and keep every new run separate from original-release observations.
-- [ ] Return the independent finding disposition and later whole-product acceptance decision when supported.
+- [x] Scoped WF-BUG-001 finding disposition: fixed and independently verified, closed as completed.
+- [ ] Return the later whole-product acceptance decision when the remaining agreed scope supports it.
 
 ## Original six-case evidence already received
 

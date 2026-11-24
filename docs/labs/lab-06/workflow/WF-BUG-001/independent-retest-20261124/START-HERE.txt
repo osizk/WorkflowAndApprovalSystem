@@ -1,0 +1,1 @@
+Read Independent-Retest/INDEPENDENT-RETEST.md first. This is actual independent scoped retest, not final product acceptance. Original failure retained separately. No credentials or business-record mutations.

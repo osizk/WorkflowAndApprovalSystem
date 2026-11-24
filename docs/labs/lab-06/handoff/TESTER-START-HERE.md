@@ -1,12 +1,14 @@
 # ClassPulse: Workflow testing checklist
 
-For ClassPulse A/B, testing EN-037_P5's Workflow and Approval System. Updated 24 November 2026, Asia/Bangkok. Use this handoff for the next session. It contains instructions and blank forms, not new execution results or acceptance.
+For ClassPulse A/B, testing EN-037_P5's Workflow and Approval System. Updated 24 November 2026, Asia/Bangkok. Use this handoff for the next session. It contains instructions and blank forms, with the received retest checkpoint identified separately. Actual template results and acceptance remain blank.
+
+Update: ClassPulse A's WF-BUG-001 independent retest at 23:03:13–15 Bangkok is accepted PASS, and the finding is closed. [Disposition and evidence](../workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md). The retest procedure below is retained for traceability/future agreed repeats; an automatic repeat is not requested. Continue remaining agreed coverage and final acceptance.
 
 ## What to do next
 
 1. Confirm the current release below and record your actual tester, browser and start time.
-2. Independently retest WF-BUG-001 using the two exact byte-boundary requests below.
-3. Return the actual retest result and evidence, then finish or explicitly disposition the remaining agreed additional coverage.
+2. Retain the completed independent WF-BUG-001 retest and original failure. Use the procedure below only for a separately needed new run.
+3. Finish or explicitly disposition the remaining agreed additional coverage; preserve your received retest evidence separately.
 4. Keep original-release results separate. Decide final acceptance only after the agreed scope and findings are accounted for.
 
 Original UAT-01–06 already have reported original-release behavior observations, with documented qualifications. Do not relabel them as runs on this corrected release. Rerun affected or additionally agreed cases as separate records; this checklist does not demand an automatic repeat of all completed cases.
@@ -38,7 +40,7 @@ The dates identify the supplied verification, not your test time. Observe the fo
 - [ ] Agree any controlled fixtures, expiry/replay, restart, new-instance or forced-rollback setup before attempting those branches. A new browser tab is not an application restart.
 - [ ] Preserve all original A/B synthetic records. Use fresh records for new successful terminal decisions. [Retention registry](../partner-reviews/RETAINED-REQUESTS.json).
 
-## Required next retest: WF-BUG-001
+## WF-BUG-001 retest procedure (completed checkpoint above)
 
 This retest needs no password or database fixture. Start signed out at the Workflow origin. Record the current marker and release record first. Send one request at each size, with Content-Type application/json and the normal same-origin Origin context. Do not use real credentials in either body.
 
@@ -72,7 +74,7 @@ For exact title boundaries, omit the normal UAT prefix and put the run marker in
 
 ## Return to EN-037_P5
 
-- [ ] Actual WF-BUG-001 retest rows, real output/evidence and source/revision identifiers.
+- [x] Received: ClassPulse A's actual WF-BUG-001 retest evidence and release identifiers. Preserve it; this checked item does not prefill any future result.
 - [ ] Completed additional subcase rows, including a completed APPROVE-501 outcome and any newly executed API probes. Keep blocked/unrun rows explicit.
 - [ ] Request IDs, before/after state/history readbacks and sanitized evidence for each relevant denial or decision.
 - [ ] Every finding with reproduction, expected/actual, impact and evidence; preserve original failures separately from retests.

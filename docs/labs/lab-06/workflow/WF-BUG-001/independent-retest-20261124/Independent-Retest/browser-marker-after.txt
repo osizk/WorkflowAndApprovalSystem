@@ -1,0 +1,18 @@
+Browser tab: 4, Title: "Workflow and Approval System", URL: "https://scd928edd-4d7hbszvwq-as.a.run.app/login".
+1 AXWebArea Workflow and Approval System, URL: scd928edd-4d7hbszvwq-as.a.run.app/login
+	2 container Sign in
+		3 text Workflow and Approval System
+		4 heading Sign in, Value: 1, ID: page-title
+			5 text Sign in
+		6 text Use your assigned account to open your workspace.
+		7 container
+			8 text Login
+			9 text field (settable) Login
+			10 text Password
+			11 text field (settable) Password
+			12 button Sign in
+		13 container
+			14 text Release 
+			15 text ad2cbef67dec
+
+The focused UI element is 4 heading Sign in, Value: 1, ID: page-title
