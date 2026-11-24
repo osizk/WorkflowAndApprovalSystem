@@ -2,6 +2,8 @@
 
 Working report and evidence checkpoint, 24 November 2026. Independent corrected-live retest, final acceptance and the self-contained submission PDF remain pending.
 
+**ClassPulse testers: begin with the [testing checklist and handoff](handoff/TESTER-START-HERE.md).** It links the current release, original cases, agreed additional cases, remaining tests and blank result/finding/acceptance forms. REPORT.md and PLAN.md describe our work; the handoff gives your execution instructions.
+
 | Document | Purpose |
 |---|---|
 | [Report](REPORT.md) | Current assessed work in both testing directions, results, limitations and remaining work |
