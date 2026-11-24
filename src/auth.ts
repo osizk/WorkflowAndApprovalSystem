@@ -102,6 +102,7 @@ export function createApp(db: PrismaClient, options: { origin: string; now?: () 
   mountRequestRoutes(app, db, requireSession(db, options.now));
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    if ('type' in err && err.type === 'entity.too.large') return error(res, 413, 'PAYLOAD_TOO_LARGE', 'Request body is too large');
     if ('type' in err && err.type === 'entity.parse.failed') return error(res, 400, 'BAD_REQUEST', 'Malformed JSON');
     console.error('API request failed');
     return error(res, 500, 'INTERNAL_ERROR', 'Unexpected server error');
