@@ -1,0 +1,14 @@
+{
+  "verified": 8,
+  "files": [
+    "HANDOVER-TO-A.txt",
+    "NEXT_UAT06_CONSOLE.txt",
+    "observation-index.csv",
+    "observations.json",
+    "RESULTS.txt",
+    "uat02-boundary-list.jpg",
+    "UAT06-console.png",
+    "UAT06-human-result.txt"
+  ],
+  "observations": 48
+}

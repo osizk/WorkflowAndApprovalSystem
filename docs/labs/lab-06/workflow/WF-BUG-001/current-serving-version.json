@@ -1,0 +1,36 @@
+{
+  "verificationStartedUtc": "2026-11-24T13:51:51.9548260Z",
+  "verificationCompletedUtc": "2026-11-24T13:51:58.3890334Z",
+  "sourceCommit": "82a4806b5291b57ad7e76a28fb7d40e1e947b9a6",
+  "service": {
+    "metadata": {
+      "name": "scd928edd"
+    },
+    "status": {
+      "latestReadyRevisionName": "scd928edd-00007-477",
+      "traffic": [
+        {
+          "latestRevision": true,
+          "percent": 100,
+          "revisionName": "scd928edd-00007-477"
+        }
+      ],
+      "url": "https://scd928edd-4d7hbszvwq-as.a.run.app"
+    }
+  },
+  "revision": {
+    "metadata": {
+      "name": "scd928edd-00007-477"
+    },
+    "status": {
+      "imageDigest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/scd928edd/scd928edd@sha256:6554d7f8cccdf1b4ded95f3f7d1a2560a786b0ecf7613cab62d59d942613a4fb"
+    }
+  },
+  "sourceTag": {
+    "image_summary": {
+      "digest": "sha256:6554d7f8cccdf1b4ded95f3f7d1a2560a786b0ecf7613cab62d59d942613a4fb",
+      "fully_qualified_digest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/scd928edd/scd928edd@sha256:6554d7f8cccdf1b4ded95f3f7d1a2560a786b0ecf7613cab62d59d942613a4fb"
+    }
+  },
+  "method": "Read-only gcloud service, revision and source-commit image-tag queries"
+}

@@ -1,0 +1,31 @@
+{
+  "AExplicitRecords": [
+    "e1cc8f10-ccb4-49b1-a391-3d44fd4e3f67",
+    "b1f4b385-04b4-4e7a-905f-7f9091e65db2"
+  ],
+  "BExplicitRecords": {
+    "minId": "5ba5da73-7d7e-4bd1-9984-8b9e13ddc553",
+    "maxId": "0063548a-0d21-4685-ba19-6dea12c3e88c",
+    "accessId": "d27f11e6-a057-4a1f-b190-980688127c63",
+    "reasonInvalidId": "5a3752c4-a619-4d0c-b69f-f2c199ac5cf9",
+    "reasonAsciiId": "baae8824-e56d-4131-9317-ad0da1cbcc23",
+    "reasonUnicodeId": "07e6bfa4-4f52-40aa-8144-46d593d72920",
+    "uat06Id": "9b734a22-085a-4f7f-a33f-3fe475c96012"
+  },
+  "OtherIdsReferencedInBEvidence": [
+    "2121680f-2c9e-4031-9460-cad1be741a47",
+    "2c0cc71d-0b09-4413-9bb2-3706d77ccdb7",
+    "573661f0-88ce-44bd-ab4f-c20a5afbf572",
+    "64399098-ac84-4d33-a7df-96efff72857c",
+    "6b080e50-6c34-4d6b-a19f-b62cf481296c",
+    "73e13288-44e2-4342-aea1-4f0fe8ff66d3",
+    "819d6c67-669d-4fbd-814b-b914822bf503",
+    "8abc3e60-8691-4f6d-8f73-6f091f5ce58c",
+    "b2d50ec0-1853-4f5e-8547-d37f549392cf",
+    "b3729b97-5883-4540-9ecd-271d76bc8bd6",
+    "b8ef3cc4-3018-4c5d-8cd7-d4766db85b42",
+    "c01db56d-8067-4151-842c-edd93c4e2eec",
+    "dd2fce67-34e3-4bf4-abfd-5f2b4d0a4d1d"
+  ],
+  "policy": "Preserve all synthetic requests. Additional referenced IDs are not assigned an author or creation claim by this registry. This is derived from partner evidence, not a fresh database inspection."
+}

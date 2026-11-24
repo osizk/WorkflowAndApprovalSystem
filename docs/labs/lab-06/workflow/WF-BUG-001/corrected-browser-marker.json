@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Script ran on page and returned:\n```json\n{\"observedAtUtc\":\"2026-11-24T15:38:00.626Z\",\"url\":\"https://scd928edd-4d7hbszvwq-as.a.run.app/login\",\"title\":\"Workflow and Approval System\",\"text\":\"Workflow and Approval System\\n\\nSign in\\n\\nUse your assigned account to open your workspace.\\n\\nLogin\\nPassword\\nSign in\\n\\nRelease ad2cbef67dec\",\"expectedMarker\":\"ad2cbef67dec\",\"markerPresent\":true,\"scope\":\"Signed-out browser release-marker verification\"}\n```"
+    }
+  ]
+}

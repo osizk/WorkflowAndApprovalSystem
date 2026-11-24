@@ -1,0 +1,1782 @@
+{
+  "operator": "Codex",
+  "runId": "UAT6-20261124-CodexD-R1",
+  "releaseRecord": "CP-V01 partner-reported",
+  "records": [
+    {
+      "id": "UAT-07-logout-setup",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/login.\n## Latest page snapshot\nuid=2_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n  uid=2_1 banner\n    uid=2_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n      uid=2_3 StaticText \"ClassPulse\"\n  uid=2_8 main\n    uid=4_0 heading \"Sign in\" level=\"1\"\n    uid=4_1 form\n      uid=4_2 StaticText \"Email\"\n      uid=4_3 textbox \"Email\"\n      uid=4_4 StaticText \"Password\"\n      uid=4_5 textbox \"Password\"\n      uid=4_6 button \"Sign in\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-bad-login-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=2_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n  uid=2_1 banner\n    uid=2_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n      uid=2_3 StaticText \"ClassPulse\"\n  uid=2_8 main\n    uid=4_0 heading \"Sign in\" level=\"1\"\n    uid=4_1 form\n      uid=5_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=5_1 StaticText \"Invalid email or password\"\n      uid=4_2 StaticText \"Email\"\n      uid=4_3 textbox \"Email\" value=\"ann.lee@classpulse.test\"\n      uid=4_4 StaticText \"Password\"\n      uid=4_5 textbox \"Password\" value=\"••••••••••••••••••••••••••••••••••\"\n      uid=4_6 button \"Sign in\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-bad-login-session",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:31:23.388Z\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-valid-ui-login",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/owner.\n## Latest page snapshot\nuid=2_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n  uid=2_1 banner\n    uid=2_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=2_3 StaticText \"ClassPulse\"\n    uid=6_0 StaticText \"Dr. Ann Lee\"\n    uid=6_1 StaticText \" · \"\n    uid=6_2 StaticText \"OWNER\"\n    uid=6_3 button \"Logout\"\n  uid=2_8 main\n    uid=6_4 heading \"Your surveys\" level=\"1\"\n    uid=6_5 link \"New survey\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/new\"\n      uid=6_6 StaticText \"New survey\"\n    uid=6_7 link \"test\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/5\"\n      uid=6_8 StaticText \"test\"\n    uid=6_9 StaticText \"CPE334\"\n    uid=6_10 StaticText \" · \"\n    uid=6_11 StaticText \"0\"\n    uid=6_12 StaticText \" \"\n    uid=6_13 StaticText \"responses\"\n    uid=6_14 StaticText \"Closed\"\n    uid=6_15 link \"CPE334 - Mid-semester Learning Check\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/4\"\n      uid=6_16 StaticText \"CPE334 - Mid-semester Learning Check\"\n    uid=6_17 StaticText \"CPE334\"\n    uid=6_18 StaticText \" · \"\n    uid=6_19 StaticText \"0\"\n    uid=6_20 StaticText \" \"\n    uid=6_21 StaticText \"responses\"\n    uid=6_22 StaticText \"Draft\"\n    uid=6_23 link \"CPE334 - Week 6: Requirements and User Stories\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/3\"\n      uid=6_24 StaticText \"CPE334 - Week 6: Requirements and User Stories\"\n    uid=6_25 StaticText \"CPE334\"\n    uid=6_26 StaticText \" · \"\n    uid=6_27 StaticText \"0\"\n    uid=6_28 StaticText \" \"\n    uid=6_29 StaticText \"responses\"\n    uid=6_30 StaticText \"Published\"\n    uid=6_31 link \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/2\"\n      uid=6_32 StaticText \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\"\n    uid=6_33 StaticText \"CPE334\"\n    uid=6_34 StaticText \" · \"\n    uid=6_35 StaticText \"1\"\n    uid=6_36 StaticText \" \"\n    uid=6_37 StaticText \"response\"\n    uid=6_38 StaticText \"Published\"\n    uid=6_39 link \"Week 1 pulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/1\"\n      uid=6_40 StaticText \"Week 1 pulse\"\n    uid=6_41 StaticText \"CPE334\"\n    uid=6_42 StaticText \" · \"\n    uid=6_43 StaticText \"0\"\n    uid=6_44 StaticText \" \"\n    uid=6_45 StaticText \"responses\"\n    uid=6_46 StaticText \"Closed\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-reload",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=7_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n  uid=7_1 banner\n    uid=7_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=7_3 StaticText \"ClassPulse\"\n    uid=7_4 StaticText \"Dr. Ann Lee\"\n    uid=7_5 StaticText \" · \"\n    uid=7_6 StaticText \"OWNER\"\n    uid=7_7 button \"Logout\"\n  uid=7_8 main\n    uid=7_9 heading \"Your surveys\" level=\"1\"\n    uid=7_10 link \"New survey\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/new\"\n      uid=7_11 StaticText \"New survey\"\n    uid=7_12 link \"test\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/5\"\n      uid=7_13 StaticText \"test\"\n    uid=7_14 StaticText \"CPE334\"\n    uid=7_15 StaticText \" · \"\n    uid=7_16 StaticText \"0\"\n    uid=7_17 StaticText \" \"\n    uid=7_18 StaticText \"responses\"\n    uid=7_19 StaticText \"Closed\"\n    uid=7_20 link \"CPE334 - Mid-semester Learning Check\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/4\"\n      uid=7_21 StaticText \"CPE334 - Mid-semester Learning Check\"\n    uid=7_22 StaticText \"CPE334\"\n    uid=7_23 StaticText \" · \"\n    uid=7_24 StaticText \"0\"\n    uid=7_25 StaticText \" \"\n    uid=7_26 StaticText \"responses\"\n    uid=7_27 StaticText \"Draft\"\n    uid=7_28 link \"CPE334 - Week 6: Requirements and User Stories\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/3\"\n      uid=7_29 StaticText \"CPE334 - Week 6: Requirements and User Stories\"\n    uid=7_30 StaticText \"CPE334\"\n    uid=7_31 StaticText \" · \"\n    uid=7_32 StaticText \"0\"\n    uid=7_33 StaticText \" \"\n    uid=7_34 StaticText \"responses\"\n    uid=7_35 StaticText \"Published\"\n    uid=7_36 link \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/2\"\n      uid=7_37 StaticText \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\"\n    uid=7_38 StaticText \"CPE334\"\n    uid=7_39 StaticText \" · \"\n    uid=7_40 StaticText \"1\"\n    uid=7_41 StaticText \" \"\n    uid=7_42 StaticText \"response\"\n    uid=7_43 StaticText \"Published\"\n    uid=7_44 link \"Week 1 pulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/1\"\n      uid=7_45 StaticText \"Week 1 pulse\"\n    uid=7_46 StaticText \"CPE334\"\n    uid=7_47 StaticText \" · \"\n    uid=7_48 StaticText \"0\"\n    uid=7_49 StaticText \" \"\n    uid=7_50 StaticText \"responses\"\n    uid=7_51 StaticText \"Closed\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-final-logout-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/login.\n## Latest page snapshot\nuid=7_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n  uid=7_1 banner\n    uid=7_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/login\"\n      uid=7_3 StaticText \"ClassPulse\"\n  uid=7_8 main\n    uid=8_0 heading \"Sign in\" level=\"1\"\n    uid=8_1 form\n      uid=8_2 StaticText \"Email\"\n      uid=8_3 textbox \"Email\"\n      uid=8_4 StaticText \"Password\"\n      uid=8_5 textbox \"Password\"\n      uid=8_6 button \"Sign in\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-07-final-session",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:31:45.865Z\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-created",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=9_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/new\"\n  uid=9_1 banner\n    uid=9_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=9_3 StaticText \"ClassPulse\"\n    uid=9_4 StaticText \"Dr. Ann Lee\"\n    uid=9_5 StaticText \" · \"\n    uid=9_6 StaticText \"OWNER\"\n    uid=9_7 button \"Logout\"\n  uid=9_8 main\n    uid=9_9 heading \"New survey\" level=\"1\"\n    uid=9_10 form\n      uid=9_11 StaticText \"Course\"\n      uid=9_12 combobox \"Course\" expandable haspopup=\"menu\" value=\"CPE334 — Software Engineering\"\n        uid=9_13 option \"Choose a course\" selectable value=\"Choose a course\"\n        uid=9_14 option \"CPE334 — Software Engineering\" selectable selected value=\"CPE334 — Software Engineering\"\n      uid=9_15 StaticText \"Title\"\n      uid=9_16 textbox \"Title\" value=\"UAT6-20261124-1732-CodexD-01\"\n      uid=9_17 StaticText \"Description (optional)\"\n      uid=9_18 textbox \"Description (optional)\" multiline\n      uid=9_19 heading \"Questions\" level=\"2\"\n      uid=9_20 StaticText \"Question \"\n      uid=9_21 StaticText \"1\"\n      uid=9_22 StaticText \"Question \"\n      uid=9_23 StaticText \"1\"\n      uid=9_24 StaticText \" text\"\n      uid=9_25 textbox \"Question 1 text\" value=\"Rate this class\"\n      uid=9_26 StaticText \"Question \"\n      uid=9_27 StaticText \"1\"\n      uid=9_28 StaticText \" type\"\n      uid=9_29 combobox \"Question 1 type\" expandable haspopup=\"menu\" value=\"Rating (1 to 5)\"\n        uid=9_30 option \"Rating (1 to 5)\" selectable selected value=\"Rating (1 to 5)\"\n        uid=9_31 option \"Single choice\" selectable value=\"Single choice\"\n      uid=9_32 checkbox \"Question 1 is required\" checked\n      uid=9_33 StaticText \"Question \"\n      uid=9_34 StaticText \"1\"\n      uid=9_35 StaticText \" is required\"\n      uid=10_0 button \"Remove question 1\"\n      uid=10_1 StaticText \"Question \"\n      uid=10_2 StaticText \"2\"\n      uid=10_3 StaticText \"Question \"\n      uid=10_4 StaticText \"2\"\n      uid=10_5 StaticText \" text\"\n      uid=10_6 textbox \"Question 2 text\" value=\"Best format?\"\n      uid=10_7 StaticText \"Question \"\n      uid=10_8 StaticText \"2\"\n      uid=10_9 StaticText \" type\"\n      uid=10_10 combobox \"Question 2 type\" expandable haspopup=\"menu\" value=\"Single choice\"\n        uid=10_11 option \"Rating (1 to 5)\" selectable value=\"Rating (1 to 5)\"\n        uid=10_12 option \"Single choice\" selectable selected value=\"Single choice\"\n      uid=10_13 checkbox \"Question 2 is required\" checked\n      uid=10_14 StaticText \"Question \"\n      uid=10_15 StaticText \"2\"\n      uid=10_16 StaticText \" is required\"\n      uid=11_0 textbox \"Question 2 option 1\" value=\"Online\"\n      uid=11_1 button \"Remove option 1 of question 2\"\n      uid=11_2 textbox \"Question 2 option 2\" value=\"In person\"\n      uid=11_3 button \"Remove option 2 of question 2\"\n      uid=11_4 button \"Add option\"\n      uid=10_17 button \"Remove question 2\"\n      uid=9_36 button \"Add question\"\n      uid=9_37 button \"Creating…\" disableable disabled\n      uid=9_38 link \"Cancel\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n        uid=9_39 StaticText \"Cancel\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-draft-detail",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=9_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6\"\n  uid=9_1 banner\n    uid=9_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=9_3 StaticText \"ClassPulse\"\n    uid=9_4 StaticText \"Dr. Ann Lee\"\n    uid=9_5 StaticText \" · \"\n    uid=9_6 StaticText \"OWNER\"\n    uid=9_7 button \"Logout\"\n  uid=9_8 main\n    uid=13_0 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=13_1 StaticText \"CPE334\"\n    uid=13_2 StaticText \" · Identified survey\"\n    uid=13_3 StaticText \"Draft\"\n    uid=13_4 button \"Publish\"\n    uid=13_5 link \"Back to your surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=13_6 StaticText \"Back to your surveys\"\n    uid=13_7 StaticText \"1\"\n    uid=13_8 StaticText \". \"\n    uid=13_9 StaticText \"Rate this class\"\n    uid=13_10 StaticText \"Rating, 1 to 5\"\n    uid=13_11 StaticText \" · required\"\n    uid=13_12 StaticText \"2\"\n    uid=13_13 StaticText \". \"\n    uid=13_14 StaticText \"Best format?\"\n    uid=13_15 StaticText \"Single choice\"\n    uid=13_16 StaticText \" · required\"\n    uid=13_17 StaticText \"Online\"\n    uid=13_18 StaticText \"In person\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-publish",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=9_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6\"\n  uid=9_1 banner\n    uid=9_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=9_3 StaticText \"ClassPulse\"\n    uid=9_4 StaticText \"Dr. Ann Lee\"\n    uid=9_5 StaticText \" · \"\n    uid=9_6 StaticText \"OWNER\"\n    uid=9_7 button \"Logout\"\n  uid=9_8 main\n    uid=13_0 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=13_1 StaticText \"CPE334\"\n    uid=13_2 StaticText \" · Identified survey\"\n    uid=13_3 StaticText \"Published\"\n    uid=14_0 button \"Close\"\n    uid=14_1 link \"View summary\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6/summary\"\n      uid=14_2 StaticText \"View summary\"\n    uid=13_5 link \"Back to your surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=13_6 StaticText \"Back to your surveys\"\n    uid=13_7 StaticText \"1\"\n    uid=13_8 StaticText \". \"\n    uid=13_9 StaticText \"Rate this class\"\n    uid=13_10 StaticText \"Rating, 1 to 5\"\n    uid=13_11 StaticText \" · required\"\n    uid=13_12 StaticText \"2\"\n    uid=13_13 StaticText \". \"\n    uid=13_14 StaticText \"Best format?\"\n    uid=13_15 StaticText \"Single choice\"\n    uid=13_16 StaticText \" · required\"\n    uid=13_17 StaticText \"Online\"\n    uid=13_18 StaticText \"In person\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-identified-form",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=15_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/6\"\n  uid=15_1 banner\n    uid=15_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_3 StaticText \"ClassPulse\"\n    uid=15_4 StaticText \"Student 1\"\n    uid=15_5 StaticText \" · \"\n    uid=15_6 StaticText \"RESPONDENT\"\n    uid=15_7 button \"Logout\"\n  uid=15_8 main\n    uid=15_9 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=15_10 StaticText \"CPE334\"\n    uid=15_11 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_12 StaticText \"Back to surveys\"\n    uid=15_13 StaticText \"Identified survey — your name is stored with your answers\"\n    uid=15_14 form\n      uid=15_15 StaticText \"Rate this class\"\n      uid=15_16 radio \"Rating 1 of 5\"\n      uid=15_17 radio \"Rating 2 of 5\"\n      uid=15_18 radio \"Rating 3 of 5\"\n      uid=15_19 radio \"Rating 4 of 5\"\n      uid=15_20 radio \"Rating 5 of 5\"\n      uid=15_21 StaticText \"Best format?\"\n      uid=15_22 radio \"Online\"\n      uid=15_23 StaticText \"Online\"\n      uid=15_24 radio \"In person\"\n      uid=15_25 StaticText \"In person\"\n      uid=15_26 button \"Submit\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-question-ids",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:32:42.871Z\",\"status\":200,\"body\":{\"survey\":{\"id\":6,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-1732-CodexD-01\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:32:38.107Z\",\"questions\":[{\"id\":13,\"position\":1,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":14,\"position\":2,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":12,\"position\":1,\"label\":\"Online\"},{\"id\":13,\"position\":2,\"label\":\"In person\"}]}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-submit",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=15_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/6\"\n  uid=15_1 banner\n    uid=15_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_3 StaticText \"ClassPulse\"\n    uid=15_4 StaticText \"Student 1\"\n    uid=15_5 StaticText \" · \"\n    uid=15_6 StaticText \"RESPONDENT\"\n    uid=15_7 button \"Logout\"\n  uid=15_8 main\n    uid=15_9 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=15_10 StaticText \"CPE334\"\n    uid=15_11 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_12 StaticText \"Back to surveys\"\n    uid=15_13 StaticText \"Identified survey — your name is stored with your answers\"\n    uid=15_14 form\n      uid=16_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=16_1 StaticText \"Please correct the answers\"\n        uid=16_2 StaticText \"Required question 13 is missing\"\n      uid=15_15 StaticText \"Rate this class\"\n      uid=15_16 radio \"Rating 1 of 5\"\n      uid=15_17 radio \"Rating 2 of 5\"\n      uid=15_18 radio \"Rating 3 of 5\"\n      uid=15_19 radio \"Rating 4 of 5\"\n      uid=15_20 radio \"Rating 5 of 5\"\n      uid=15_21 StaticText \"Best format?\"\n      uid=15_22 radio \"Online\" checked\n      uid=15_23 StaticText \"Online\"\n      uid=15_24 radio \"In person\"\n      uid=15_25 StaticText \"In person\"\n      uid=15_26 button \"Submit\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-rating-selection-recovery",
+      "note": "Direct DevTools input click did not set hidden rating control. Activated associated visible label and verified checked state before resubmitting. Earlier required-answer error was an operator/tool input issue.",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=15_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/6\"\n  uid=15_1 banner\n    uid=15_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_3 StaticText \"ClassPulse\"\n    uid=15_4 StaticText \"Student 1\"\n    uid=15_5 StaticText \" · \"\n    uid=15_6 StaticText \"RESPONDENT\"\n    uid=15_7 button \"Logout\"\n  uid=15_8 main\n    uid=15_9 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=15_10 StaticText \"CPE334\"\n    uid=15_11 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_12 StaticText \"Back to surveys\"\n    uid=15_13 StaticText \"Identified survey — your name is stored with your answers\"\n    uid=15_14 form\n      uid=16_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=16_1 StaticText \"Please correct the answers\"\n        uid=16_2 StaticText \"Required question 13 is missing\"\n      uid=15_15 StaticText \"Rate this class\"\n      uid=15_16 radio \"Rating 1 of 5\"\n      uid=15_17 radio \"Rating 2 of 5\"\n      uid=15_18 radio \"Rating 3 of 5\"\n      uid=15_19 radio \"Rating 4 of 5\" checked focusable focused\n      uid=15_20 radio \"Rating 5 of 5\"\n      uid=15_21 StaticText \"Best format?\"\n      uid=15_22 radio \"Online\" checked\n      uid=15_23 StaticText \"Online\"\n      uid=15_24 radio \"In person\"\n      uid=15_25 StaticText \"In person\"\n      uid=15_26 button \"Submit\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-valid-resubmit",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/3.\n## Latest page snapshot\nuid=15_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/3\"\n  uid=15_1 banner\n    uid=15_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=15_3 StaticText \"ClassPulse\"\n    uid=15_4 StaticText \"Student 1\"\n    uid=15_5 StaticText \" · \"\n    uid=15_6 StaticText \"RESPONDENT\"\n    uid=15_7 button \"Logout\"\n  uid=15_8 main\n    uid=18_0 heading \"Response submitted\" level=\"1\"\n    uid=18_1 StaticText \"Thanks — your response is in.\"\n    uid=18_2 StaticText \"Submitted on \"\n    uid=18_3 StaticText \"11/24/2026, 5:33:34 PM\"\n    uid=18_4 heading \"Your answers\" level=\"2\"\n    uid=18_5 StaticText \"Rate this class\"\n    uid=18_6 radio \"Rating 1 of 5\" disableable disabled\n    uid=18_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=18_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=18_9 radio \"Rating 4 of 5\" checked disableable disabled\n    uid=18_10 radio \"Rating 5 of 5\" disableable disabled\n    uid=18_11 StaticText \"Best format?\"\n    uid=18_12 StaticText \"Online\"\n    uid=18_13 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=18_14 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-populated-summary-list",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:33:49.156Z\",\"results\":[{\"path\":\"/api/owner/surveys/6/summary\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}},{\"path\":\"/api/owner/surveys\",\"status\":200,\"body\":{\"surveys\":[{\"id\":6,\"title\":\"UAT6-20261124-1732-CodexD-01\",\"status\":\"PUBLISHED\",\"courseCode\":\"CPE334\",\"responseCount\":1},{\"id\":5,\"title\":\"test\",\"status\":\"CLOSED\",\"courseCode\":\"CPE334\",\"responseCount\":0},{\"id\":4,\"title\":\"CPE334 - Mid-semester Learning Check\",\"status\":\"DRAFT\",\"courseCode\":\"CPE334\",\"responseCount\":0},{\"id\":3,\"title\":\"CPE334 - Week 6: Requirements and User Stories\",\"status\":\"PUBLISHED\",\"courseCode\":\"CPE334\",\"responseCount\":0},{\"id\":2,\"title\":\"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\",\"status\":\"PUBLISHED\",\"courseCode\":\"CPE334\",\"responseCount\":1},{\"id\":1,\"title\":\"Week 1 pulse\",\"status\":\"CLOSED\",\"courseCode\":\"CPE334\",\"responseCount\":0}]}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-saved-response-list",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:33:49.408Z\",\"results\":[{\"path\":\"/api/responses/3\",\"status\":200,\"body\":{\"response\":{\"id\":3,\"surveyId\":6,\"submittedAt\":\"2026-11-24T10:33:34.812Z\",\"answers\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"optionId\":12,\"optionLabel\":\"Online\"}]}}},{\"path\":\"/api/surveys\",\"status\":200,\"body\":{\"surveys\":[{\"id\":2,\"title\":\"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\",\"courseCode\":\"CPE334\",\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"hasResponded\":true},{\"id\":3,\"title\":\"CPE334 - Week 6: Requirements and User Stories\",\"courseCode\":\"CPE334\",\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"hasResponded\":false},{\"id\":6,\"title\":\"UAT6-20261124-1732-CodexD-01\",\"courseCode\":\"CPE334\",\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"hasResponded\":true}]}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-summary-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=19_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6/summary\"\n  uid=19_1 banner\n    uid=19_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=19_3 StaticText \"ClassPulse\"\n    uid=19_4 StaticText \"Dr. Ann Lee\"\n    uid=19_5 StaticText \" · \"\n    uid=19_6 StaticText \"OWNER\"\n    uid=19_7 button \"Logout\"\n  uid=19_8 main\n    uid=19_9 region \"Survey summary\"\n      uid=19_10 heading \"Survey summary\" level=\"1\"\n      uid=19_11 StaticText \"Responses:\"\n      uid=19_12 StaticText \" \"\n      uid=19_13 StaticText \"1\"\n      uid=19_14 heading \"Rate this class\" level=\"2\"\n      uid=19_15 StaticText \"Average: \"\n      uid=19_16 StaticText \"4.00\"\n      uid=19_17 radio \"Rating 1 of 5\" disableable disabled\n      uid=19_18 radio \"Rating 2 of 5\" disableable disabled\n      uid=19_19 radio \"Rating 3 of 5\" disableable disabled\n      uid=19_20 radio \"Rating 4 of 5\" checked disableable disabled\n      uid=19_21 radio \"Rating 5 of 5\" disableable disabled\n      uid=19_22 StaticText \"Rating \"\n      uid=19_23 StaticText \"1\"\n      uid=19_24 StaticText \"0\"\n      uid=19_25 StaticText \"Rating \"\n      uid=19_26 StaticText \"2\"\n      uid=19_27 StaticText \"0\"\n      uid=19_28 StaticText \"Rating \"\n      uid=19_29 StaticText \"3\"\n      uid=19_30 StaticText \"0\"\n      uid=19_31 StaticText \"Rating \"\n      uid=19_32 StaticText \"4\"\n      uid=19_33 StaticText \"1\"\n      uid=19_34 StaticText \"Rating \"\n      uid=19_35 StaticText \"5\"\n      uid=19_36 StaticText \"0\"\n      uid=19_37 heading \"Best format?\" level=\"2\"\n      uid=19_38 StaticText \"Online\"\n      uid=19_39 StaticText \"1\"\n      uid=19_40 image \"Online: 1 responses\"\n      uid=19_41 StaticText \"In person\"\n      uid=19_42 StaticText \"0\"\n      uid=19_43 image \"In person: 0 responses\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-01-submitted-badge",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=20_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n  uid=20_1 banner\n    uid=20_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=20_3 StaticText \"ClassPulse\"\n    uid=20_4 StaticText \"Student 1\"\n    uid=20_5 StaticText \" · \"\n    uid=20_6 StaticText \"RESPONDENT\"\n    uid=20_7 button \"Logout\"\n  uid=20_8 main\n    uid=20_9 heading \"Available surveys\" level=\"1\"\n    uid=20_10 link \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/2\"\n      uid=20_11 StaticText \"CPE334 Lab 5 deployment feedback - EN-034_P0 - 2026-11-14\"\n    uid=20_12 StaticText \"CPE334\"\n    uid=20_13 StaticText \" · Identified survey\"\n    uid=20_14 StaticText \"Submitted\"\n    uid=20_15 link \"CPE334 - Week 6: Requirements and User Stories\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/3\"\n      uid=20_16 StaticText \"CPE334 - Week 6: Requirements and User Stories\"\n    uid=20_17 StaticText \"CPE334\"\n    uid=20_18 StaticText \" · Identified survey\"\n    uid=20_19 link \"UAT6-20261124-1732-CodexD-01\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/6\"\n      uid=20_20 StaticText \"UAT6-20261124-1732-CodexD-01\"\n    uid=20_21 StaticText \"CPE334\"\n    uid=20_22 StaticText \" · Identified survey\"\n    uid=20_23 StaticText \"Submitted\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-04-duplicate-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:34:13.946Z\",\"duplicate\":{\"status\":409,\"body\":{\"error\":{\"code\":\"ALREADY_RESPONDED\",\"message\":\"You have already submitted this survey\"}}},\"original\":{\"status\":200,\"body\":{\"response\":{\"id\":3,\"surveyId\":6,\"submittedAt\":\"2026-11-24T10:33:34.812Z\",\"answers\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"optionId\":12,\"optionLabel\":\"Online\"}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-04-owner-count",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:34:14.137Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-03-09-available-subcases",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:34:38.120Z\",\"results\":[{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6/summary\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"PUT\",\"path\":\"/api/responses/3\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Endpoint not found\"}}},{\"method\":\"DELETE\",\"path\":\"/api/responses/3\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Endpoint not found\"}}}],\"readback\":{\"status\":200,\"body\":{\"response\":{\"id\":3,\"surveyId\":6,\"submittedAt\":\"2026-11-24T10:33:34.812Z\",\"answers\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"optionId\":12,\"optionLabel\":\"Online\"}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-09-owner-denial-and-summary",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:34:38.348Z\",\"ownerResponseAccess\":{\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},\"summary\":{\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-08-setup-summary-api",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:34:50.217Z\",\"setupMethod\":\"API fixture creation\",\"create\":{\"status\":201,\"body\":{\"survey\":{\"id\":7,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-08\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"DRAFT\",\"publishedAt\":null,\"closedAt\":null,\"createdAt\":\"2026-11-24T10:34:48.702Z\",\"questions\":[{\"id\":15,\"position\":1,\"prompt\":\"Empty rating\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":16,\"position\":2,\"prompt\":\"Empty choice\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":14,\"position\":1,\"label\":\"A\"},{\"id\":15,\"position\":2,\"label\":\"B\"}]}]}}},\"publish\":{\"status\":200,\"body\":{\"survey\":{\"id\":7,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-08\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:34:48.780Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:34:48.702Z\",\"questions\":[{\"id\":15,\"position\":1,\"prompt\":\"Empty rating\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":16,\"position\":2,\"prompt\":\"Empty choice\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":14,\"position\":1,\"label\":\"A\"},{\"id\":15,\"position\":2,\"label\":\"B\"}]}]}}},\"summary\":{\"status\":200,\"body\":{\"summary\":{\"surveyId\":7,\"status\":\"PUBLISHED\",\"responseCount\":0,\"questions\":[{\"questionId\":15,\"prompt\":\"Empty rating\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}},{\"questionId\":16,\"prompt\":\"Empty choice\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":14,\"label\":\"A\",\"count\":0},{\"optionId\":15,\"label\":\"B\",\"count\":0}]}}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-08-empty-summary-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=21_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/7/summary\"\n  uid=21_1 banner\n    uid=21_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=21_3 StaticText \"ClassPulse\"\n    uid=21_4 StaticText \"Dr. Ann Lee\"\n    uid=21_5 StaticText \" · \"\n    uid=21_6 StaticText \"OWNER\"\n    uid=21_7 button \"Logout\"\n  uid=21_8 main\n    uid=21_9 region \"Survey summary\"\n      uid=21_10 heading \"Survey summary\" level=\"1\"\n      uid=21_11 StaticText \"Responses:\"\n      uid=21_12 StaticText \" \"\n      uid=21_13 StaticText \"0\"\n      uid=21_14 StaticText \"No responses yet\"\n      uid=21_15 heading \"Empty rating\" level=\"2\"\n      uid=21_16 StaticText \"Average: \"\n      uid=21_17 StaticText \"—\"\n      uid=21_18 radio \"Rating 1 of 5\" disableable disabled\n      uid=21_19 radio \"Rating 2 of 5\" disableable disabled\n      uid=21_20 radio \"Rating 3 of 5\" disableable disabled\n      uid=21_21 radio \"Rating 4 of 5\" disableable disabled\n      uid=21_22 radio \"Rating 5 of 5\" disableable disabled\n      uid=21_23 StaticText \"Rating \"\n      uid=21_24 StaticText \"1\"\n      uid=21_25 StaticText \"0\"\n      uid=21_26 StaticText \"Rating \"\n      uid=21_27 StaticText \"2\"\n      uid=21_28 StaticText \"0\"\n      uid=21_29 StaticText \"Rating \"\n      uid=21_30 StaticText \"3\"\n      uid=21_31 StaticText \"0\"\n      uid=21_32 StaticText \"Rating \"\n      uid=21_33 StaticText \"4\"\n      uid=21_34 StaticText \"0\"\n      uid=21_35 StaticText \"Rating \"\n      uid=21_36 StaticText \"5\"\n      uid=21_37 StaticText \"0\"\n      uid=21_38 heading \"Empty choice\" level=\"2\"\n      uid=21_39 StaticText \"A\"\n      uid=21_40 StaticText \"0\"\n      uid=21_41 image \"A: 0 responses\"\n      uid=21_42 StaticText \"B\"\n      uid=21_43 StaticText \"0\"\n      uid=21_44 image \"B: 0 responses\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-01-invalid-authentication-core",
+      "note": "Nonexistent email selected as a unique synthetic candidate; Product Team concurrence on the exact string remains pending. No inactive-account probe.",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:35:33.867Z\",\"operator\":\"Codex\",\"results\":[{\"id\":\"wrong-existing\",\"status\":401,\"body\":{\"error\":{\"code\":\"INVALID_CREDENTIALS\",\"message\":\"Invalid email or password\"}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"unknown-email\",\"status\":401,\"body\":{\"error\":{\"code\":\"INVALID_CREDENTIALS\",\"message\":\"Invalid email or password\"}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"empty-object\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"email\",\"message\":\"Enter your email address\"},{\"field\":\"password\",\"message\":\"Enter your password\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"missing-password\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"password\",\"message\":\"Enter your password\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"missing-email\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"email\",\"message\":\"Enter your email address\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"email-number\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"email\",\"message\":\"Enter your email address\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"password-number\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"password\",\"message\":\"Enter your password\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true},{\"id\":\"text-plain\",\"status\":400,\"body\":{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Enter your email and password\",\"details\":[{\"field\":\"email\",\"message\":\"Enter your email address\"},{\"field\":\"password\",\"message\":\"Enter your password\"}]}},\"sessionAfter\":{\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}}},\"pass\":true}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-06-thirteen-protected-routes",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:35:34.554Z\",\"results\":[{\"method\":\"GET\",\"path\":\"/api/auth/me\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"POST\",\"path\":\"/api/auth/logout\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6/summary\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/surveys\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/surveys/6\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"POST\",\"path\":\"/api/surveys/6/responses\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/responses/3\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/owner/courses\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/owner/surveys\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"POST\",\"path\":\"/api/owner/surveys\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"POST\",\"path\":\"/api/owner/surveys/6/publish\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true},{\"method\":\"POST\",\"path\":\"/api/owner/surveys/6/close\",\"status\":401,\"body\":{\"error\":{\"code\":\"UNAUTHENTICATED\",\"message\":\"Please sign in to continue\"}},\"pass\":true}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-02-authoring-matrix",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:36:06.986Z\",\"run\":\"UAT6-20261124-CodexD-R1-CD02\",\"planned\":30,\"executed\":30,\"results\":[{\"id\":\"title-1\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":1,\"questionCount\":1,\"courseId\":1},\"newIds\":[8],\"savedId\":8,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"title-120\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":120,\"questionCount\":1,\"courseId\":1},\"newIds\":[9],\"savedId\":9,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"title-121\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":121,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"title\",\"message\":\"Title must be 1 to 120 characters\"}]},\"pass\":true},{\"id\":\"title-blank\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":3,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"title\",\"message\":\"Title must be 1 to 120 characters\"}]},\"pass\":true},{\"id\":\"questions-0\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":0,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions\",\"message\":\"Add 1 to 20 questions\"}]},\"pass\":true},{\"id\":\"questions-1\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[10],\"savedId\":10,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"questions-20\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":20,\"courseId\":1},\"newIds\":[11],\"savedId\":11,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"questions-21\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":21,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions\",\"message\":\"Add 1 to 20 questions\"}]},\"pass\":true},{\"id\":\"prompt-1\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[12],\"savedId\":12,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"prompt-300\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[13],\"savedId\":13,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"prompt-301\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].prompt\",\"message\":\"Question text must be 1 to 300 characters\"}]},\"pass\":true},{\"id\":\"prompt-blank\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].prompt\",\"message\":\"Question text must be 1 to 300 characters\"}]},\"pass\":true},{\"id\":\"options-count-1\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"Give 2 to 6 different options of 1 to 100 characters\"}]},\"pass\":true},{\"id\":\"options-count-2\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[14],\"savedId\":14,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"options-count-6\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[15],\"savedId\":15,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"options-count-7\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"Give 2 to 6 different options of 1 to 100 characters\"}]},\"pass\":true},{\"id\":\"options-length100\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[16],\"savedId\":16,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"options-length101\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"Give 2 to 6 different options of 1 to 100 characters\"}]},\"pass\":true},{\"id\":\"options-blank\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"Give 2 to 6 different options of 1 to 100 characters\"}]},\"pass\":true},{\"id\":\"options-duplicate\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"Give 2 to 6 different options of 1 to 100 characters\"}]},\"pass\":true},{\"id\":\"unknown-type\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].type\",\"message\":\"Choose Rating or Single choice\"}]},\"pass\":true},{\"id\":\"required-string\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].required\",\"message\":\"Required must be true or false\"}]},\"pass\":true},{\"id\":\"questions-object\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":\"non-array\",\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions\",\"message\":\"Add 1 to 20 questions\"}]},\"pass\":true},{\"id\":\"rating-options\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"questions[0].options\",\"message\":\"A rating question has no options\"}]},\"pass\":true},{\"id\":\"description-1000\",\"expectedStatus\":201,\"actualStatus\":201,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1,\"descriptionLength\":1000},\"newIds\":[17],\"savedId\":17,\"savedStatus\":\"DRAFT\",\"pass\":true},{\"id\":\"description-1001\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1,\"descriptionLength\":1001},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Check the highlighted fields\",\"details\":[{\"field\":\"description\",\"message\":\"Description can be at most 1000 characters\"}]},\"pass\":true},{\"id\":\"course-abc\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":\"abc\"},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Choose one of your courses\",\"details\":[{\"field\":\"courseId\",\"message\":\"Choose one of your courses\"}]},\"pass\":true},{\"id\":\"course-0\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":0},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Choose one of your courses\",\"details\":[{\"field\":\"courseId\",\"message\":\"Choose one of your courses\"}]},\"pass\":true},{\"id\":\"course--1\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":-1},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Choose one of your courses\",\"details\":[{\"field\":\"courseId\",\"message\":\"Choose one of your courses\"}]},\"pass\":true},{\"id\":\"course-1.5\",\"expectedStatus\":400,\"actualStatus\":400,\"input\":{\"titleLength\":28,\"questionCount\":1,\"courseId\":1.5},\"newIds\":[],\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Choose one of your courses\",\"details\":[{\"field\":\"courseId\",\"message\":\"Choose one of your courses\"}]},\"pass\":true}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-03-04-05-fixtures",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:36:23.264Z\",\"fixtures\":[{\"name\":\"CD03\",\"createStatus\":201,\"publishStatus\":200,\"survey\":{\"id\":18,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD03\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:36:21.038Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:36:20.876Z\",\"questions\":[{\"id\":46,\"position\":1,\"prompt\":\"Rating CD03\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":47,\"position\":2,\"prompt\":\"Choice CD03\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":26,\"position\":1,\"label\":\"Online\"},{\"id\":27,\"position\":2,\"label\":\"In person\"}]}]}},{\"name\":\"CD04\",\"createStatus\":201,\"publishStatus\":200,\"survey\":{\"id\":19,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD04\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:36:21.499Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:36:21.254Z\",\"questions\":[{\"id\":48,\"position\":1,\"prompt\":\"Rating CD04\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":49,\"position\":2,\"prompt\":\"Choice CD04\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":28,\"position\":1,\"label\":\"Online\"},{\"id\":29,\"position\":2,\"label\":\"In person\"}]}]}},{\"name\":\"CD05-stale\",\"createStatus\":201,\"publishStatus\":200,\"survey\":{\"id\":20,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD05-stale\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:36:21.747Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:36:21.674Z\",\"questions\":[{\"id\":50,\"position\":1,\"prompt\":\"Rating CD05-stale\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":51,\"position\":2,\"prompt\":\"Choice CD05-stale\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":30,\"position\":1,\"label\":\"Online\"},{\"id\":31,\"position\":2,\"label\":\"In person\"}]}]}},{\"name\":\"CD05-double\",\"createStatus\":201,\"publishStatus\":200,\"survey\":{\"id\":21,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD05-double\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:36:21.890Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:36:21.816Z\",\"questions\":[{\"id\":52,\"position\":1,\"prompt\":\"Rating CD05-double\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":53,\"position\":2,\"prompt\":\"Choice CD05-double\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":32,\"position\":1,\"label\":\"Online\"},{\"id\":33,\"position\":2,\"label\":\"In person\"}]}]}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-03-missing-choice",
+      "input": {
+        "answers": [
+          {
+            "questionId": 46,
+            "ratingValue": 4
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T10:37:08.482Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers",
+                "message": "Required question 47 is missing"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:08.711Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-foreign-question",
+      "input": {
+        "answers": [
+          {
+            "questionId": 15,
+            "ratingValue": 4
+          },
+          {
+            "questionId": 47,
+            "optionId": 26
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T10:37:08.974Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0].questionId",
+                "message": "Question does not belong to this survey"
+              },
+              {
+                "field": "answers",
+                "message": "Required question 46 is missing"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:09.162Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-foreign-option",
+      "input": {
+        "answers": [
+          {
+            "questionId": 46,
+            "ratingValue": 4
+          },
+          {
+            "questionId": 47,
+            "optionId": 14
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T10:37:09.418Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[1].optionId",
+                "message": "Option does not belong to this question"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:09.602Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-duplicate-question",
+      "input": {
+        "answers": [
+          {
+            "questionId": 46,
+            "ratingValue": 4
+          },
+          {
+            "questionId": 47,
+            "optionId": 26
+          },
+          {
+            "questionId": 46,
+            "ratingValue": 4
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T10:37:09.879Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[2].questionId",
+                "message": "Question may be answered only once"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:10.064Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-answers-object",
+      "input": {
+        "answers": {}
+      },
+      "response": {
+        "at": "2026-11-24T10:37:10.324Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers",
+                "message": "Answers must be an array"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:10.513Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-null-answer",
+      "input": {
+        "answers": [
+          null
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T10:37:10.777Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0]",
+                "message": "Each answer must be an object"
+              },
+              {
+                "field": "answers",
+                "message": "Required question 46 is missing"
+              },
+              {
+                "field": "answers",
+                "message": "Required question 47 is missing"
+              }
+            ]
+          }
+        },
+        "hasResponded": false
+      },
+      "ownerReadback": {
+        "at": "2026-11-24T10:37:10.960Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 18,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 46,
+                "prompt": "Rating CD03",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 47,
+                "prompt": "Choice CD03",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 26,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 27,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "CD-03-final-valid",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:11.163Z\",\"status\":201,\"body\":{\"response\":{\"id\":5,\"surveyId\":18,\"submittedAt\":\"2026-11-24T10:37:09.780Z\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-04-concurrent-pair",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:23.466Z\",\"results\":[{\"label\":\"A\",\"status\":201,\"body\":{\"response\":{\"id\":6,\"surveyId\":19,\"submittedAt\":\"2026-11-24T10:37:22.013Z\"}}},{\"label\":\"B\",\"status\":409,\"body\":{\"error\":{\"code\":\"ALREADY_RESPONDED\",\"message\":\"You have already submitted this survey\"}}}],\"readback\":{\"status\":200,\"body\":{\"response\":{\"id\":6,\"surveyId\":19,\"submittedAt\":\"2026-11-24T10:37:22.013Z\",\"answers\":[{\"questionId\":48,\"prompt\":\"Rating CD04\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":49,\"prompt\":\"Choice CD04\",\"type\":\"SINGLE_CHOICE\",\"optionId\":28,\"optionLabel\":\"Online\"}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-03-04-final-owner-readbacks",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:23.811Z\",\"results\":[{\"surveyId\":6,\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}},{\"surveyId\":18,\"status\":200,\"body\":{\"summary\":{\"surveyId\":18,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":46,\"prompt\":\"Rating CD03\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":47,\"prompt\":\"Choice CD03\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":26,\"label\":\"Online\",\"count\":1},{\"optionId\":27,\"label\":\"In person\",\"count\":0}]}}]}}},{\"surveyId\":19,\"status\":200,\"body\":{\"summary\":{\"surveyId\":19,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":48,\"prompt\":\"Rating CD04\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":49,\"prompt\":\"Choice CD04\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":28,\"label\":\"Online\",\"count\":1},{\"optionId\":29,\"label\":\"In person\",\"count\":0}]}}]}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-owner-close-stale",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:46.996Z\",\"status\":200,\"body\":{\"survey\":{\"id\":20,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD05-stale\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"CLOSED\",\"publishedAt\":\"2026-11-24T10:36:21.747Z\",\"closedAt\":\"2026-11-24T10:37:45.609Z\",\"createdAt\":\"2026-11-24T10:36:21.674Z\",\"questions\":[{\"id\":50,\"position\":1,\"prompt\":\"Rating CD05-stale\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":51,\"position\":2,\"prompt\":\"Choice CD05-stale\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":30,\"position\":1,\"label\":\"Online\"},{\"id\":31,\"position\":2,\"label\":\"In person\"}]}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-stale-submit-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=22_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/20\"\n  uid=22_1 banner\n    uid=22_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=22_3 StaticText \"ClassPulse\"\n    uid=22_4 StaticText \"Student 1\"\n    uid=22_5 StaticText \" · \"\n    uid=22_6 StaticText \"RESPONDENT\"\n    uid=22_7 button \"Logout\"\n  uid=22_8 main\n    uid=22_9 heading \"UAT6-20261124-CodexD-R1-CD05-stale\" level=\"1\"\n    uid=22_10 StaticText \"CPE334\"\n    uid=22_11 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=22_12 StaticText \"Back to surveys\"\n    uid=22_13 StaticText \"Identified survey — your name is stored with your answers\"\n    uid=22_14 form\n      uid=23_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=23_1 StaticText \"This survey is not open for responses\"\n      uid=22_15 StaticText \"Rating CD05-stale\"\n      uid=22_16 radio \"Rating 1 of 5\"\n      uid=22_17 radio \"Rating 2 of 5\"\n      uid=22_18 radio \"Rating 3 of 5\"\n      uid=22_19 radio \"Rating 4 of 5\" checked\n      uid=22_20 radio \"Rating 5 of 5\"\n      uid=22_21 StaticText \"Choice CD05-stale\"\n      uid=22_22 radio \"Online\" checked\n      uid=22_23 StaticText \"Online\"\n      uid=22_24 radio \"In person\"\n      uid=22_25 StaticText \"In person\"\n      uid=22_26 button \"Submit\" disableable disabled\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-stale-submit-http",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:47.368Z\",\"responses\":[{\"at\":\"2026-11-24T10:37:47.205Z\",\"status\":409,\"body\":{\"error\":{\"code\":\"SURVEY_NOT_OPEN\",\"message\":\"This survey is not open for responses\"}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-stale-owner-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:37:47.563Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":20,\"status\":\"CLOSED\",\"responseCount\":0,\"questions\":[{\"questionId\":50,\"prompt\":\"Rating CD05-stale\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}},{\"questionId\":51,\"prompt\":\"Choice CD05-stale\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":30,\"label\":\"Online\",\"count\":0},{\"optionId\":31,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-doubleclick-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully double clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/8.\n## Latest page snapshot\nuid=24_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/8\"\n  uid=24_1 banner\n    uid=24_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=24_3 StaticText \"ClassPulse\"\n    uid=24_4 StaticText \"Student 1\"\n    uid=24_5 StaticText \" · \"\n    uid=24_6 StaticText \"RESPONDENT\"\n    uid=24_7 button \"Logout\"\n  uid=24_8 main\n    uid=25_0 heading \"Response submitted\" level=\"1\"\n    uid=25_1 StaticText \"Thanks — your response is in.\"\n    uid=25_2 StaticText \"Submitted on \"\n    uid=25_3 StaticText \"11/24/2026, 5:38:14 PM\"\n    uid=25_4 heading \"Your answers\" level=\"2\"\n    uid=25_5 StaticText \"Rating CD05-double\"\n    uid=25_6 radio \"Rating 1 of 5\" disableable disabled\n    uid=25_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=25_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=25_9 radio \"Rating 4 of 5\" checked disableable disabled\n    uid=25_10 radio \"Rating 5 of 5\" disableable disabled\n    uid=25_11 StaticText \"Choice CD05-double\"\n    uid=25_12 StaticText \"Online\"\n    uid=25_13 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=25_14 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-inflight-diagnostics",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:38:15.828Z\",\"diagnostics\":{\"disabledStates\":[{\"at\":\"2026-11-24T10:38:15.536Z\",\"disabled\":true,\"label\":\"Submitting…\"}],\"requests\":[{\"at\":\"2026-11-24T10:38:15.629Z\",\"status\":201,\"body\":{\"response\":{\"id\":8,\"surveyId\":21,\"submittedAt\":\"2026-11-24T10:38:14.244Z\"}}}]},\"url\":\"https://classpulse-zdwglar6eq-as.a.run.app/responses/8\"}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-05-doubleclick-owner-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:38:16.009Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":21,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":52,\"prompt\":\"Rating CD05-double\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":53,\"prompt\":\"Choice CD05-double\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":32,\"label\":\"Online\",\"count\":1},{\"optionId\":33,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-respondent-owner-route-denials-CD06-id",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:38:41.492Z\",\"results\":[{\"method\":\"GET\",\"path\":\"/api/owner/courses\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"GET\",\"path\":\"/api/owner/surveys\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"POST\",\"path\":\"/api/owner/surveys\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"POST\",\"path\":\"/api/owner/surveys/6/publish\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"POST\",\"path\":\"/api/owner/surveys/6/close\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"GET\",\"path\":\"/api/surveys/not-a-number\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Record not found\"}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-owner-wrong-role-and-readbacks",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:38:41.859Z\",\"results\":[{\"method\":\"GET\",\"path\":\"/api/surveys/6\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}},{\"method\":\"POST\",\"path\":\"/api/surveys/6/responses\",\"status\":403,\"body\":{\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"You do not have permission to do that\"}}}],\"deniedTitleCreated\":false,\"s1\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-02-persisted-detail-readbacks",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:40:05.615Z\",\"rows\":[{\"id\":8,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":1,\"questionCount\":1,\"promptLength\":28,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":9,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":120,\"questionCount\":1,\"promptLength\":28,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":10,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":10,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":11,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":20,\"promptLength\":10,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":12,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":1,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":13,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":300,\"optionCount\":0,\"optionLabelLengths\":[]},{\"id\":14,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":28,\"optionCount\":2,\"optionLabelLengths\":[8,8]},{\"id\":15,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":28,\"optionCount\":6,\"optionLabelLengths\":[8,8,8,8,8,8]},{\"id\":16,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":28,\"optionCount\":2,\"optionLabelLengths\":[1,100]},{\"id\":17,\"status\":200,\"savedStatus\":\"DRAFT\",\"titleLength\":28,\"questionCount\":1,\"promptLength\":28,\"optionCount\":0,\"optionLabelLengths\":[],\"descriptionLength\":1000}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "S1-resumption-check",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:34.942Z\",\"detail\":{\"status\":200,\"body\":{\"survey\":{\"id\":6,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-1732-CodexD-01\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:32:38.107Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:32:25.905Z\",\"questions\":[{\"id\":13,\"position\":1,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":14,\"position\":2,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":12,\"position\":1,\"label\":\"Online\"},{\"id\":13,\"position\":2,\"label\":\"In person\"}]}]}}},\"summary\":{\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-03-other-owner",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:54.590Z\",\"results\":[{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},{\"method\":\"GET\",\"path\":\"/api/owner/surveys/6/summary\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},{\"method\":\"POST\",\"path\":\"/api/owner/surveys/6/close\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-09-cross-respondent",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:54.778Z\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Record not found\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-06-non-enrollment",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:55.131Z\",\"listed\":false,\"list\":{\"surveys\":[]},\"detail\":{\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},\"submission\":{\"status\":403,\"body\":{\"error\":{\"code\":\"NOT_ELIGIBLE\",\"message\":\"You are not enrolled in this course\"}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-03-06-09-owner-readback-after-denials",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:55.340Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-ownerB-course-id-list-before",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:57:55.595Z\",\"courses\":{\"courses\":[{\"id\":2,\"code\":\"CPE231\",\"title\":\"Course 231\"}]},\"ownedList\":{\"surveys\":[]}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-foreign-course-ownership-precedence",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:14.139Z\",\"ownCourses\":{\"courses\":[{\"id\":1,\"code\":\"CPE334\",\"title\":\"Software Engineering\"}]},\"results\":[{\"title\":\"UAT6-20261124-CodexD-R1-12-denied\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Course not found\"}}},{\"title\":\"\",\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Course not found\"}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-other-owner-publish-and-create-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:14.400Z\",\"publish\":{\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},\"ownedList\":{\"surveys\":[]}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-12-final-owner-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:14.611Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-09-original-ui-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=26_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/3\"\n  uid=26_1 banner\n    uid=26_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=26_3 StaticText \"ClassPulse\"\n    uid=26_4 StaticText \"Student 1\"\n    uid=26_5 StaticText \" · \"\n    uid=26_6 StaticText \"RESPONDENT\"\n    uid=26_7 button \"Logout\"\n  uid=26_8 main\n    uid=26_9 heading \"Response submitted\" level=\"1\"\n    uid=26_10 StaticText \"Thanks — your response is in.\"\n    uid=26_11 StaticText \"Submitted on \"\n    uid=26_12 StaticText \"11/24/2026, 5:33:34 PM\"\n    uid=26_13 heading \"Your answers\" level=\"2\"\n    uid=26_14 StaticText \"Rate this class\"\n    uid=26_15 radio \"Rating 1 of 5\" disableable disabled\n    uid=26_16 radio \"Rating 2 of 5\" disableable disabled\n    uid=26_17 radio \"Rating 3 of 5\" disableable disabled\n    uid=26_18 radio \"Rating 4 of 5\" checked disableable disabled\n    uid=26_19 radio \"Rating 5 of 5\" disableable disabled\n    uid=26_20 StaticText \"Best format?\"\n    uid=26_21 StaticText \"Online\"\n    uid=26_22 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=26_23 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-05-close-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=27_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6\"\n  uid=27_1 banner\n    uid=27_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=27_3 StaticText \"ClassPulse\"\n    uid=27_4 StaticText \"Dr. Ann Lee\"\n    uid=27_5 StaticText \" · \"\n    uid=27_6 StaticText \"OWNER\"\n    uid=27_7 button \"Logout\"\n  uid=27_8 main\n    uid=27_9 heading \"UAT6-20261124-1732-CodexD-01\" level=\"1\"\n    uid=27_10 StaticText \"CPE334\"\n    uid=27_11 StaticText \" · Identified survey\"\n    uid=27_12 StaticText \"Closed\"\n    uid=27_14 link \"View summary\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/6/summary\"\n      uid=27_15 StaticText \"View summary\"\n    uid=27_16 link \"Back to your surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=27_17 StaticText \"Back to your surveys\"\n    uid=27_18 StaticText \"1\"\n    uid=27_19 StaticText \". \"\n    uid=27_20 StaticText \"Rate this class\"\n    uid=27_21 StaticText \"Rating, 1 to 5\"\n    uid=27_22 StaticText \" · required\"\n    uid=27_23 StaticText \"2\"\n    uid=27_24 StaticText \". \"\n    uid=27_25 StaticText \"Best format?\"\n    uid=27_26 StaticText \"Single choice\"\n    uid=27_27 StaticText \" · required\"\n    uid=27_28 StaticText \"Online\"\n    uid=27_29 StaticText \"In person\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-05-respondent2-closed-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=29_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/6\"\n  uid=29_1 banner\n    uid=29_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=29_3 StaticText \"ClassPulse\"\n    uid=29_4 StaticText \"Student 2\"\n    uid=29_5 StaticText \" · \"\n    uid=29_6 StaticText \"RESPONDENT\"\n    uid=29_7 button \"Logout\"\n  uid=29_8 main\n    uid=29_9 alert atomic live=\"assertive\" relevant=\"additions text\"\n      uid=29_10 StaticText \"Survey not found\"\n    uid=29_11 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=29_12 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-05-respondent2-closed-api",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:45.991Z\",\"listed\":false,\"detail\":{\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},\"submission\":{\"status\":409,\"body\":{\"error\":{\"code\":\"SURVEY_NOT_OPEN\",\"message\":\"This survey is not open for responses\"}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-05-final-summary",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:46.189Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":6,\"status\":\"CLOSED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-05-saved-history",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:58:46.400Z\",\"status\":200,\"body\":{\"response\":{\"id\":3,\"surveyId\":6,\"submittedAt\":\"2026-11-24T10:33:34.812Z\",\"answers\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"optionId\":12,\"optionLabel\":\"Online\"}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-10-illegal-transitions-draft-fixture",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:59:09.069Z\",\"out\":[{\"surveyId\":6,\"action\":\"publish\",\"status\":409,\"body\":{\"error\":{\"code\":\"INVALID_TRANSITION\",\"message\":\"A closed survey cannot be published\"}},\"stateAfter\":\"CLOSED\"},{\"surveyId\":6,\"action\":\"close\",\"status\":409,\"body\":{\"error\":{\"code\":\"INVALID_TRANSITION\",\"message\":\"A closed survey cannot be closed\"}},\"stateAfter\":\"CLOSED\"},{\"surveyId\":22,\"action\":\"close-draft\",\"status\":409,\"body\":{\"error\":{\"code\":\"INVALID_TRANSITION\",\"message\":\"A draft survey cannot be closed\"}},\"stateAfter\":\"DRAFT\"}],\"draft\":{\"survey\":{\"id\":22,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-10\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"DRAFT\",\"publishedAt\":null,\"closedAt\":null,\"createdAt\":\"2026-11-24T10:59:07.432Z\",\"questions\":[{\"id\":54,\"position\":1,\"prompt\":\"Draft test\",\"type\":\"RATING\",\"required\":true,\"options\":[]}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-10-draft-respondent-denials",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:59:21.927Z\",\"listed\":false,\"detail\":{\"status\":404,\"body\":{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Survey not found\"}}},\"submit\":{\"status\":409,\"body\":{\"error\":{\"code\":\"SURVEY_NOT_OPEN\",\"message\":\"This survey is not open for responses\"}}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-10-publish-repeat-readbacks",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T10:59:22.451Z\",\"before\":{\"summary\":{\"surveyId\":22,\"status\":\"DRAFT\",\"responseCount\":0,\"questions\":[{\"questionId\":54,\"prompt\":\"Draft test\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}}]}},\"publish\":{\"status\":200,\"body\":{\"survey\":{\"id\":22,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-10\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T10:59:20.737Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T10:59:07.432Z\",\"questions\":[{\"id\":54,\"position\":1,\"prompt\":\"Draft test\",\"type\":\"RATING\",\"required\":true,\"options\":[]}]}}},\"repeat\":{\"status\":409,\"body\":{\"error\":{\"code\":\"INVALID_TRANSITION\",\"message\":\"A published survey cannot be published\"}}},\"after\":{\"summary\":{\"surveyId\":22,\"status\":\"PUBLISHED\",\"responseCount\":0,\"questions\":[{\"questionId\":54,\"prompt\":\"Draft test\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}}]}},\"s1\":{\"summary\":{\"surveyId\":6,\"status\":\"CLOSED\",\"responseCount\":1,\"questions\":[{\"questionId\":13,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":4,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":0}}},{\"questionId\":14,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":12,\"label\":\"Online\",\"count\":1},{\"optionId\":13,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-empty-title-ui",
+      "note": "One valid required rating question supplied at empty-title probe; second required choice added for the actual S2 fixture.",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=30_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/new\"\n  uid=30_1 banner\n    uid=30_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=30_3 StaticText \"ClassPulse\"\n    uid=30_4 StaticText \"Dr. Ann Lee\"\n    uid=30_5 StaticText \" · \"\n    uid=30_6 StaticText \"OWNER\"\n    uid=30_7 button \"Logout\"\n  uid=30_8 main\n    uid=30_9 heading \"New survey\" level=\"1\"\n    uid=30_10 form\n      uid=31_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=31_1 StaticText \"Check the highlighted fields\"\n      uid=30_11 StaticText \"Course\"\n      uid=30_12 combobox \"Course\" expandable haspopup=\"menu\" value=\"CPE334 — Software Engineering\"\n        uid=30_13 option \"Choose a course\" selectable value=\"Choose a course\"\n        uid=30_14 option \"CPE334 — Software Engineering\" selectable selected value=\"CPE334 — Software Engineering\"\n      uid=30_15 StaticText \"Title\"\n      uid=30_16 textbox \"Title\" description=\"Title must be 1 to 120 characters\"\n      uid=31_2 StaticText \"Title must be 1 to 120 characters\"\n      uid=30_17 StaticText \"Description (optional)\"\n      uid=30_18 textbox \"Description (optional)\" multiline\n      uid=30_19 heading \"Questions\" level=\"2\"\n      uid=30_20 StaticText \"Question \"\n      uid=30_21 StaticText \"1\"\n      uid=30_22 StaticText \"Question \"\n      uid=30_23 StaticText \"1\"\n      uid=30_24 StaticText \" text\"\n      uid=30_25 textbox \"Question 1 text\" value=\"Rate this class\"\n      uid=30_26 StaticText \"Question \"\n      uid=30_27 StaticText \"1\"\n      uid=30_28 StaticText \" type\"\n      uid=30_29 combobox \"Question 1 type\" expandable haspopup=\"menu\" value=\"Rating (1 to 5)\"\n        uid=30_30 option \"Rating (1 to 5)\" selectable selected value=\"Rating (1 to 5)\"\n        uid=30_31 option \"Single choice\" selectable value=\"Single choice\"\n      uid=30_32 checkbox \"Question 1 is required\" checked\n      uid=30_33 StaticText \"Question \"\n      uid=30_34 StaticText \"1\"\n      uid=30_35 StaticText \" is required\"\n      uid=30_36 button \"Add question\"\n      uid=30_37 button \"Create survey\"\n      uid=30_38 link \"Cancel\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n        uid=30_39 StaticText \"Cancel\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-empty-title-complete-valid-questions",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/23.\n## Latest page snapshot\nuid=30_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/23\"\n  uid=30_1 banner\n    uid=30_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=30_3 StaticText \"ClassPulse\"\n    uid=30_4 StaticText \"Dr. Ann Lee\"\n    uid=30_5 StaticText \" · \"\n    uid=30_6 StaticText \"OWNER\"\n    uid=30_7 button \"Logout\"\n  uid=30_8 main\n    uid=34_0 heading \"UAT6-20261124-CodexD-R1-02\" level=\"1\"\n    uid=34_1 StaticText \"CPE334\"\n    uid=34_2 StaticText \" · Identified survey\"\n    uid=34_3 StaticText \"Draft\"\n    uid=34_4 button \"Publish\"\n    uid=34_5 link \"Back to your surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=34_6 StaticText \"Back to your surveys\"\n    uid=34_7 StaticText \"1\"\n    uid=34_8 StaticText \". \"\n    uid=34_9 StaticText \"Rate this class\"\n    uid=34_10 StaticText \"Rating, 1 to 5\"\n    uid=34_11 StaticText \" · required\"\n    uid=34_12 StaticText \"2\"\n    uid=34_13 StaticText \". \"\n    uid=34_14 StaticText \"Best format?\"\n    uid=34_15 StaticText \"Single choice\"\n    uid=34_16 StaticText \" · required\"\n    uid=34_17 StaticText \"Online\"\n    uid=34_18 StaticText \"In person\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-empty-title-no-saved-survey",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:00:13.405Z\",\"status\":200,\"blankTitles\":0,\"currentS2Exists\":true}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-empty-string-fill-tool-issue",
+      "note": "DevTools fill with empty string did not clear the existing title. The next create saved valid titled survey 23. No blank-title record was created. Treat this attempt as tool input behavior, not a successful empty-title rejection. Earlier empty-title UI rejection is retained; repeat with a fresh untouched title field."
+    },
+    {
+      "id": "UAT-02-S2-published",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=30_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/23\"\n  uid=30_1 banner\n    uid=30_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=30_3 StaticText \"ClassPulse\"\n    uid=30_4 StaticText \"Dr. Ann Lee\"\n    uid=30_5 StaticText \" · \"\n    uid=30_6 StaticText \"OWNER\"\n    uid=30_7 button \"Logout\"\n  uid=30_8 main\n    uid=34_0 heading \"UAT6-20261124-CodexD-R1-02\" level=\"1\"\n    uid=34_1 StaticText \"CPE334\"\n    uid=34_2 StaticText \" · Identified survey\"\n    uid=34_3 StaticText \"Published\"\n    uid=35_0 button \"Close\"\n    uid=35_1 link \"View summary\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/23/summary\"\n      uid=35_2 StaticText \"View summary\"\n    uid=34_5 link \"Back to your surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=34_6 StaticText \"Back to your surveys\"\n    uid=34_7 StaticText \"1\"\n    uid=34_8 StaticText \". \"\n    uid=34_9 StaticText \"Rate this class\"\n    uid=34_10 StaticText \"Rating, 1 to 5\"\n    uid=34_11 StaticText \" · required\"\n    uid=34_12 StaticText \"2\"\n    uid=34_13 StaticText \". \"\n    uid=34_14 StaticText \"Best format?\"\n    uid=34_15 StaticText \"Single choice\"\n    uid=34_16 StaticText \" · required\"\n    uid=34_17 StaticText \"Online\"\n    uid=34_18 StaticText \"In person\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-S2-ids",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:00:30.398Z\",\"status\":200,\"body\":{\"survey\":{\"id\":23,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-02\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T11:00:28.692Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T11:00:11.615Z\",\"questions\":[{\"id\":55,\"position\":1,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":56,\"position\":2,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":34,\"position\":1,\"label\":\"Online\"},{\"id\":35,\"position\":2,\"label\":\"In person\"}]}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-empty-answers-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=36_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys/23\"\n  uid=36_1 banner\n    uid=36_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=36_3 StaticText \"ClassPulse\"\n    uid=37_0 StaticText \"Student 2\"\n    uid=37_1 StaticText \" · \"\n    uid=37_2 StaticText \"RESPONDENT\"\n    uid=37_3 button \"Logout\"\n  uid=36_4 main\n    uid=37_4 heading \"UAT6-20261124-CodexD-R1-02\" level=\"1\"\n    uid=37_5 StaticText \"CPE334\"\n    uid=37_6 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=37_7 StaticText \"Back to surveys\"\n    uid=37_8 StaticText \"Identified survey — your name is stored with your answers\"\n    uid=37_9 form\n      uid=38_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=38_1 StaticText \"Please correct the answers\"\n        uid=38_2 StaticText \"Required question 55 is missing\"\n        uid=38_3 StaticText \"Required question 56 is missing\"\n      uid=37_10 StaticText \"Rate this class\"\n      uid=37_11 radio \"Rating 1 of 5\"\n      uid=37_12 radio \"Rating 2 of 5\"\n      uid=37_13 radio \"Rating 3 of 5\"\n      uid=37_14 radio \"Rating 4 of 5\"\n      uid=37_15 radio \"Rating 5 of 5\"\n      uid=37_16 StaticText \"Best format?\"\n      uid=37_17 radio \"Online\"\n      uid=37_18 StaticText \"Online\"\n      uid=37_19 radio \"In person\"\n      uid=37_20 StaticText \"In person\"\n      uid=37_21 button \"Submit\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-invalid-rating-\"empty\"",
+      "input": {
+        "answers": []
+      },
+      "response": {
+        "at": "2026-11-24T11:00:54.642Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers",
+                "message": "Required question 55 is missing"
+              },
+              {
+                "field": "answers",
+                "message": "Required question 56 is missing"
+              }
+            ]
+          }
+        }
+      },
+      "readback": {
+        "at": "2026-11-24T11:00:54.834Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 23,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 55,
+                "prompt": "Rate this class",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 56,
+                "prompt": "Best format?",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 34,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 35,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "UAT-02-invalid-rating-0",
+      "input": {
+        "answers": [
+          {
+            "questionId": 55,
+            "ratingValue": 0
+          },
+          {
+            "questionId": 56,
+            "optionId": 34
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T11:00:55.029Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0].ratingValue",
+                "message": "Rating must be an integer from 1 through 5"
+              }
+            ]
+          }
+        }
+      },
+      "readback": {
+        "at": "2026-11-24T11:00:55.218Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 23,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 55,
+                "prompt": "Rate this class",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 56,
+                "prompt": "Best format?",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 34,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 35,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "UAT-02-invalid-rating-6",
+      "input": {
+        "answers": [
+          {
+            "questionId": 55,
+            "ratingValue": 6
+          },
+          {
+            "questionId": 56,
+            "optionId": 34
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T11:00:55.420Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0].ratingValue",
+                "message": "Rating must be an integer from 1 through 5"
+              }
+            ]
+          }
+        }
+      },
+      "readback": {
+        "at": "2026-11-24T11:00:55.611Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 23,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 55,
+                "prompt": "Rate this class",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 56,
+                "prompt": "Best format?",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 34,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 35,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "UAT-02-invalid-rating-2.5",
+      "input": {
+        "answers": [
+          {
+            "questionId": 55,
+            "ratingValue": 2.5
+          },
+          {
+            "questionId": 56,
+            "optionId": 34
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T11:00:55.821Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0].ratingValue",
+                "message": "Rating must be an integer from 1 through 5"
+              }
+            ]
+          }
+        }
+      },
+      "readback": {
+        "at": "2026-11-24T11:00:56.014Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 23,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 55,
+                "prompt": "Rate this class",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 56,
+                "prompt": "Best format?",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 34,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 35,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "UAT-02-invalid-rating-\"3\"",
+      "input": {
+        "answers": [
+          {
+            "questionId": 55,
+            "ratingValue": "3"
+          },
+          {
+            "questionId": 56,
+            "optionId": 34
+          }
+        ]
+      },
+      "response": {
+        "at": "2026-11-24T11:00:56.217Z",
+        "status": 400,
+        "body": {
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "message": "Please correct the answers",
+            "details": [
+              {
+                "field": "answers[0].ratingValue",
+                "message": "Rating must be an integer from 1 through 5"
+              }
+            ]
+          }
+        }
+      },
+      "readback": {
+        "at": "2026-11-24T11:00:56.403Z",
+        "status": 200,
+        "body": {
+          "summary": {
+            "surveyId": 23,
+            "status": "PUBLISHED",
+            "responseCount": 0,
+            "questions": [
+              {
+                "questionId": 55,
+                "prompt": "Rate this class",
+                "type": "RATING",
+                "rating": {
+                  "average": null,
+                  "distribution": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+                  }
+                }
+              },
+              {
+                "questionId": 56,
+                "prompt": "Best format?",
+                "type": "SINGLE_CHOICE",
+                "choice": {
+                  "options": [
+                    {
+                      "optionId": 34,
+                      "label": "Online",
+                      "count": 0
+                    },
+                    {
+                      "optionId": 35,
+                      "label": "In person",
+                      "count": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "UAT-02-valid-rating1-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/9.\n## Latest page snapshot\nuid=36_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/9\"\n  uid=36_1 banner\n    uid=36_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=36_3 StaticText \"ClassPulse\"\n    uid=37_0 StaticText \"Student 2\"\n    uid=37_1 StaticText \" · \"\n    uid=37_2 StaticText \"RESPONDENT\"\n    uid=37_3 button \"Logout\"\n  uid=36_4 main\n    uid=39_0 heading \"Response submitted\" level=\"1\"\n    uid=39_1 StaticText \"Thanks — your response is in.\"\n    uid=39_2 StaticText \"Submitted on \"\n    uid=39_3 StaticText \"11/24/2026, 6:00:55 PM\"\n    uid=39_4 heading \"Your answers\" level=\"2\"\n    uid=39_5 StaticText \"Rate this class\"\n    uid=39_6 radio \"Rating 1 of 5\" checked disableable disabled\n    uid=39_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=39_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=39_9 radio \"Rating 4 of 5\" disableable disabled\n    uid=39_10 radio \"Rating 5 of 5\" disableable disabled\n    uid=39_11 StaticText \"Best format?\"\n    uid=39_12 StaticText \"Online\"\n    uid=39_13 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=39_14 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-rating1-owner-readback",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:01:05.884Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":23,\"status\":\"PUBLISHED\",\"responseCount\":1,\"questions\":[{\"questionId\":55,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":1,\"distribution\":{\"1\":1,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}},{\"questionId\":56,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":34,\"label\":\"Online\",\"count\":1},{\"optionId\":35,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-valid-rating5-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/10.\n## Latest page snapshot\nuid=40_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/10\"\n  uid=40_1 banner\n    uid=40_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=40_3 StaticText \"ClassPulse\"\n    uid=41_0 StaticText \"Student 1\"\n    uid=41_1 StaticText \" · \"\n    uid=41_2 StaticText \"RESPONDENT\"\n    uid=41_3 button \"Logout\"\n  uid=40_4 main\n    uid=42_0 heading \"Response submitted\" level=\"1\"\n    uid=42_1 StaticText \"Thanks — your response is in.\"\n    uid=42_2 StaticText \"Submitted on \"\n    uid=42_3 StaticText \"11/24/2026, 6:01:26 PM\"\n    uid=42_4 heading \"Your answers\" level=\"2\"\n    uid=42_5 StaticText \"Rate this class\"\n    uid=42_6 radio \"Rating 1 of 5\" disableable disabled\n    uid=42_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=42_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=42_9 radio \"Rating 4 of 5\" disableable disabled\n    uid=42_10 radio \"Rating 5 of 5\" checked disableable disabled\n    uid=42_11 StaticText \"Best format?\"\n    uid=42_12 StaticText \"Online\"\n    uid=42_13 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=42_14 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-final-aggregate",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:01:27.890Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":23,\"status\":\"PUBLISHED\",\"responseCount\":2,\"questions\":[{\"questionId\":55,\"prompt\":\"Rate this class\",\"type\":\"RATING\",\"rating\":{\"average\":3,\"distribution\":{\"1\":1,\"2\":0,\"3\":0,\"4\":0,\"5\":1}}},{\"questionId\":56,\"prompt\":\"Best format?\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":34,\"label\":\"Online\",\"count\":2},{\"optionId\":35,\"label\":\"In person\",\"count\":0}]}}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-fixture",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:01:28.237Z\",\"setup\":\"API\",\"createStatus\":201,\"publishStatus\":200,\"survey\":{\"id\":24,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-11\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"PUBLISHED\",\"publishedAt\":\"2026-11-24T11:01:26.753Z\",\"closedAt\":null,\"createdAt\":\"2026-11-24T11:01:26.623Z\",\"questions\":[{\"id\":57,\"position\":1,\"prompt\":\"Overall\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":58,\"position\":2,\"prompt\":\"Format\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":36,\"position\":1,\"label\":\"Online\"},{\"id\":37,\"position\":2,\"label\":\"In person\"}]},{\"id\":59,\"position\":3,\"prompt\":\"Extra\",\"type\":\"RATING\",\"required\":false,\"options\":[]}]}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-respondent1-optional-omitted-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/11.\n## Latest page snapshot\nuid=43_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/11\"\n  uid=43_1 banner\n    uid=43_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=43_3 StaticText \"ClassPulse\"\n    uid=43_4 StaticText \"Student 1\"\n    uid=43_5 StaticText \" · \"\n    uid=43_6 StaticText \"RESPONDENT\"\n    uid=43_7 button \"Logout\"\n  uid=43_8 main\n    uid=44_0 heading \"Response submitted\" level=\"1\"\n    uid=44_1 StaticText \"Thanks — your response is in.\"\n    uid=44_2 StaticText \"Submitted on \"\n    uid=44_3 StaticText \"11/24/2026, 6:01:45 PM\"\n    uid=44_4 heading \"Your answers\" level=\"2\"\n    uid=44_5 StaticText \"Overall\"\n    uid=44_6 radio \"Rating 1 of 5\" disableable disabled\n    uid=44_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=44_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=44_9 radio \"Rating 4 of 5\" checked disableable disabled\n    uid=44_10 radio \"Rating 5 of 5\" disableable disabled\n    uid=44_11 StaticText \"Format\"\n    uid=44_12 StaticText \"Online\"\n    uid=44_13 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=44_14 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-optional-omission-saved-api",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:01:47.094Z\",\"status\":200,\"body\":{\"response\":{\"id\":11,\"surveyId\":24,\"submittedAt\":\"2026-11-24T11:01:45.324Z\",\"answers\":[{\"questionId\":57,\"prompt\":\"Overall\",\"type\":\"RATING\",\"ratingValue\":4},{\"questionId\":58,\"prompt\":\"Format\",\"type\":\"SINGLE_CHOICE\",\"optionId\":36,\"optionLabel\":\"Online\"}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-respondent2-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\nPage navigated to https://classpulse-zdwglar6eq-as.a.run.app/responses/12.\n## Latest page snapshot\nuid=45_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/responses/12\"\n  uid=45_1 banner\n    uid=45_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=45_3 StaticText \"ClassPulse\"\n    uid=45_4 StaticText \"Student 2\"\n    uid=45_5 StaticText \" · \"\n    uid=45_6 StaticText \"RESPONDENT\"\n    uid=45_7 button \"Logout\"\n  uid=45_8 main\n    uid=46_0 heading \"Response submitted\" level=\"1\"\n    uid=46_1 StaticText \"Thanks — your response is in.\"\n    uid=46_2 StaticText \"Submitted on \"\n    uid=46_3 StaticText \"11/24/2026, 6:02:01 PM\"\n    uid=46_4 heading \"Your answers\" level=\"2\"\n    uid=46_5 StaticText \"Overall\"\n    uid=46_6 radio \"Rating 1 of 5\" disableable disabled\n    uid=46_7 radio \"Rating 2 of 5\" disableable disabled\n    uid=46_8 radio \"Rating 3 of 5\" disableable disabled\n    uid=46_9 radio \"Rating 4 of 5\" disableable disabled\n    uid=46_10 radio \"Rating 5 of 5\" checked disableable disabled\n    uid=46_11 StaticText \"Format\"\n    uid=46_12 StaticText \"Online\"\n    uid=46_13 StaticText \"Extra\"\n    uid=46_14 radio \"Rating 1 of 5\" checked disableable disabled\n    uid=46_15 radio \"Rating 2 of 5\" disableable disabled\n    uid=46_16 radio \"Rating 3 of 5\" disableable disabled\n    uid=46_17 radio \"Rating 4 of 5\" disableable disabled\n    uid=46_18 radio \"Rating 5 of 5\" disableable disabled\n    uid=46_19 link \"Back to surveys\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/surveys\"\n      uid=46_20 StaticText \"Back to surveys\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-arithmetic-summary-reload",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:02:02.890Z\",\"status\":200,\"body\":{\"summary\":{\"surveyId\":24,\"status\":\"PUBLISHED\",\"responseCount\":2,\"questions\":[{\"questionId\":57,\"prompt\":\"Overall\",\"type\":\"RATING\",\"rating\":{\"average\":4.5,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":1}}},{\"questionId\":58,\"prompt\":\"Format\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":36,\"label\":\"Online\",\"count\":2},{\"optionId\":37,\"label\":\"In person\",\"count\":0}]}},{\"questionId\":59,\"prompt\":\"Extra\",\"type\":\"RATING\",\"rating\":{\"average\":1,\"distribution\":{\"1\":1,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}}]}},\"reloaded\":{\"summary\":{\"surveyId\":24,\"status\":\"PUBLISHED\",\"responseCount\":2,\"questions\":[{\"questionId\":57,\"prompt\":\"Overall\",\"type\":\"RATING\",\"rating\":{\"average\":4.5,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":1,\"5\":1}}},{\"questionId\":58,\"prompt\":\"Format\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":36,\"label\":\"Online\",\"count\":2},{\"optionId\":37,\"label\":\"In person\",\"count\":0}]}},{\"questionId\":59,\"prompt\":\"Extra\",\"type\":\"RATING\",\"rating\":{\"average\":1,\"distribution\":{\"1\":1,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}}]}},\"stable\":true}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-11-summary-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "## Latest page snapshot\nuid=47_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/24/summary\"\n  uid=47_1 banner\n    uid=47_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=47_3 StaticText \"ClassPulse\"\n    uid=47_4 StaticText \"Dr. Ann Lee\"\n    uid=47_5 StaticText \" · \"\n    uid=47_6 StaticText \"OWNER\"\n    uid=47_7 button \"Logout\"\n  uid=47_8 main\n    uid=47_9 region \"Survey summary\"\n      uid=47_10 heading \"Survey summary\" level=\"1\"\n      uid=47_11 StaticText \"Responses:\"\n      uid=47_12 StaticText \" \"\n      uid=47_13 StaticText \"2\"\n      uid=47_14 heading \"Overall\" level=\"2\"\n      uid=47_15 StaticText \"Average: \"\n      uid=47_16 StaticText \"4.50\"\n      uid=47_17 radio \"Rating 1 of 5\" disableable disabled\n      uid=47_18 radio \"Rating 2 of 5\" disableable disabled\n      uid=47_19 radio \"Rating 3 of 5\" disableable disabled\n      uid=47_20 radio \"Rating 4 of 5\" disableable disabled\n      uid=47_21 radio \"Rating 5 of 5\" disableable disabled\n      uid=47_22 StaticText \"Rating \"\n      uid=47_23 StaticText \"1\"\n      uid=47_24 StaticText \"0\"\n      uid=47_25 StaticText \"Rating \"\n      uid=47_26 StaticText \"2\"\n      uid=47_27 StaticText \"0\"\n      uid=47_28 StaticText \"Rating \"\n      uid=47_29 StaticText \"3\"\n      uid=47_30 StaticText \"0\"\n      uid=47_31 StaticText \"Rating \"\n      uid=47_32 StaticText \"4\"\n      uid=47_33 StaticText \"1\"\n      uid=47_34 StaticText \"Rating \"\n      uid=47_35 StaticText \"5\"\n      uid=47_36 StaticText \"1\"\n      uid=47_37 heading \"Format\" level=\"2\"\n      uid=47_38 StaticText \"Online\"\n      uid=47_39 StaticText \"2\"\n      uid=47_40 image \"Online: 2 responses\"\n      uid=47_41 StaticText \"In person\"\n      uid=47_42 StaticText \"0\"\n      uid=47_43 image \"In person: 0 responses\"\n      uid=47_44 heading \"Extra\" level=\"2\"\n      uid=47_45 StaticText \"Average: \"\n      uid=47_46 StaticText \"1.00\"\n      uid=47_47 radio \"Rating 1 of 5\" checked disableable disabled\n      uid=47_48 radio \"Rating 2 of 5\" disableable disabled\n      uid=47_49 radio \"Rating 3 of 5\" disableable disabled\n      uid=47_50 radio \"Rating 4 of 5\" disableable disabled\n      uid=47_51 radio \"Rating 5 of 5\" disableable disabled\n      uid=47_52 StaticText \"Rating \"\n      uid=47_53 StaticText \"1\"\n      uid=47_54 StaticText \"1\"\n      uid=47_55 StaticText \"Rating \"\n      uid=47_56 StaticText \"2\"\n      uid=47_57 StaticText \"0\"\n      uid=47_58 StaticText \"Rating \"\n      uid=47_59 StaticText \"3\"\n      uid=47_60 StaticText \"0\"\n      uid=47_61 StaticText \"Rating \"\n      uid=47_62 StaticText \"4\"\n      uid=47_63 StaticText \"0\"\n      uid=47_64 StaticText \"Rating \"\n      uid=47_65 StaticText \"5\"\n      uid=47_66 StaticText \"0\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-08-draft-fixture",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:02:29.995Z\",\"status\":201,\"body\":{\"survey\":{\"id\":25,\"courseId\":1,\"courseCode\":\"CPE334\",\"title\":\"UAT6-20261124-CodexD-R1-CD08-draft\",\"description\":null,\"mode\":\"IDENTIFIED\",\"status\":\"DRAFT\",\"publishedAt\":null,\"closedAt\":null,\"createdAt\":\"2026-11-24T11:02:28.477Z\",\"questions\":[{\"id\":60,\"position\":1,\"prompt\":\"Precedence rating\",\"type\":\"RATING\",\"required\":true,\"options\":[]},{\"id\":61,\"position\":2,\"prompt\":\"Precedence choice\",\"type\":\"SINGLE_CHOICE\",\"required\":true,\"options\":[{\"id\":38,\"position\":1,\"label\":\"Online\"},{\"id\":39,\"position\":2,\"label\":\"In person\"}]}]}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-08-non-enrolled-draft-precedence",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:02:49.500Z\",\"status\":403,\"body\":{\"error\":{\"code\":\"NOT_ELIGIBLE\",\"message\":\"You are not enrolled in this course\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-08-closed-before-validation",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:02:49.734Z\",\"status\":409,\"body\":{\"error\":{\"code\":\"SURVEY_NOT_OPEN\",\"message\":\"This survey is not open for responses\"}}}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CD-08-owner-readbacks",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:02:50.256Z\",\"rows\":[{\"id\":20,\"status\":\"CLOSED\",\"summary\":{\"summary\":{\"surveyId\":20,\"status\":\"CLOSED\",\"responseCount\":0,\"questions\":[{\"questionId\":50,\"prompt\":\"Rating CD05-stale\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}},{\"questionId\":51,\"prompt\":\"Choice CD05-stale\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":30,\"label\":\"Online\",\"count\":0},{\"optionId\":31,\"label\":\"In person\",\"count\":0}]}}]}}},{\"id\":25,\"status\":\"DRAFT\",\"summary\":{\"summary\":{\"surveyId\":25,\"status\":\"DRAFT\",\"responseCount\":0,\"questions\":[{\"questionId\":60,\"prompt\":\"Precedence rating\",\"type\":\"RATING\",\"rating\":{\"average\":null,\"distribution\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}}},{\"questionId\":61,\"prompt\":\"Precedence choice\",\"type\":\"SINGLE_CHOICE\",\"choice\":{\"options\":[{\"optionId\":38,\"label\":\"Online\",\"count\":0},{\"optionId\":39,\"label\":\"In person\",\"count\":0}]}}]}}}]}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-fresh-empty-title-before",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:03:19.399Z\",\"ids\":[25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1],\"formTitle\":\"\"}\n```"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-fresh-empty-title-rejected-ui",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=48_0 RootWebArea \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner/surveys/new\"\n  uid=48_1 banner\n    uid=48_2 link \"ClassPulse\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n      uid=48_3 StaticText \"ClassPulse\"\n    uid=48_4 StaticText \"Dr. Ann Lee\"\n    uid=48_5 StaticText \" · \"\n    uid=48_6 StaticText \"OWNER\"\n    uid=48_7 button \"Logout\"\n  uid=48_8 main\n    uid=48_9 heading \"New survey\" level=\"1\"\n    uid=48_10 form\n      uid=51_0 alert atomic live=\"assertive\" relevant=\"additions text\"\n        uid=51_1 StaticText \"Check the highlighted fields\"\n      uid=48_11 StaticText \"Course\"\n      uid=48_12 combobox \"Course\" expandable haspopup=\"menu\" value=\"CPE334 — Software Engineering\"\n        uid=48_13 option \"Choose a course\" selectable value=\"Choose a course\"\n        uid=48_14 option \"CPE334 — Software Engineering\" selectable selected value=\"CPE334 — Software Engineering\"\n      uid=48_15 StaticText \"Title\"\n      uid=48_16 textbox \"Title\" description=\"Title must be 1 to 120 characters\"\n      uid=51_2 StaticText \"Title must be 1 to 120 characters\"\n      uid=48_17 StaticText \"Description (optional)\"\n      uid=48_18 textbox \"Description (optional)\" multiline\n      uid=48_19 heading \"Questions\" level=\"2\"\n      uid=48_20 StaticText \"Question \"\n      uid=48_21 StaticText \"1\"\n      uid=48_22 StaticText \"Question \"\n      uid=48_23 StaticText \"1\"\n      uid=48_24 StaticText \" text\"\n      uid=48_25 textbox \"Question 1 text\" value=\"Rate this class\"\n      uid=48_26 StaticText \"Question \"\n      uid=48_27 StaticText \"1\"\n      uid=48_28 StaticText \" type\"\n      uid=48_29 combobox \"Question 1 type\" expandable haspopup=\"menu\" value=\"Rating (1 to 5)\"\n        uid=48_30 option \"Rating (1 to 5)\" selectable selected value=\"Rating (1 to 5)\"\n        uid=48_31 option \"Single choice\" selectable value=\"Single choice\"\n      uid=48_32 checkbox \"Question 1 is required\" checked\n      uid=48_33 StaticText \"Question \"\n      uid=48_34 StaticText \"1\"\n      uid=48_35 StaticText \" is required\"\n      uid=49_0 button \"Remove question 1\"\n      uid=49_1 StaticText \"Question \"\n      uid=49_2 StaticText \"2\"\n      uid=49_3 StaticText \"Question \"\n      uid=49_4 StaticText \"2\"\n      uid=49_5 StaticText \" text\"\n      uid=49_6 textbox \"Question 2 text\" value=\"Best format?\"\n      uid=49_7 StaticText \"Question \"\n      uid=49_8 StaticText \"2\"\n      uid=49_9 StaticText \" type\"\n      uid=49_10 combobox \"Question 2 type\" expandable haspopup=\"menu\" value=\"Single choice\"\n        uid=49_11 option \"Rating (1 to 5)\" selectable value=\"Rating (1 to 5)\"\n        uid=49_12 option \"Single choice\" selectable selected value=\"Single choice\"\n      uid=49_13 checkbox \"Question 2 is required\" checked\n      uid=49_14 StaticText \"Question \"\n      uid=49_15 StaticText \"2\"\n      uid=49_16 StaticText \" is required\"\n      uid=50_0 textbox \"Question 2 option 1\" value=\"Online\"\n      uid=50_1 button \"Remove option 1 of question 2\"\n      uid=50_2 textbox \"Question 2 option 2\" value=\"In person\"\n      uid=50_3 button \"Remove option 2 of question 2\"\n      uid=50_4 button \"Add option\"\n      uid=49_17 button \"Remove question 2\"\n      uid=48_36 button \"Add question\"\n      uid=48_37 button \"Create survey\"\n      uid=48_38 link \"Cancel\" url=\"https://classpulse-zdwglar6eq-as.a.run.app/owner\"\n        uid=48_39 StaticText \"Cancel\"\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "UAT-02-fresh-empty-title-after-no-create",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Script ran on page and returned:\n```json\n{\"at\":\"2026-11-24T11:03:19.854Z\",\"ids\":[25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1],\"blankTitles\":0}\n```"
+          }
+        ]
+      }
+    }
+  ]
+}
