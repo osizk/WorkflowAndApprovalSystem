@@ -147,7 +147,7 @@ test('AC-15 to AC-17: requester withdrawal is validated, authorized and persiste
     }
     assert.equal((await call(owner, '/not-a-uuid/withdraw', 'POST', { reason: 'Valid reason' })).status, 404);
 
-    for (const [reason, expected] of [[undefined, 422], ['  \t\n ', 422], ['x'.repeat(501), 422], ['x', 200], ['x'.repeat(500), 200]]) {
+    for (const [reason, expected] of [[undefined, 422], ['  \t\n ', 422], ['😀'.repeat(501), 422], ['x', 200], ['😀'.repeat(500), 200]]) {
       const request = await createRequest('Reason boundary');
       const response = await call(owner, `/${request.id}/withdraw`, 'POST', reason === undefined ? {} : { reason });
       assert.equal(response.status, expected);
