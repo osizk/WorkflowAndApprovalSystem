@@ -101,7 +101,11 @@
     },
     "CD-01-live-previous-session-rejection": {
       "status": "BLOCKED",
-      "scope": "The live logout check used a normal browser session. Same-session reuse rejection is recorded at supporting scope by existing isolated TEST-04."
+      "scope": "The live logout check used a normal browser session. Same-session reuse rejection is recorded at supporting scope by existing isolated TEST-04.",
+      "blockedReason": "A cyber-safety policy constraint prevented the assistant from re-presenting a revoked session credential to the deployed ClassPulse service.",
+      "liveObserved": false,
+      "supportingEvidence": "Earlier verbose isolated CP-V01 auth run, TEST-04 PASS. The separate exact-command auth run supports TEST-05.",
+      "coverageLimitDisposition": "Pending C and ClassPulse A/B agreement"
     },
     "CD-06-signed-out-PUT-DELETE": {
       "status": "PASS",
