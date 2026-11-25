@@ -1,0 +1,309 @@
+{
+  "run": "UAT6-20261125-CodexD-R3",
+  "date": "2026-11-25",
+  "timeZone": "Asia/Bangkok",
+  "operator": "Codex (GPT-6) under Thira, tester D",
+  "privateStartNotice": {
+    "postVerified": true,
+    "localTime": "21:39",
+    "channel": "Agreed private Discord DM with ClassPulse A"
+  },
+  "release": {
+    "label": "CP-V01",
+    "source": "1fe3e3b82dfb0537be30223c9b598b3479b4affe",
+    "revision": "classpulse-00006-6w6",
+    "trafficPercent": 100,
+    "digest": "sha256:60f61ccccbc559e6c060383ad9acafc6918e1202ec1e7e5e43aa107c35707795",
+    "cloudAttributesVerifier": "ClassPulse A",
+    "cloudAttributesVerifiedAt": "2026-11-25T21:15:48+07:00",
+    "sourceMappingBasis": "ClassPulse A carried forward its prior verified mapping of the same immutable digest",
+    "pre": {
+      "at": "2026-11-25T14:37:53.211Z",
+      "origin": "https://classpulse-zdwglar6eq-as.a.run.app",
+      "path": "/login",
+      "assets": [
+        "/assets/index-Bi1ZvEdG.js"
+      ],
+      "health": 200,
+      "healthBody": {
+        "status": "ok"
+      }
+    },
+    "post": {
+      "at": "2026-11-25T14:43:56.976Z",
+      "origin": "https://classpulse-zdwglar6eq-as.a.run.app",
+      "assets": [
+        "/assets/index-Bi1ZvEdG.js"
+      ],
+      "health": 200,
+      "healthBody": {
+        "status": "ok"
+      }
+    }
+  },
+  "branches": {
+    "UAT-07-respondent-reload": {
+      "status": "PASS",
+      "beforeReload": {
+        "at": "2026-11-25T14:39:43.585Z",
+        "path": "/surveys",
+        "heading": "Available surveys",
+        "status": 200,
+        "role": "RESPONDENT",
+        "syntheticIdentity": true,
+        "error": null
+      },
+      "afterReload": {
+        "at": "2026-11-25T14:39:55.216Z",
+        "path": "/surveys",
+        "heading": "Available surveys",
+        "status": 200,
+        "role": "RESPONDENT",
+        "syntheticIdentity": true,
+        "error": null
+      },
+      "afterNormalLogout": {
+        "at": "2026-11-25T14:40:09.212Z",
+        "path": "/login",
+        "heading": "Sign in",
+        "status": 401,
+        "error": "UNAUTHENTICATED",
+        "log": [
+          {
+            "status": 204,
+            "at": "2026-11-25T14:40:03.563Z"
+          }
+        ]
+      }
+    },
+    "CD-01-live-cookie-attributes": {
+      "status": "PASS",
+      "scope": "Dedicated synthetic respondent login and normal logout on HTTPS. Cookie values were confined to the temporary process and excluded from outputs.",
+      "at": "2026-11-25T21:41:46.891003+07:00",
+      "login": 200,
+      "loginFlags": {
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "secure": true,
+        "pathRoot": true,
+        "hasExpiryMetadata": true,
+        "clearingDirective": false
+      },
+      "logout": 204,
+      "logoutFlags": {
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "secure": true,
+        "pathRoot": true,
+        "hasExpiryMetadata": true,
+        "clearingDirective": true
+      }
+    },
+    "CD-01-live-previous-session-rejection": {
+      "status": "BLOCKED",
+      "scope": "The live logout check used a normal browser session. Same-session reuse rejection is recorded at supporting scope by existing isolated TEST-04."
+    },
+    "CD-06-signed-out-PUT-DELETE": {
+      "status": "PASS",
+      "course": "CPE334",
+      "surveyTitle": "[EN037-UAT6-R3-CD06] Signed-out status check",
+      "surveyId": 27,
+      "responseId": 16,
+      "input": {
+        "rating": 4,
+        "choice": "Online",
+        "putBody": {},
+        "deleteBody": null
+      },
+      "before": {
+        "response": {
+          "at": "2026-11-25T14:43:26.899Z",
+          "http": 200,
+          "response": {
+            "id": 16,
+            "surveyId": 27,
+            "submittedAt": "2026-11-25T14:42:59.459Z",
+            "answers": [
+              {
+                "questionId": 64,
+                "prompt": "Overall rating",
+                "rating": 4,
+                "choice": null
+              },
+              {
+                "questionId": 65,
+                "prompt": "Preferred format",
+                "rating": null,
+                "choice": "Online"
+              }
+            ]
+          }
+        },
+        "summary": {
+          "at": "2026-11-25T14:43:26.578Z",
+          "http": 200,
+          "summary": {
+            "surveyId": 27,
+            "state": "PUBLISHED",
+            "count": 1,
+            "rating": {
+              "average": 4,
+              "distribution": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 1,
+                "5": 0
+              }
+            },
+            "choice": [
+              {
+                "label": "Online",
+                "count": 1
+              },
+              {
+                "label": "In person",
+                "count": 0
+              }
+            ]
+          }
+        }
+      },
+      "identityPrecheck": 401,
+      "observations": [
+        {
+          "at": "2026-11-25T14:43:39.770Z",
+          "method": "PUT",
+          "responseId": 16,
+          "status": 401,
+          "code": "UNAUTHENTICATED"
+        },
+        {
+          "at": "2026-11-25T14:43:40.062Z",
+          "method": "DELETE",
+          "responseId": 16,
+          "status": 401,
+          "code": "UNAUTHENTICATED"
+        }
+      ],
+      "after": {
+        "response": {
+          "at": "2026-11-25T14:43:56.343Z",
+          "http": 200,
+          "response": {
+            "id": 16,
+            "surveyId": 27,
+            "submittedAt": "2026-11-25T14:42:59.459Z",
+            "answers": [
+              {
+                "questionId": 64,
+                "prompt": "Overall rating",
+                "rating": 4,
+                "choice": null
+              },
+              {
+                "questionId": 65,
+                "prompt": "Preferred format",
+                "rating": null,
+                "choice": "Online"
+              }
+            ]
+          }
+        },
+        "summary": {
+          "at": "2026-11-25T14:43:57.333Z",
+          "http": 200,
+          "summary": {
+            "surveyId": 27,
+            "state": "PUBLISHED",
+            "count": 1,
+            "rating": {
+              "average": 4,
+              "distribution": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 1,
+                "5": 0
+              }
+            },
+            "choice": [
+              {
+                "label": "Online",
+                "count": 1
+              },
+              {
+                "label": "In person",
+                "count": 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "preservation": {
+    "newFixtureRetained": {
+      "surveyId": 27,
+      "responseIds": [
+        16
+      ]
+    },
+    "priorFixtureUntouched": {
+      "surveyId": 26,
+      "responseIds": [
+        13,
+        14,
+        15
+      ]
+    },
+    "priorAggregate": {
+      "at": "2026-11-25T14:43:56.693Z",
+      "http": 200,
+      "surveyId": 26,
+      "count": 3,
+      "ratingAverage": 4.33,
+      "choice": [
+        {
+          "label": "Online",
+          "count": 3
+        },
+        {
+          "label": "In person",
+          "count": 0
+        }
+      ]
+    },
+    "accountsAndEnrollmentsChanged": false,
+    "cloudReleaseChangedByRun": false,
+    "finalBrowserCleanup": [
+      {
+        "at": "2026-11-25T14:44:25.940Z",
+        "path": "/login",
+        "logout": 204,
+        "identity": 401,
+        "error": "UNAUTHENTICATED"
+      },
+      {
+        "at": "2026-11-25T14:44:26.612Z",
+        "path": "/login",
+        "logout": 204,
+        "identity": 401,
+        "error": "UNAUTHENTICATED"
+      }
+    ]
+  },
+  "limits": {
+    "liveEightHourExpiry": "OPEN",
+    "isolatedTEST05": "Supporting PASS",
+    "isolatedTEST04": "Supporting PASS, earlier verbose auth run",
+    "productionStorageAndFullLogs": "UNOBSERVED",
+    "passwordTEST06": "NOT RUN in this run and excluded from the auth file",
+    "roundingTie": "NOT RUN",
+    "databaseConcurrencySchedule": "Outside observation",
+    "CReview": "Pending actual Ashira review",
+    "partD": "Pending partner review of this baseline",
+    "finalAcceptance": "OPEN"
+  },
+  "genuineProductDefectObserved": false
+}
