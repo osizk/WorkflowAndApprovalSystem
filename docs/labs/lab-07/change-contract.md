@@ -1,77 +1,76 @@
-# Lab 7 change contract — proposed, pending approval
+# Lab 7 change contract — proposed requester withdrawal
 
-**Issue:** [#70 — Change the minimum rejection reason length](https://github.com/osizk/WorkflowAndApprovalSystem/issues/70)  
-**Status:** Proposed. Do not implement the production behavior until the TA or instructor approves this precise change.  
-**Contract revision:** 0.1-draft  
-**Affected feature:** F-03 — Decide and retrieve history
+**Issue:** [#70 — Allow a Requester to withdraw a submitted purchase request](https://github.com/osizk/WorkflowAndApprovalSystem/issues/70)  
+**Status:** Proposed for pair agreement. The 25 November instructor announcement says Lab 7 change requests do not require prior instructor or TA approval.  
+**Contract revision:** 0.2-draft  
+**Affected features:** F-02 Submit/retrieve and F-03 Review/history
 
 ## Change request
 
-The accepted Sprint 1 contract requires a nonblank rejection reason of 1–500 Unicode code points after trimming. Lab 7 proposes changing the rejection minimum to 10 code points after trimming while keeping the 500-code-point maximum. The purpose is to give Requesters more context for the decision. Text quality is outside scope.
+Change the Sprint 1 rule that a submitted purchase request cannot be edited and has no requester-initiated withdrawal. A Requester may withdraw their own request while its status is `SUBMITTED`, with a required reason of 1–500 Unicode code points after trimming. The withdrawal changes the status to `WITHDRAWN` and records one durable event atomically. Once an approval, rejection or withdrawal wins, competing transitions leave the status and history unchanged.
 
-### Approval record
-
-| Approver | Date and time ICT | Approval message or reference | Status |
-|---|---|---|---|
-| TA or instructor | Pending | Pending | Not approved |
-
-The TA's confirmation that Lab 6 and Lab 7 may proceed in parallel does not approve this behavior change.
+The change gives requesters a controlled way to stop a purchase request that is no longer needed while preserving an auditable record. It adds a state transition, backend ownership checks, persistence/migration, concurrency handling, and requester/reviewer UI behavior.
 
 ## Existing and proposed behavior
 
 | Case | Sprint 1 behavior | Proposed Lab 7 behavior |
 |---|---|---|
-| Reject with omitted or whitespace-only reason | Validation error; no status/history write | Same |
-| Reject with 1–9 code points after trimming | Accepted | HTTP 422 field error on `reason`; no status/history write |
-| Reject with exactly 10 code points after trimming | Accepted | Accepted |
-| Reject with 11–500 code points after trimming | Accepted | Accepted |
-| Reject with more than 500 code points | HTTP 422; no status/history write | Same |
-| Approve with no reason | Accepted; stored reason is null | Same |
-| Approve with 1–500 code points | Accepted | Same |
-| Approve with more than 500 code points | HTTP 422; no write | Same |
-| Read historical rejection reason shorter than 10 | Returned as stored | Returned unchanged |
-
-Count Unicode code points after trimming, following the existing contract convention. Do not count UTF-16 code units.
+| Requester opens own submitted request | Read status/history; no edit or withdrawal action | May choose Withdraw request and enter a reason |
+| Requester withdraws own SUBMITTED request with valid reason | No supported operation | HTTP 200; status becomes WITHDRAWN; one event stores the trimmed reason |
+| Missing, whitespace-only or over-500 withdrawal reason | No supported operation | HTTP 422 with a reason-field error; status/history unchanged |
+| Requester tries to withdraw another user's request | No supported operation | HTTP 404; no data disclosure or writes |
+| Reviewer attempts withdrawal | No supported operation | HTTP 403; no writes |
+| Withdraw an already APPROVED, REJECTED or WITHDRAWN request | No supported operation | HTTP 409; no additional event |
+| Reviewer decision races with owner withdrawal | Decision may win from SUBMITTED | Exactly one transition wins; loser receives HTTP 409; exactly one terminal event is persisted |
+| Read a withdrawn request | Not applicable | Owner and assigned Reviewer can read WITHDRAWN status and ordered history; unrelated users remain denied |
 
 ## Scope and exclusions
 
-- Change only the minimum reason length for a Reject decision.
-- Preserve authentication, assigned-reviewer authorization, requester denial, ownership/data isolation, status-transition guards, one-event history writes, transaction rollback, conflict responses and existing list/detail behavior.
-- Apply the new limit when creating a rejection event. Do not rewrite or hide existing history.
-- No schema or migration change is expected. Confirm during impact review.
-- F-04 Return/revise has a separate contract. This rule applies only to Reject unless an approved contract changes scope.
+- Add one requester-owned transition from SUBMITTED to WITHDRAWN.
+- Require the authenticated owner and a 1–500 code-point reason after trimming.
+- Preserve request fields and the initial submission event. Do not delete records or rewrite history.
+- Preserve existing approval/rejection behavior and backend Reviewer assignment checks.
+- Reviewers can read the withdrawn request and history under existing assigned-reviewer access. They cannot decide a withdrawn request.
+- Keep the current assigned review list behavior for terminal records unless a separate contract changes it. A withdrawn record has no decision controls.
+- Do not add editing, resubmission, external notifications, file uploads, payment effects or additional approval stages.
+- Add the WITHDRAWN status and event type through a forward migration. Existing records and events need no data backfill.
+- Coordinate the migration and request-detail UI changes with Sprint 2 F-04 and any concurrent edits to shared request files.
+
+## Requirement and traceability changes
+
+- Add **FR-11**: A Requester can withdraw their own submitted request with a reason, and authorized users can retrieve its resulting status and history.
+- Add **BR-10**: Only the authenticated owner may withdraw a request while SUBMITTED. A nonblank reason of 1–500 Unicode code points after trimming is required. Withdrawal and one matching event are committed atomically. Withdrawal competes with Reviewer approval/rejection through the same SUBMITTED precondition.
+- Revise **BR-04** to keep submitted purchase fields read-only while explicitly allowing the separate withdrawal action under BR-10.
+- Extend **BR-06/BR-07** to include withdrawal as a terminal state transition with one winning update and an atomic history event.
+- Keep existing FR/BR/AC/TEST IDs unchanged and add the new IDs below. Update the SRS, F-02/F-03 feature contracts, System SDS and traceability in a versioned change. Record the Lab 7 change as a baseline revision for Deliverable 2.
 
 ## Impact analysis
 
-| Requirement or layer | Existing contract location | Impact and planned evidence |
+| Area | Existing contract | Impact and planned verification |
 |---|---|---|
-| Business rule | SRS BR-05 and delegated decision D-04 | Version BR-05 to say 10–500 trimmed code points for Reject, with approval still optional. Record approval and rationale. |
-| Feature/API | F-03, FR-05/06, Sprint 1 contract v0.6 | Update reason validation and HTTP 422 field error. Preserve success shape and decision transaction. Check callers of POST `/api/requests/{id}/decision`. |
-| AC and STS | AC-10/11, TEST-10/11 | Keep IDs. Extend AC-11/TEST-11 with rejected 9 and accepted 10 code-point cases and no-write assertions. |
-| User interface | F-03 `/reviews/:id` | Display `Required to reject. Enter 10 to 500 characters.` beside the Reason field. A trimmed 1–9 or over-500 input displays `Enter 10 to 500 characters.` accessibly and retains focus/input. Test 9 is blocked without POST; 10 submits. |
-| Authorization/state | FR-04–06, BR-02/06–08, AC-09/12/13 | No policy change. Regress assigned/unrelated reviewers, requester denial, terminal/repeated/concurrent decisions and rollback after event failure. |
-| Persistence/history | F-03 data, NFR-01, AC-10/11/14 | Reuse nullable `reason` and existing transaction. No migration/backfill. Read a documented short-reason historical fixture. |
-| Sprint 2 integration | F-04 Return/revise/resubmit | Keep validation specific to Reject. Rerun Return/resubmit after integration because files and screens may overlap. |
+| Request detail UI | F-02 `/requests/:id` | Add Withdraw request controls only for owner-owned SUBMITTED detail. Provide reason input, accessible validation, submitting, saved, conflict and retry feedback. Keep request fields read-only. |
+| Reviewer UI | F-03 `/reviews/:id` | Render WITHDRAWN status and event reason in history; hide Approve/Reject for this terminal status. Preserve read access for the assigned Reviewer. |
+| API and permissions | FR-02–06, F-02/F-03 routes | Add `POST /api/requests/{id}/withdraw` with `{reason}`. Identity comes from the session. Owner-only. Anonymous 401, Reviewer 403, another owner's or missing ID 404, invalid input 422, non-SUBMITTED/lost race 409. Success 200 with saved request detail. |
+| Transaction and concurrency | BR-06/07, AC-12/13 | Conditional update from SUBMITTED and matching WITHDRAWN event in one database transaction. Race withdrawal against approve/reject and prove exactly one transition/event succeeds. |
+| Schema and migration | `RequestStatus`, `PurchaseRequest.status`, `RequestEvent.type`, partial unique terminal-event index and reason constraint | Add enum value WITHDRAWN. Extend terminal uniqueness to APPROVED, REJECTED and WITHDRAWN. Require a nonblank reason for WITHDRAWN. Verify forward migration on an empty database and an isolated database containing Sprint 1 requests/history. Existing history stays readable. |
+| Return/resubmit integration | F-04 Sprint 2 | A withdrawn request cannot be revised or resubmitted. Verify F-04 transition guards against WITHDRAWN and coordinate shared files and migration order. |
 
-## Proposed AC/STS extension
-
-These become approved contract content only after TA/instructor approval and pair review.
+## Proposed acceptance criteria and STS
 
 | ID | Level and intended test | Preconditions and input | Action | Expected result |
 |---|---|---|---|---|
-| AC-11 / TEST-11 API boundary | API/DB, `tests/decisions.test.mjs` | Assigned Reviewer, submitted request, reason of 9 code points after trim | POST Reject | 422 reason field error; request stays SUBMITTED; history unchanged |
-| AC-11 / TEST-11 lower boundary | API/DB, `tests/decisions.test.mjs` | Separate submitted request, exactly 10 code points after trim | POST Reject | 200; REJECTED; exactly one durable event with trimmed reason |
-| AC-11 / TEST-11 whitespace/maximum | API/DB, `tests/decisions.test.mjs` | Omitted, whitespace-only, 500 and 501 code-point reasons on separate requests | POST Reject | Omitted/whitespace/501 rejected with no writes; 500 accepted with one event |
-| AC-11 / TEST-11 unchanged approval | API/DB, `tests/decisions.test.mjs` | Approve without reason and with a valid short reason | POST Approve | Both follow existing behavior; omitted reason is null |
-| AC-11 / TEST-11 UI feedback | Browser, `tests/review-ui.test.mjs` | Assigned Reviewer at submitted detail | Enter 9 then 10 on separate requests | 9 yields accessible error and no write; 10 succeeds and appears trimmed in history |
-| AC-11 / TEST-11 historical read | API/DB or browser, test name TBD | Existing rejected record with short saved reason | Read authorized detail/history | Existing status and reason returned unchanged |
-| AC-09 / TEST-09 authorization regression | API/DB, `tests/decisions.test.mjs` | Unrelated Reviewer and Requester attempt decision | POST Reject | Existing 404/403 behavior remains; no disclosure or write |
+| AC-15 / TEST-15 | API/DB, `tests/requests.test.mjs` | Owner, assigned Reviewer and SUBMITTED request; valid trimmed reason | Owner POSTs `/api/requests/{id}/withdraw` | 200; status WITHDRAWN; one event with owner actor and trimmed reason; saved detail/history returned |
+| AC-16 / TEST-16 | API/DB, `tests/requests.test.mjs` | SUBMITTED request; omitted, whitespace-only, 501-code-point, 1-code-point and 500-code-point reasons | Owner attempts each case on isolated requests | Invalid inputs return 422 and write nothing; 1 and 500 boundaries succeed |
+| AC-17 / TEST-17 | API/DB, `tests/requests.test.mjs` | Anonymous caller, Reviewer and unrelated Requester | POST withdrawal | 401, 403 and 404 respectively; no state/history writes or disclosure |
+| AC-18 / TEST-18 | API/DB, intended in `tests/requests.test.mjs` or a focused transition test | SUBMITTED request and concurrent owner withdrawal plus assigned Reviewer decision | Submit both transitions concurrently, then retry loser | Exactly one 200 transition; loser/retry gets 409; one terminal event matches stored status |
+| AC-19 / TEST-19 | Browser, `tests/request-ui.test.mjs` | Signed-in owner with submitted request | Withdraw with valid reason, reload, then open as assigned Reviewer | Owner and Reviewer see WITHDRAWN and saved reason; controls disappear; persisted history contains one withdrawal event |
+| AC-20 / TEST-20 | API/DB and migration | Existing Sprint 1 request/history before migration | Apply forward migration, read existing records and attempt a WITHDRAWN write | Existing data remains intact; valid new state/event is accepted; invalid reason or duplicate terminal event is rejected |
 
 ## Pair review and revision history
 
-| Revision | Date | Change | Author | Reviewer/feedback |
+| Revision | Date | Change | Author | Reviewer and feedback |
 |---|---|---|---|---|
-| 0.1-draft | 25 Nov 2026 | Proposed minimum, impact table and AC/STS before production implementation | Ashira (draft) | Thira review pending |
-| Approval | Pending | Record TA/instructor decision on the specific 10–500 Reject rule | Pending | Pending |
+| 0.1-draft | 25 Nov 2026 | Previous proposal to raise the minimum rejection reason length; superseded after the instructor's Spec Sheet Change announcement | Ashira | Superseded |
+| 0.2-draft | 25 Nov 2026 | Proposed requester withdrawal, cross-layer impact, migration and new AC/STS. No TA approval required under the announcement. | Ashira (draft) | Thira pair review pending |
 
-The current Sprint 1 contract remains v0.6 and describes the implemented 1–500 rule. Keep that released wording intact until an approved, versioned revision is recorded.
+The current Sprint 1 contract remains v0.6 until the pair agrees and the versioned change is accepted into the Lab 7 branch. No implementation or test result is claimed by this contract.
