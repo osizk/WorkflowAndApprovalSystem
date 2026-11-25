@@ -4,7 +4,7 @@ Latest independent-retest checkpoint: ClassPulse A independently retested WF-BUG
 
 Updated 25 November 2026, Asia/Bangkok. Final acceptance and submission remain open.
 
-ClassPulse reviewed the supplied R2 JSON and screenshot and accepted the **CD-01 inactive-login and CD-07 aggregate PASS paths** within the reported CP-V01 limits. Retain survey 26 and responses 13–15. Separately, the agreed local TEST-05 passed on exact CP-V01 source. The isolated auth file passed all eight tests. TEST-05 asserted HTTP 200 before fixture expiry and HTTP 401 `UNAUTHENTICATED` after the fixture was expired. [Local supporting evidence](classpulse/CP-V01-TEST-05/REPORT.md).
+ClassPulse reviewed the supplied R2 JSON and screenshot and accepted the **CD-01 inactive-login and CD-07 aggregate PASS paths** within the reported CP-V01 limits. Retain survey 26 and responses 13–15. Separately, the agreed local TEST-05 passed on exact CP-V01 source. The isolated auth file passed all eight tests. TEST-05 asserted HTTP 200 before fixture expiry and HTTP 401 `UNAUTHENTICATED` after the fixture was expired. [Local supporting evidence](classpulse/CP-V01-TEST-05/REPORT.md). The 20:30 Bangkok rerun used the exact `npm test -- tests/api/auth.test.ts` command and passed all eight tests again with exit code 0. [Exact-command rerun evidence](classpulse/CP-V01-TEST-05/exact-command/REPORT.md).
 
 | Direction | Completed evidence | Remaining work |
 |---|---|---|

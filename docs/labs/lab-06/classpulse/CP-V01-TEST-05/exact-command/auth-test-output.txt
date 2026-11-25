@@ -1,0 +1,16 @@
+
+> classpulse-server@0.1.0 test
+> vitest run tests/api/auth.test.ts
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 <CP-V01 checkout>/server
+
+ ✓ tests/api/auth.test.ts (8 tests) 1758ms
+   ✓ F-01 login, session and current user > TEST-02 wrong password, unknown email and an inactive user are indistinguishable 311ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:30:16
+   Duration  2.63s (transform 158ms, setup 28ms, collect 445ms, tests 1.76s, environment 0ms, prepare 129ms)
+
