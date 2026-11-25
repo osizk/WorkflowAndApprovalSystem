@@ -2,14 +2,13 @@
 
 **Issue:** [#70 — Allow a Requester to withdraw a submitted purchase request](https://github.com/osizk/WorkflowAndApprovalSystem/issues/70)  
 **Status:** Proposed for pair agreement. The 25 November instructor announcement says Lab 7 change requests do not require prior instructor or TA approval.  
-**Contract revision:** 0.2-draft  
+**Contract revision:** 0.3-draft  
 **Affected features:** F-02 Submit/retrieve and F-03 Review/history
 
 ## Baseline and pre-change reference
 
-- **Accepted Sprint 1 release reference:** [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c), the immutable release cited in the Deliverable 1 README/report. The original F-02/F-03 rules and tests are in [Sprint 1 contracts](../../sprints/sprint-1/contracts.md), especially AC-04–08 / TEST-04–08 and AC-09–13 / TEST-09–13.
+- **Sprint 1 release reference for the original behavior:** [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c), the immutable release cited in the Deliverable 1 README/report. This identifies the original behavior; it does not claim independent whole-product UAT acceptance, which remains pending in the available record. The original F-02/F-03 rules and tests are in [Sprint 1 contracts](../../sprints/sprint-1/contracts.md), especially AC-04–08 / TEST-04–08 and AC-09–13 / TEST-09–13.
 - **Lab 7 pre-change source SHA:** `ad2cbef67decf9953219694898327dea0bb66034`. GitHub `main` and `lab7-staging` were both at this SHA when the contract review began; it includes the Lab 6 release merged by PR #64. This is the source revision against which the test-only RED commit is based, unless a later verified branch update changes the implementation base. Record the actual RED parent SHA and commit again when tests are run.
-- **Lab 6 status:** the corrected-live retest is recorded in Issue #66 against the same source SHA. Whole-product UAT acceptance and remaining agreed Workflow additions are still pending in the available record.
 - **RED reference:** Run the route and browser behavior tests (AC-15–19) against the unchanged implementation at `ad2cbef...` from a test-only commit; the expected failures must be assertion failures caused by the unsupported withdrawal behavior, not test setup errors. AC-20 migration/constraint assertions and AC-21 event-write rollback require the new schema/route, so record their execution during implementation verification; do not present them as baseline RED unless a meaningful pre-change assertion is specifically designed and observed. No RED run is claimed yet.
 
 ## Change request
@@ -96,6 +95,6 @@ The change gives requesters a controlled way to stop a purchase request that is 
 |---|---|---|---|---|
 | 0.1-draft | 25 Nov 2026 | Previous proposal to raise the minimum rejection reason length; superseded after the instructor's Spec Sheet Change announcement | Ashira | Superseded |
 | 0.2-draft | 25 Nov 2026 | Proposed requester withdrawal, cross-layer impact, migration and new AC/STS. No TA approval required under the announcement. | Ashira (draft) | Thira pair review pending |
-| 0.3-draft | 25 Nov 2026 | Addressed Kane's review: separated accepted Sprint 1 and pre-change SHAs, specified withdrawal reason database invariants and TEST-20 cases, and mapped retained regressions plus withdrawal rollback. | Pex | Re-review pending |
+| 0.3-draft | 25 Nov 2026 | Addressed Kane's technical review and baseline/scoping re-review: clarified the Sprint 1 release reference and pending UAT acceptance, retained the pinned pre-change SHA, specified withdrawal reason database invariants and TEST-20 cases, and mapped regressions plus withdrawal rollback. | Pex | Re-review requested |
 
 The current Sprint 1 contract remains v0.6 until the pair agrees and the versioned change is accepted into the Lab 7 branch. No implementation or test result is claimed by this contract.
