@@ -48,7 +48,7 @@ Count Unicode code points after trimming, following the existing contract conven
 | Business rule | SRS BR-05 and delegated decision D-04 | Version BR-05 to say 10–500 trimmed code points for Reject, with approval still optional. Record approval and rationale. |
 | Feature/API | F-03, FR-05/06, Sprint 1 contract v0.6 | Update reason validation and HTTP 422 field error. Preserve success shape and decision transaction. Check callers of POST `/api/requests/{id}/decision`. |
 | AC and STS | AC-10/11, TEST-10/11 | Keep IDs. Extend AC-11/TEST-11 with rejected 9 and accepted 10 code-point cases and no-write assertions. |
-| User interface | F-03 `/reviews/:id` | State the minimum near Reason. Associate accessible validation feedback with the field and retain focus/input after error. Test 9 is blocked without POST, 10 submits. |
+| User interface | F-03 `/reviews/:id` | Display `Required to reject. Enter 10 to 500 characters.` beside the Reason field. A trimmed 1–9 or over-500 input displays `Enter 10 to 500 characters.` accessibly and retains focus/input. Test 9 is blocked without POST; 10 submits. |
 | Authorization/state | FR-04–06, BR-02/06–08, AC-09/12/13 | No policy change. Regress assigned/unrelated reviewers, requester denial, terminal/repeated/concurrent decisions and rollback after event failure. |
 | Persistence/history | F-03 data, NFR-01, AC-10/11/14 | Reuse nullable `reason` and existing transaction. No migration/backfill. Read a documented short-reason historical fixture. |
 | Sprint 2 integration | F-04 Return/revise/resubmit | Keep validation specific to Reject. Rerun Return/resubmit after integration because files and screens may overlap. |
