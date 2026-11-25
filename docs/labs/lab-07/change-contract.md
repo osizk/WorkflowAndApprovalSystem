@@ -5,6 +5,13 @@
 **Contract revision:** 0.2-draft  
 **Affected features:** F-02 Submit/retrieve and F-03 Review/history
 
+## Baseline and pre-change reference
+
+- **Accepted Sprint 1 release reference:** [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c), the immutable release cited in the Deliverable 1 README/report. The original F-02/F-03 rules and tests are in [Sprint 1 contracts](../../sprints/sprint-1/contracts.md), especially AC-04–08 / TEST-04–08 and AC-09–13 / TEST-09–13.
+- **Lab 7 pre-change source SHA:** `ad2cbef67decf9953219694898327dea0bb66034`. GitHub `main` and `lab7-staging` were both at this SHA when the contract review began; it includes the Lab 6 release merged by PR #64. This is the source revision against which the test-only RED commit is based, unless a later verified branch update changes the implementation base. Record the actual RED parent SHA and commit again when tests are run.
+- **Lab 6 status:** the corrected-live retest is recorded in Issue #66 against the same source SHA. Whole-product UAT acceptance and remaining agreed Workflow additions are still pending in the available record.
+- **RED reference:** TEST-15–19 and the changed-behavior assertions in TEST-20/21 are to run on the original implementation at `ad2cbef...`, with tests committed before production changes. No RED run is claimed yet.
+
 ## Change request
 
 Change the Sprint 1 rule that a submitted purchase request cannot be edited and has no requester-initiated withdrawal. A Requester may withdraw their own request while its status is `SUBMITTED`, with a required reason of 1–500 Unicode code points after trimming. The withdrawal changes the status to `WITHDRAWN` and records one durable event atomically. Once an approval, rejection or withdrawal wins, competing transitions leave the status and history unchanged.
@@ -52,7 +59,7 @@ The change gives requesters a controlled way to stop a purchase request that is 
 | Reviewer UI | F-03 `/reviews/:id` | Render WITHDRAWN status and event reason in history; hide Approve/Reject for this terminal status. Preserve read access for the assigned Reviewer. |
 | API and permissions | FR-02–06, F-02/F-03 routes | Add `POST /api/requests/{id}/withdraw` with `{reason}`. Identity comes from the session. Owner-only. Anonymous 401, Reviewer 403, another owner's or missing ID 404, invalid input 422, non-SUBMITTED/lost race 409. Success 200 with saved request detail. |
 | Transaction and concurrency | BR-06/07, AC-12/13 | Conditional update from SUBMITTED and matching WITHDRAWN event in one database transaction. Race withdrawal against approve/reject and prove exactly one transition/event succeeds. |
-| Schema and migration | `RequestStatus`, `PurchaseRequest.status`, `RequestEvent.type`, partial unique terminal-event index and reason constraint | Add enum value WITHDRAWN. Extend terminal uniqueness to APPROVED, REJECTED and WITHDRAWN. Require a nonblank reason for WITHDRAWN. Verify forward migration on an empty database and an isolated database containing Sprint 1 requests/history. Existing history stays readable. |
+| Schema and migration | `RequestStatus`, `PurchaseRequest.status`, `RequestEvent.type`, terminal-event uniqueness and reason constraints | Add WITHDRAWN through a forward migration. Preserve the REJECTED reason rule. Require WITHDRAWN events to have a non-null, trimmed nonblank reason of 1–500 code points; keep APPROVED reason optional and SUBMITTED reason absent. Extend terminal-event uniqueness to APPROVED, REJECTED and WITHDRAWN. TEST-20 separately checks NULL and whitespace-only WITHDRAWN reasons are rejected, a valid reason is accepted, and a duplicate terminal event is rejected. Verify the migration on empty and existing-data databases; existing rows/history remain intact. |
 | Return/resubmit integration | F-04 Sprint 2 | A withdrawn request cannot be revised or resubmitted. Verify F-04 transition guards against WITHDRAWN and coordinate shared files and migration order. |
 
 ## Proposed acceptance criteria and STS
@@ -64,7 +71,20 @@ The change gives requesters a controlled way to stop a purchase request that is 
 | AC-17 / TEST-17 | API/DB, `tests/requests.test.mjs` | Anonymous caller, Reviewer and unrelated Requester | POST withdrawal | 401, 403 and 404 respectively; no state/history writes or disclosure |
 | AC-18 / TEST-18 | API/DB, intended in `tests/requests.test.mjs` or a focused transition test | SUBMITTED request and concurrent owner withdrawal plus assigned Reviewer decision | Submit both transitions concurrently, then retry loser | Exactly one 200 transition; loser/retry gets 409; one terminal event matches stored status |
 | AC-19 / TEST-19 | Browser, `tests/request-ui.test.mjs` | Signed-in owner with submitted request | Withdraw with valid reason, reload, then open as assigned Reviewer | Owner and Reviewer see WITHDRAWN and saved reason; controls disappear; persisted history contains one withdrawal event |
-| AC-20 / TEST-20 | API/DB and migration | Existing Sprint 1 request/history before migration | Apply forward migration, read existing records and attempt a WITHDRAWN write | Existing data remains intact; valid new state/event is accepted; invalid reason or duplicate terminal event is rejected |
+| AC-20 / TEST-20 | API/DB and migration, `tests/schema.sql` or focused migration test | Existing Sprint 1 requests/history before migration | Apply the forward migration, read existing rows, and separately attempt WITHDRAWN events with NULL reason, whitespace-only reason, a valid 1–500 code-point reason, and a duplicate terminal event; also rerun the REJECTED reason constraint case | Existing data remains intact; NULL/whitespace-only and duplicate terminal events are rejected; valid WITHDRAWN reason succeeds; prior REJECTED reason constraint remains enforced |
+
+## Preserved-behavior regression mapping
+
+| Existing check | Behavior retained and required regression |
+|---|---|
+| AC-07 / TEST-07 | Requester list/detail ownership isolation remains unchanged after adding the withdrawal route. |
+| AC-09 / TEST-09 | Assigned Reviewer scope, out-of-scope denial and Requester decision denial remain unchanged; add Reviewer-withdrawal denial under AC-17 / TEST-17. |
+| AC-10 / TEST-10 | Approval without a reason and rejection with a valid reason still persist exactly one matching event. |
+| AC-11 / TEST-11 | Existing rejection-reason validation and the 500-code-point boundary remain unchanged after adding the WITHDRAWN reason constraint. |
+| AC-12 / TEST-12 | Concurrent/repeated approval or rejection still permits only one terminal transition/event; AC-18 / TEST-18 adds the withdrawal race. |
+| AC-13 / TEST-13 | Existing decision event-write failure still rolls back. **AC-21 / TEST-21** additionally injects a withdrawal event-write failure and verifies the request remains SUBMITTED with its original history and no WITHDRAWN event. |
+
+| AC-21 / TEST-21 | API/DB, `tests/requests.test.mjs` | Owner and SUBMITTED request; force the WITHDRAWN event insert to fail after the conditional status update | Owner POSTs a valid withdrawal reason | Transaction rolls back: status remains SUBMITTED and no new history event is stored |
 
 ## Pair review and revision history
 
@@ -72,5 +92,6 @@ The change gives requesters a controlled way to stop a purchase request that is 
 |---|---|---|---|---|
 | 0.1-draft | 25 Nov 2026 | Previous proposal to raise the minimum rejection reason length; superseded after the instructor's Spec Sheet Change announcement | Ashira | Superseded |
 | 0.2-draft | 25 Nov 2026 | Proposed requester withdrawal, cross-layer impact, migration and new AC/STS. No TA approval required under the announcement. | Ashira (draft) | Thira pair review pending |
+| 0.3-draft | 25 Nov 2026 | Addressed Kane's review: separated accepted Sprint 1 and pre-change SHAs, specified withdrawal reason database invariants and TEST-20 cases, and mapped retained regressions plus withdrawal rollback. | Pex | Re-review pending |
 
 The current Sprint 1 contract remains v0.6 until the pair agrees and the versioned change is accepted into the Lab 7 branch. No implementation or test result is claimed by this contract.
