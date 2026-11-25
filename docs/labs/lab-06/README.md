@@ -11,6 +11,7 @@ Working report and evidence checkpoint, 24 November 2026. WF-BUG-001 independent
 | [Current status](STATUS.md) | Latest Workflow release, peer reviews, ClassPulse coverage and open dependencies |
 | [Contributions and required declaration](CONTRIBUTIONS.md) | Actual contribution, operator attribution and limits required by the labsheet |
 | [Workflow handoff](handoff/lab06-uat-cases-en037-aligned.docx) | Prepared six-case handoff; Word visual layout verification remains pending |
+| [ClassPulse coverage disposition](classpulse/COVERAGE-DISPOSITION.md) | Consolidated independent coverage, open branches and proposed Part D coordination |
 | [ClassPulse coverage review](classpulse/R11-coverage-review.md) | Original eight proposed additional coverage groups |
 | [ClassPulse execution continuation](classpulse/R1/CONTINUATION-REPORT.md) | Original case behavior observations, fixture-setup deviations and limitations |
 | [ClassPulse accumulated evidence](classpulse/R1/continuation-results.json) | Recorded browser/API observations |
