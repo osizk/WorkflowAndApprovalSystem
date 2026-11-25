@@ -10,7 +10,7 @@
 - **Accepted Sprint 1 release reference:** [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c), the immutable release cited in the Deliverable 1 README/report. The original F-02/F-03 rules and tests are in [Sprint 1 contracts](../../sprints/sprint-1/contracts.md), especially AC-04–08 / TEST-04–08 and AC-09–13 / TEST-09–13.
 - **Lab 7 pre-change source SHA:** `ad2cbef67decf9953219694898327dea0bb66034`. GitHub `main` and `lab7-staging` were both at this SHA when the contract review began; it includes the Lab 6 release merged by PR #64. This is the source revision against which the test-only RED commit is based, unless a later verified branch update changes the implementation base. Record the actual RED parent SHA and commit again when tests are run.
 - **Lab 6 status:** the corrected-live retest is recorded in Issue #66 against the same source SHA. Whole-product UAT acceptance and remaining agreed Workflow additions are still pending in the available record.
-- **RED reference:** TEST-15–19 and the changed-behavior assertions in TEST-20/21 are to run on the original implementation at `ad2cbef...`, with tests committed before production changes. No RED run is claimed yet.
+- **RED reference:** Run the route and browser behavior tests (AC-15–19) against the unchanged implementation at `ad2cbef...` from a test-only commit; the expected failures must be assertion failures caused by the unsupported withdrawal behavior, not test setup errors. AC-20 migration/constraint assertions and AC-21 event-write rollback require the new schema/route, so record their execution during implementation verification; do not present them as baseline RED unless a meaningful pre-change assertion is specifically designed and observed. No RED run is claimed yet.
 
 ## Change request
 
@@ -84,7 +84,11 @@ The change gives requesters a controlled way to stop a purchase request that is 
 | AC-12 / TEST-12 | Concurrent/repeated approval or rejection still permits only one terminal transition/event; AC-18 / TEST-18 adds the withdrawal race. |
 | AC-13 / TEST-13 | Existing decision event-write failure still rolls back. **AC-21 / TEST-21** additionally injects a withdrawal event-write failure and verifies the request remains SUBMITTED with its original history and no WITHDRAWN event. |
 
-| AC-21 / TEST-21 | API/DB, `tests/requests.test.mjs` | Owner and SUBMITTED request; force the WITHDRAWN event insert to fail after the conditional status update | Owner POSTs a valid withdrawal reason | Transaction rolls back: status remains SUBMITTED and no new history event is stored |
+### AC-21 / TEST-21 — withdrawal event-write rollback
+
+| Level and intended test | Preconditions and input | Action | Expected result |
+|---|---|---|---|
+| API/DB, `tests/requests.test.mjs` | Owner and SUBMITTED request; force the WITHDRAWN event insert to fail after the conditional status update | Owner POSTs a valid withdrawal reason | Transaction rolls back: status remains SUBMITTED and no new history event is stored |
 
 ## Pair review and revision history
 
