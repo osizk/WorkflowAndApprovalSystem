@@ -1,14 +1,14 @@
 # Lab 6 current status after corrected Workflow deployment
 
-Latest independent-retest checkpoint: ClassPulse A independently retested WF-BUG-001 on WF-FIX-001 at 23:03:13.097–23:03:15.462 Bangkok on 24 November. The unchanged original reproducer passed 2/2 (102400 bytes -> 422; 102401 bytes -> 413), and five supplemental checks passed. All 25 package hashes verified. WF-BUG-001 is fixed and independently verified, closed as completed. This is scoped defect closure; remaining agreed Workflow coverage, whole-product acceptance and ClassPulse CD-01/CD-07 fixtures remain pending. See [independent retest disposition](workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md).
+Latest independent-retest checkpoint: ClassPulse A independently retested WF-BUG-001 on WF-FIX-001 at 23:03:13.097–23:03:15.462 Bangkok on 24 November. The unchanged original reproducer passed 2/2 (102400 bytes -> 422; 102401 bytes -> 413), and five supplemental checks passed. All 25 package hashes verified. WF-BUG-001 is fixed and independently verified, closed as completed. This is scoped defect closure; remaining agreed Workflow coverage, and whole-product acceptance remain pending. See [independent retest disposition](workflow/WF-BUG-001/INDEPENDENT-RETEST-DISPOSITION.md).
 
-24 November 2026, Asia/Bangkok. No final acceptance or submission is recorded.
+Updated 25 November 2026, Asia/Bangkok. Final acceptance and submission remain open.
 
-Latest ClassPulse fixture update: read-only preflight is complete, but no accounts have been created. The additive fixture tool needs a concurrency correction/review before authorized human execution. CD-01/CD-07 wait for actual setup evidence and private access.
+ClassPulse reviewed the supplied R2 JSON and screenshot and accepted the **CD-01 inactive-login and CD-07 aggregate PASS paths** within the reported CP-V01 limits. Retain survey 26 and responses 13–15. Separately, the agreed local TEST-05 passed on exact CP-V01 source. The isolated auth file passed all eight tests. TEST-05 asserted HTTP 200 before fixture expiry and HTTP 401 `UNAUTHENTICATED` after the fixture was expired. [Local supporting evidence](classpulse/CP-V01-TEST-05/REPORT.md).
 
 | Direction | Completed evidence | Remaining work |
 |---|---|---|
-| Our team tests ClassPulse | Original UAT-01–12 behavior observations, agreed CD-08 missing-ID checks, additional coverage recorded with setup deviations | Partner provisions CD-07 third respondent and CD-01 inactive account; complete remaining agreed branches and coverage assessment; final independent acceptance |
+| Our team tests ClassPulse | Original UAT-01–12 behavior observations, agreed CD-08 missing-ID checks, accepted CD-01 inactive-login and CD-07 aggregate paths, and local TEST-05 PASS | Independent live expiry, remaining coverage assessment, ClassPulse Part D, and final independent acceptance |
 | ClassPulse tests our Workflow | A original UAT-01/04/05 and B original UAT-02/03 plus later UAT-06 denial have observed outcomes; documented setup/presentation/version qualifications accepted; WF-BUG-001 independently reproduced | Remaining agreed additional coverage, including incomplete APPROVE-501 capture; whole-product acceptance |
 | Our team fixes Workflow | Issue #62, meaningful RED/GREEN, peer-approved PR #63, peer-approved release PR #64, main CI 17/17 and successful deployment, fresh corrected serving mapping and seven passing developer checks | Finding closed after accepted independent retest; overall lab completion remains pending |
 
@@ -22,4 +22,4 @@ Corrected release WF-FIX-001 is verified: source ad2cbef67decf9953219694898327de
 
 Preserve Workflow request IDs e1cc8f10-ccb4-49b1-a391-3d44fd4e3f67 and b1f4b385-04b4-4e7a-905f-7f9091e65db2. The optional restart remains NOT RUN. Browser setup acceptance covers the observed session retrieval checks only.
 
-Next external reply: Lab6_Corrected_Workflow_and_B_Dispositions_20261124.zip. It supersedes older preparation-time reply packages for current Workflow status. Sending remains the student's action. ClassPulse CD-07 third respondent and CD-01 inactive-account fixture branches remain pending actual provisioning/private access. A reports the C3 contract approval has now happened; fixture readiness is still not established. Exact future appointments and the private findings channel remain for discussion on 25 November. Actual contributions, course-required declaration, final PDF and submission receipt remain to be completed from real events.
+The earlier corrected Workflow package and retest remain in the evidence history. Continue independent live expiry coordination and remaining agreed coverage. Record both teams' actual acceptance decisions, contributions and PDF submission evidence when available.

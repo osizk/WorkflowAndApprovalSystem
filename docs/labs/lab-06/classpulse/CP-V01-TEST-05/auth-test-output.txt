@@ -1,0 +1,22 @@
+
+> classpulse-server@0.1.0 test
+> vitest run tests/api/auth.test.ts --reporter=verbose
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 <CP-V01 checkout>/server
+
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-01 valid login returns the user and an HttpOnly SameSite=Lax cp_session cookie 440ms
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-02 wrong password, unknown email and an inactive user are indistinguishable 491ms
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-03 /me returns the current user with a cookie and 401 without one 355ms
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-04 logout deletes the session and the replayed cookie is rejected 340ms
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-05 a session whose expiresAt has passed is rejected
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-55 a malformed login body is a 400 with no cookie and no session
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-56 the session cookie is Secure in production (login and logout) and not in test 424ms
+ ✓ tests/api/auth.test.ts > F-01 login, session and current user > TEST-57 the server never writes a password or a session token to its console
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:20:18
+   Duration  3.93s (transform 238ms, setup 38ms, collect 690ms, tests 2.82s, environment 0ms, prepare 144ms)
+
