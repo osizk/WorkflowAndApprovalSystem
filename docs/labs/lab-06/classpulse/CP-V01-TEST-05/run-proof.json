@@ -1,0 +1,36 @@
+{
+  "startedAtBangkok": "2026-11-25T20:20:11+07:00",
+  "operator": "Codex (GPT-6.2 Sol), under Thira Rungruangkaset, tester D / EN-037_P5",
+  "sourceCheckout": "1fe3e3b82dfb0537be30223c9b598b3479b4affe",
+  "checkoutMode": "detached",
+  "gitStatusBeforePorcelain": "",
+  "servingRevision": "N/A \u2014 local supporting automated run",
+  "runtime": {
+    "node": "v24.14.0",
+    "npm": "11.9.0",
+    "postgres": "postgres (PostgreSQL) 16.16"
+  },
+  "database": {
+    "databaseName": "classpulse_test",
+    "host": "127.0.0.1",
+    "port": 60758,
+    "listener": "127.0.0.1",
+    "postgresVersion": "16.16",
+    "clusterSystemIdentifier": "7712098302129996920",
+    "ownsFreshDataDirectory": true,
+    "publicTableCountBeforeMigrations": 0,
+    "otherSessionsBeforeTests": 0
+  },
+  "migrationCommand": "npx --no-install prisma migrate deploy",
+  "migrationExitCode": 0,
+  "testCommand": "npm test -- tests/api/auth.test.ts --reporter=verbose",
+  "testStartedAtBangkok": "2026-11-25T20:20:17+07:00",
+  "testExitCode": 0,
+  "testFinishedAtBangkok": "2026-11-25T20:20:22+07:00",
+  "sourceAfter": "1fe3e3b82dfb0537be30223c9b598b3479b4affe",
+  "gitStatusAfterPorcelain": "",
+  "wholeFileSummary": "Tests  8 passed (8)",
+  "test05Output": "\u2713 tests/api/auth.test.ts > F-01 login, session and current user > TEST-05 a session whose expiresAt has passed is rejected",
+  "databaseStopped": true,
+  "completedAtBangkok": "2026-11-25T20:20:22+07:00"
+}
