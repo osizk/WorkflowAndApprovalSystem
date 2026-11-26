@@ -117,6 +117,41 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     return res.status(201).json({ request: requestDetail(request) });
   });
 
+app.post('/api/requests/:id/withdraw', session, async (req, res) => {
+    const user = (req as AuthRequest).authUser!;
+    if (user.role !== 'REQUESTER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const id = req.params.id;
+    const notFound = () => fail(res, 404, 'NOT_FOUND', 'Request not found');
+    if (typeof id !== 'string' || !uuidPattern.test(id)) return notFound();
+    const ownerScope = { id, requesterId: user.id };
+    const request = await db.purchaseRequest.findFirst({ where: ownerScope, select: { status: true } });
+    if (!request) return notFound();
+    const conflict = () => fail(res, 409, 'WITHDRAWAL_CONFLICT', 'Only submitted requests can be withdrawn');
+    if (request.status !== 'SUBMITTED') return conflict();
+
+    const body: unknown = req.body;
+    const fields: Fields = {};
+    if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).some((key) => key !== 'reason')) {
+      fields.body = 'Provide a withdrawal object with only a reason.';
+    }
+    const input = body as { reason?: unknown } | null | undefined;
+    const reason = typeof input?.reason === 'string' ? input.reason.trim() : '';
+    if (!reason || [...reason].length > 500 || reason.includes('\0')) fields.reason = 'Enter 1 to 500 characters.';
+    if (Object.keys(fields).length) return fail(res, 422, 'VALIDATION_ERROR', 'Check the withdrawal fields', fields);
+
+    const result = await db.$transaction(async (tx) => {
+      const updated = await tx.purchaseRequest.updateMany({
+        where: { ...ownerScope, status: 'SUBMITTED' },
+        data: { status: 'WITHDRAWN' },
+      });
+      if (updated.count !== 1) return null;
+      await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: 'WITHDRAWN', reason } });
+      return tx.purchaseRequest.findUniqueOrThrow({ where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } } });
+    });
+    if (!result) return conflict();
+    return res.json({ request: requestDetail(result) });
+  });
+
   app.post('/api/requests/:id/decision', session, async (req, res) => {
     const user = (req as AuthRequest).authUser!;
     if (user.role !== 'REVIEWER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');

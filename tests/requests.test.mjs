@@ -97,7 +97,7 @@ test('F-02: guarded submission, scoped retrieval and durable history', async () 
   }
 });
 
-test('AC-15 to AC-17: requester withdrawal is validated, authorized and persisted', async () => {
+test('AC-15 to AC-18, AC-20 and AC-21: requester withdrawal API and persistence', async () => {
   const url = testDatabaseUrl(process.env.TEST_DATABASE_URL, developmentDatabaseUrl());
   const db = new PrismaClient({ datasources: { db: { url } } });
   const users = [];
@@ -142,7 +142,7 @@ test('AC-15 to AC-17: requester withdrawal is validated, authorized and persiste
     assert.equal(saved.history[1].reason, 'No longer needed');
     assert.equal((await call(owner, `/${withdrawn.id}/withdraw`, 'POST', { reason: 'Again' })).status, 409);
 
-    for (const [who, expected] of [[null, 401], [reviewer, 403], [other, 404], [unrelatedReviewer, 404]]) {
+    for (const [who, expected] of [[null, 401], [reviewer, 403], [other, 404], [unrelatedReviewer, 403]]) {
       assert.equal((await call(who, `/${withdrawn.id}/withdraw`, 'POST', { reason: 'Valid reason' })).status, expected);
     }
     assert.equal((await call(owner, '/not-a-uuid/withdraw', 'POST', { reason: 'Valid reason' })).status, 404);
@@ -167,6 +167,36 @@ test('AC-15 to AC-17: requester withdrawal is validated, authorized and persiste
     assert.equal(reviewerDetail.status, 200);
     assert.equal((await reviewerDetail.json()).request.history[1].reason, 'No longer needed');
     assert.equal((await call(other, `/${withdrawn.id}`)).status, 404);
+
+    for (const decision of ['APPROVE', 'REJECT']) {
+      const item = await createRequest('Competing transitions');
+      const results = await Promise.all([
+        call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' }),
+        call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' }),
+      ]);
+      assert.deepEqual(results.map(({ status }) => status).sort(), [200, 409]);
+      const decisionWon = results[1].status === 200;
+      const expected = decisionWon ? (decision === 'APPROVE' ? 'APPROVED' : 'REJECTED') : 'WITHDRAWN';
+      const retry = decisionWon
+        ? await call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' })
+        : await call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' });
+      assert.equal(retry.status, 409);
+      const stored = await db.purchaseRequest.findUnique({ where: { id: item.id }, include: { events: true } });
+      assert.equal(stored.status, expected);
+      assert.deepEqual(stored.events.filter(({ type }) => type !== 'SUBMITTED').map(({ type }) => type), [expected]);
+    }
+
+    const rollback = await createRequest('Rollback on duplicate terminal event');
+    const event = { requestId: rollback.id, actorId: owner.id, type: 'WITHDRAWN' };
+    for (const reason of [null, '\u00a0', ' leading']) {
+      await assert.rejects(db.requestEvent.create({ data: { ...event, reason } }), /request_event_(withdrawal_)?reason/);
+    }
+    await db.requestEvent.create({ data: { ...event, reason: 'Fixture terminal event' } });
+    const readEvents = () => db.requestEvent.findMany({ where: { requestId: rollback.id }, orderBy: { id: 'asc' } });
+    const before = await readEvents();
+    assert.equal((await call(owner, `/${rollback.id}/withdraw`, 'POST', { reason: 'Second terminal event' })).status, 500);
+    assert.equal((await db.purchaseRequest.findUnique({ where: { id: rollback.id } })).status, 'SUBMITTED');
+    assert.deepEqual(await readEvents(), before);
   } finally {
     if (server) await new Promise((resolve) => server.close(resolve));
     await db.requestEvent.deleteMany({ where: { request: { requesterId: { in: users } } } });
