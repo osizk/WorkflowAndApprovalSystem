@@ -16,6 +16,7 @@ enum RequestStatus {
   SUBMITTED
   APPROVED
   REJECTED
+  WITHDRAWN
 }
 
 model User {

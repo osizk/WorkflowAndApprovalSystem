@@ -21,6 +21,12 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
   const [fields, setFields] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [withdrawalOpen, setWithdrawalOpen] = useState(false);
+  const [withdrawalReason, setWithdrawalReason] = useState('');
+  const [withdrawalReasonError, setWithdrawalReasonError] = useState('');
+  const [withdrawalError, setWithdrawalError] = useState('');
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [withdrawn, setWithdrawn] = useState(false);
 
   useEffect(() => {
     if (mode === 'new') return;
@@ -76,6 +82,61 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     }
   }
 
+  function closeWithdrawal() {
+    setWithdrawalOpen(false);
+    setWithdrawalReason('');
+    setWithdrawalReasonError('');
+    setWithdrawalError('');
+  }
+
+  async function withdraw(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (withdrawing || request?.status !== 'SUBMITTED') return;
+    setWithdrawalError('');
+    setWithdrawalReasonError('');
+    const reason = withdrawalReason.trim();
+    if (!reason || [...reason].length > 500) {
+      setWithdrawalReasonError('Enter 1 to 500 characters.');
+      return;
+    }
+
+    setWithdrawing(true);
+    try {
+      const response = await fetch(`/api/requests/${encodeURIComponent(request.id)}/withdraw`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+      });
+      if (response.status === 401) return signInAgain();
+      if (response.status === 404) {
+        closeWithdrawal();
+        setState('missing');
+        return;
+      }
+      if (response.status === 409) {
+        closeWithdrawal();
+        setWithdrawalError('This request changed before it could be withdrawn.');
+        setState('loading');
+        setRetry((value) => value + 1);
+        return;
+      }
+      if (response.status === 422) {
+        const data = await response.json() as ApiError;
+        setWithdrawalReasonError(data.error?.fields?.reason ?? 'Check the withdrawal reason.');
+        return;
+      }
+      if (!response.ok) throw new Error('Withdrawal failed');
+      const data = await response.json() as { request: Detail };
+      setRequest(data.request);
+      closeWithdrawal();
+      setWithdrawn(true);
+    } catch {
+      setWithdrawalError('Could not withdraw the request. Try again.');
+    } finally {
+      setWithdrawing(false);
+    }
+  }
+
   return <div className="workspace">
     <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
     {mode !== 'list' && <a href="/requests">Back to my requests</a>}
@@ -102,6 +163,8 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       <button type="submit" disabled={submitting}>{submitting ? 'Submitting…' : 'Submit request'}</button>
     </form>}
     {mode === 'detail' && <>
+      {withdrawalError && <p role="alert" className="error">{withdrawalError}</p>}
+      {withdrawn && <p role="status">Request withdrawn.</p>}
       {state === 'loading' && <p role="status">Loading request…</p>}
       {state === 'missing' && <p role="alert">Request not found.</p>}
       {state === 'ready' && request && <div className="request-detail">
@@ -111,6 +174,19 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
         <p><strong>Purpose:</strong> {request.purpose}</p>
         <h3>History</h3>
         <ol>{request.history.map((event) => <li key={event.id}>{event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason ? ` · ${event.reason}` : ''}</li>)}</ol>
+        {request.status === 'SUBMITTED' && (
+          withdrawalOpen ? <form onSubmit={withdraw} aria-busy={withdrawing} noValidate>
+            <label htmlFor="withdrawal-reason">Withdrawal reason</label>
+            <textarea id="withdrawal-reason" value={withdrawalReason} autoFocus required disabled={withdrawing}
+              onChange={(event) => setWithdrawalReason(event.target.value)}
+              aria-invalid={!!withdrawalReasonError}
+              aria-describedby={withdrawalReasonError ? 'withdrawal-help withdrawal-error' : 'withdrawal-help'} />
+            <p id="withdrawal-help">Enter 1 to 500 characters. The reason will appear in the request history.</p>
+            {withdrawalReasonError && <p id="withdrawal-error" className="error" role="alert">{withdrawalReasonError}</p>}
+            <button type="submit" disabled={withdrawing}>{withdrawing ? 'Withdrawing…' : 'Confirm withdrawal'}</button>
+            <button type="button" disabled={withdrawing} onClick={closeWithdrawal}>Cancel</button>
+          </form> : <button type="button" onClick={() => setWithdrawalOpen(true)}>Withdraw request</button>
+        )}
       </div>}
     </>}
     {state === 'error' && <><p role="alert">Could not load requests.</p><button onClick={() => { setState('loading'); setRetry((value) => value + 1); }}>Try again</button></>}
