@@ -85,7 +85,7 @@ button:disabled { opacity: .65; cursor: wait; }
   gap: .5rem 1rem;
 }
 .requester-amount { font-variant-numeric: tabular-nums; }
-.requester-list-page .requester-status {
+.requester-status {
   justify-self: start;
   background: #e5eee8;
   color: #244536;
@@ -94,10 +94,26 @@ button:disabled { opacity: .65; cursor: wait; }
   font-size: .75rem;
   font-weight: 700;
 }
-.requester-list-page .requester-status[data-status="RETURNED"] { background: #fef0c7; color: #653b0d; }
-.requester-list-page .requester-status[data-status="APPROVED"] { background: #d9f0e3; color: #174b37; }
-.requester-list-page .requester-status[data-status="REJECTED"] { background: #fce1e1; color: #802525; }
+.requester-status[data-status="RETURNED"] { background: #fef0c7; color: #653b0d; }
+.requester-status[data-status="APPROVED"] { background: #d9f0e3; color: #174b37; }
+.requester-status[data-status="REJECTED"] { background: #fce1e1; color: #802525; }
 @media (max-width: 520px) {
   .requester-list-page .request-list li { grid-template-columns: minmax(0, 1fr) auto; }
   .requester-list-page .request-list li > a { grid-column: 1 / -1; }
 }
+
+.requester-detail { display: grid; gap: 1rem; }
+.requester-detail-summary, .requester-history, .requester-resubmit {
+  padding: clamp(.75rem, 3vw, 1.25rem);
+  border: 1px solid #c8dbcf;
+  border-radius: 10px;
+}
+.requester-detail-summary { background: #f4f8f5; }
+.requester-detail-summary h2, .requester-detail-summary p { margin: 0; }
+.requester-detail-summary p + p { margin-top: .5rem; }
+.requester-detail-summary h2 + p { margin-top: .65rem; }
+.requester-detail > button, .requester-resubmit > button { justify-self: start; }
+.requester-history h3, .requester-resubmit h3 { margin: 0; }
+.requester-history ol { margin-bottom: 0; }
+.requester-history li + li { margin-top: .5rem; }
+.requester-resubmit { margin: 0; }
