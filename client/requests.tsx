@@ -145,26 +145,31 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     }
   }
 
-  return <div className="workspace">
-    <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
+  return <div className={mode === 'list' ? 'workspace requester-list-page' : 'workspace'}>
+    <div className={mode === 'list' ? 'requester-list-header' : undefined}>
+      <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
+      {mode === 'list' && <a className="requester-create" href="/requests/new">Create request</a>}
+    </div>
     {mode !== 'list' && <a href="/requests">Back to my requests</a>}
     {mode === 'list' && <>
-      <label htmlFor="request-status-filter">Status</label>
-      <select id="request-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
-        <option value="">All statuses</option>
-        <option value="SUBMITTED">Submitted</option>
-        <option value="RETURNED">Returned</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-        <option value="WITHDRAWN">Withdrawn</option>
-      </select>
-      <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
-      <p><a href="/requests/new">Create request</a></p>
+      <div className="requester-filters">
+        <label htmlFor="request-status-filter">Status</label>
+        <select id="request-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
+          <option value="">All statuses</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="RETURNED">Returned</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="WITHDRAWN">Withdrawn</option>
+        </select>
+        <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
+      </div>
       {state === 'loading' && <p role="status">Loading requests…</p>}
       {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
       {state === 'ready' && <ul className="request-list">{requests.map((item) => <li key={item.id}>
         <a href={`/requests/${item.id}`}>{item.title}</a>
-        <span>{item.amount} {item.currency} · {item.status}</span>
+        <span className="requester-amount">{item.amount} {item.currency}</span>
+        <span className="requester-status" data-status={item.status}>{item.status}</span>
       </li>)}</ul>}
     </>}
     {mode === 'new' && <form onSubmit={submit} aria-busy={submitting} noValidate>
