@@ -27,6 +27,10 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
   const [withdrawalError, setWithdrawalError] = useState('');
   const [withdrawing, setWithdrawing] = useState(false);
   const [withdrawn, setWithdrawn] = useState(false);
+  const [resubmitFields, setResubmitFields] = useState<Record<string, string>>({});
+  const [resubmitError, setResubmitError] = useState('');
+  const [resubmitMessage, setResubmitMessage] = useState('');
+  const [resubmitting, setResubmitting] = useState(false);
 
   useEffect(() => {
     if (mode === 'new') return;
@@ -43,6 +47,11 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
         setState(data.requests.length ? 'ready' : 'empty');
       } else {
         setRequest(data.request);
+        if (data.request.status === 'RETURNED') {
+          setTitle(data.request.title);
+          setPurpose(data.request.purpose);
+          setAmount(data.request.amount);
+        }
         setState('ready');
       }
     }).catch(() => { if (!controller.signal.aborted) setState('error'); });
@@ -79,6 +88,60 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       setMessage('Could not submit the request. Try again.');
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  function changeResubmitField(field: string, value: string) {
+    if (field === 'title') setTitle(value);
+    if (field === 'purpose') setPurpose(value);
+    if (field === 'amount') setAmount(value);
+    setResubmitFields((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+    setResubmitError('');
+    setResubmitMessage('');
+  }
+
+  async function resubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (resubmitting || request?.status !== 'RETURNED') return;
+    setResubmitting(true);
+    setResubmitFields({});
+    setResubmitError('');
+    setResubmitMessage('');
+    try {
+      const response = await fetch(`/api/requests/${encodeURIComponent(request.id)}/resubmit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, purpose, amount, version: request.version }),
+      });
+      if (response.status === 401) return signInAgain();
+      if (response.status === 404) {
+        setState('missing');
+        return;
+      }
+      if (response.status === 409) {
+        setResubmitError('This request changed. Review the latest details before trying again.');
+        setState('loading');
+        setRetry((value) => value + 1);
+        return;
+      }
+      if (response.status === 422) {
+        const data = await response.json() as ApiError;
+        setResubmitFields(data.error?.fields ?? {});
+        setResubmitError('Check the revised request fields.');
+        return;
+      }
+      if (!response.ok) throw new Error('Request resubmission failed');
+      const data = await response.json() as { request: Detail };
+      setRequest(data.request);
+      setResubmitMessage('Request resubmitted.');
+    } catch {
+      setResubmitError('Could not resubmit the request. Try again.');
+    } finally {
+      setResubmitting(false);
     }
   }
 
@@ -165,6 +228,8 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     {mode === 'detail' && <>
       {withdrawalError && <p role="alert" className="error">{withdrawalError}</p>}
       {withdrawn && <p role="status">Request withdrawn.</p>}
+      {resubmitError && <p role="alert" className="error">{resubmitError}</p>}
+      {resubmitMessage && <p role="status">{resubmitMessage}</p>}
       {state === 'loading' && <p role="status">Loading request…</p>}
       {state === 'missing' && <p role="alert">Request not found.</p>}
       {state === 'ready' && request && <div className="request-detail">
@@ -187,6 +252,22 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
             <button type="button" disabled={withdrawing} onClick={closeWithdrawal}>Cancel</button>
           </form> : <button type="button" onClick={() => setWithdrawalOpen(true)}>Withdraw request</button>
         )}
+        {request.status === 'RETURNED' && <form onSubmit={resubmit} aria-busy={resubmitting} noValidate>
+          <h3>Edit and resubmit</h3>
+          <label htmlFor="resubmit-title">Title</label>
+          <input id="resubmit-title" value={title} onChange={(event) => changeResubmitField('title', event.target.value)}
+            aria-invalid={!!resubmitFields.title} aria-describedby={resubmitFields.title ? 'resubmit-title-error' : undefined} required disabled={resubmitting} />
+          {resubmitFields.title && <p id="resubmit-title-error" className="error" role="alert">{resubmitFields.title}</p>}
+          <label htmlFor="resubmit-purpose">Purpose</label>
+          <textarea id="resubmit-purpose" value={purpose} onChange={(event) => changeResubmitField('purpose', event.target.value)}
+            aria-invalid={!!resubmitFields.purpose} aria-describedby={resubmitFields.purpose ? 'resubmit-purpose-error' : undefined} required disabled={resubmitting} />
+          {resubmitFields.purpose && <p id="resubmit-purpose-error" className="error" role="alert">{resubmitFields.purpose}</p>}
+          <label htmlFor="resubmit-amount">Amount (THB)</label>
+          <input id="resubmit-amount" inputMode="decimal" value={amount} onChange={(event) => changeResubmitField('amount', event.target.value)}
+            aria-invalid={!!resubmitFields.amount} aria-describedby={resubmitFields.amount ? 'resubmit-amount-error' : undefined} required disabled={resubmitting} />
+          {resubmitFields.amount && <p id="resubmit-amount-error" className="error" role="alert">{resubmitFields.amount}</p>}
+          <button type="submit" disabled={resubmitting}>{resubmitting ? 'Resubmitting…' : 'Edit & Resubmit'}</button>
+        </form>}
       </div>}
     </>}
     {state === 'error' && <><p role="alert">Could not load requests.</p><button onClick={() => { setState('loading'); setRetry((value) => value + 1); }}>Try again</button></>}
