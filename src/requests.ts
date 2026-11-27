@@ -33,13 +33,17 @@ function parsePurchase(body: unknown) {
   return Object.keys(fields).length ? { fields } : { value: { title, purpose, amountSatang } };
 }
 
+function isRequestVersion(version: unknown): version is number {
+  return typeof version === 'number' && Number.isInteger(version) && version >= 1 && version <= 2147483647;
+}
+
 function parseDecision(body: unknown) {
   const fields: Fields = {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return { fields: { body: 'Provide a decision object.' } };
   }
   const input = body as Record<string, unknown>;
-  if (Object.keys(input).some((key) => !['decision', 'reason'].includes(key))) fields.body = 'Unexpected decision fields.';
+  if (Object.keys(input).some((key) => !['decision', 'reason', 'version'].includes(key))) fields.body = 'Unexpected decision fields.';
   if (input.decision !== 'APPROVE' && input.decision !== 'REJECT') fields.decision = 'Choose APPROVE or REJECT.';
   let reason: string | null = null;
   if (Object.hasOwn(input, 'reason')) {
@@ -50,9 +54,32 @@ function parseDecision(body: unknown) {
     }
   }
   if (input.decision === 'REJECT' && !reason) fields.reason = 'A rejection reason is required.';
+  const version = input.version;
+  if (!isRequestVersion(version)) return { fields: { ...fields, version: 'Enter a valid request version.' } };
   if (Object.keys(fields).length) return { fields };
   const status: 'APPROVED' | 'REJECTED' = input.decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
-  return { value: { status, reason } };
+  return { value: { status, reason, version } };
+}
+
+function parseTransitionReason(body: unknown, allowMissingVersion: boolean) {
+  const fields: Fields = {};
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { fields: { body: 'Provide an action object.' } };
+  }
+  const input = body as Record<string, unknown>;
+  if (Object.keys(input).some((key) => !['reason', 'version'].includes(key))) {
+    fields.body = 'Unexpected action fields.';
+  }
+  const reason = typeof input.reason === 'string' ? input.reason.trim() : '';
+  if (!reason || [...reason].length > 500 || reason.includes('\0')) {
+    fields.reason = 'Enter 1 to 500 characters.';
+  }
+  const version = allowMissingVersion && !Object.hasOwn(input, 'version') ? 1 : input.version;
+  if (!isRequestVersion(version)) {
+    fields.version = 'Enter a valid request version.';
+    return { fields };
+  }
+  return Object.keys(fields).length ? { fields } : { value: { reason, version } };
 }
 
 function summarize(request: PurchaseRequest) {
@@ -67,7 +94,7 @@ function summarize(request: PurchaseRequest) {
 export function requestDetail(request: PurchaseRequest & { events: RequestEvent[] }) {
   return {
     ...summarize(request), purpose: request.purpose, requesterId: request.requesterId,
-    reviewerId: request.reviewerId,
+    reviewerId: request.reviewerId, version: request.version,
     history: request.events.map(({ id, type, actorId, createdAt, reason }) => ({ id, type, actorId, createdAt, reason })),
   };
 }
@@ -117,7 +144,35 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     return res.status(201).json({ request: requestDetail(request) });
   });
 
-app.post('/api/requests/:id/withdraw', session, async (req, res) => {
+  app.post('/api/requests/:id/return', session, async (req, res) => {
+    const user = (req as AuthRequest).authUser!;
+    if (user.role !== 'REVIEWER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const id = req.params.id;
+    const notFound = () => fail(res, 404, 'NOT_FOUND', 'Request not found');
+    if (typeof id !== 'string' || !uuidPattern.test(id)) return notFound();
+    const scope = { id, reviewerId: user.id };
+    const assigned = await db.purchaseRequest.findFirst({ where: scope, select: { requesterId: true } });
+    if (!assigned) return notFound();
+    if (assigned.requesterId === user.id) return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const parsed = parseTransitionReason(req.body, false);
+    if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the return fields', parsed.fields);
+    const { reason, version } = parsed.value;
+    const result = await db.$transaction(async (tx) => {
+      const updated = await tx.purchaseRequest.updateMany({
+        where: { ...scope, requesterId: { not: user.id }, status: 'SUBMITTED', version },
+        data: { status: 'RETURNED', version: { increment: 1 } },
+      });
+      if (updated.count !== 1) return null;
+      await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: 'RETURNED', reason } });
+      return tx.purchaseRequest.findUniqueOrThrow({
+        where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } },
+      });
+    });
+    if (!result) return fail(res, 409, 'REQUEST_CONFLICT', 'Request changed. Reload and try again.');
+    return res.json({ request: requestDetail(result) });
+  });
+
+  app.post('/api/requests/:id/withdraw', session, async (req, res) => {
     const user = (req as AuthRequest).authUser!;
     if (user.role !== 'REQUESTER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');
     const id = req.params.id;
@@ -129,19 +184,13 @@ app.post('/api/requests/:id/withdraw', session, async (req, res) => {
     const conflict = () => fail(res, 409, 'WITHDRAWAL_CONFLICT', 'Only submitted requests can be withdrawn');
     if (request.status !== 'SUBMITTED') return conflict();
 
-    const body: unknown = req.body;
-    const fields: Fields = {};
-    if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).some((key) => key !== 'reason')) {
-      fields.body = 'Provide a withdrawal object with only a reason.';
-    }
-    const input = body as { reason?: unknown } | null | undefined;
-    const reason = typeof input?.reason === 'string' ? input.reason.trim() : '';
-    if (!reason || [...reason].length > 500 || reason.includes('\0')) fields.reason = 'Enter 1 to 500 characters.';
-    if (Object.keys(fields).length) return fail(res, 422, 'VALIDATION_ERROR', 'Check the withdrawal fields', fields);
+    const parsed = parseTransitionReason(req.body, true);
+    if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the withdrawal fields', parsed.fields);
+    const { reason, version } = parsed.value;
 
     const result = await db.$transaction(async (tx) => {
       const updated = await tx.purchaseRequest.updateMany({
-        where: { ...ownerScope, status: 'SUBMITTED' },
+        where: { ...ownerScope, status: 'SUBMITTED', version },
         data: { status: 'WITHDRAWN' },
       });
       if (updated.count !== 1) return null;
@@ -165,14 +214,14 @@ app.post('/api/requests/:id/withdraw', session, async (req, res) => {
     if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the decision fields', parsed.fields);
     const result = await db.$transaction(async (tx) => {
       const updated = await tx.purchaseRequest.updateMany({
-        where: { id, reviewerId: user.id, requesterId: { not: user.id }, status: 'SUBMITTED' },
+        where: { id, reviewerId: user.id, requesterId: { not: user.id }, status: 'SUBMITTED', version: parsed.value.version },
         data: { status: parsed.value.status },
       });
       if (updated.count !== 1) return null;
       await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: parsed.value.status, reason: parsed.value.reason } });
       return tx.purchaseRequest.findUniqueOrThrow({ where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } } });
     });
-    if (!result) return fail(res, 409, 'DECISION_CONFLICT', 'Request has already been decided');
+    if (!result) return fail(res, 409, 'DECISION_CONFLICT', 'Request changed. Reload and try again.');
     return res.json({ request: requestDetail(result) });
   });
 }

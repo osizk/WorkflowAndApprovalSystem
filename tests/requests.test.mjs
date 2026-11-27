@@ -172,14 +172,14 @@ test('AC-15 to AC-18, AC-20 and AC-21: requester withdrawal API and persistence'
       const item = await createRequest('Competing transitions');
       const results = await Promise.all([
         call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' }),
-        call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' }),
+        call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed', version: item.version }),
       ]);
       assert.deepEqual(results.map(({ status }) => status).sort(), [200, 409]);
       const decisionWon = results[1].status === 200;
       const expected = decisionWon ? (decision === 'APPROVE' ? 'APPROVED' : 'REJECTED') : 'WITHDRAWN';
       const retry = decisionWon
         ? await call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' })
-        : await call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' });
+        : await call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed', version: item.version });
       assert.equal(retry.status, 409);
       const stored = await db.purchaseRequest.findUnique({ where: { id: item.id }, include: { events: true } });
       assert.equal(stored.status, expected);
