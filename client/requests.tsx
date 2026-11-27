@@ -208,27 +208,35 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     }
   }
 
-  return <div className="workspace">
-    <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
-    {mode !== 'list' && <a href="/requests">Back to my requests</a>}
+  return <div className={mode === 'list' ? 'workspace requester-list-page' : 'workspace'}>
+    <div className={mode === 'list' ? 'requester-list-header' : undefined}>
+      <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
+      {mode === 'list' && <a className="requester-create" href="/requests/new">Create request</a>}
+    </div>
+    {mode !== 'list' && <a className="requester-nav-link requester-back-link" href="/requests"><span aria-hidden="true">←</span> Back to my requests</a>}
     {mode === 'list' && <>
-      <label htmlFor="request-status-filter">Status</label>
-      <select id="request-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
-        <option value="">All statuses</option>
-        <option value="SUBMITTED">Submitted</option>
-        <option value="RETURNED">Returned</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-        <option value="WITHDRAWN">Withdrawn</option>
-      </select>
-      <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
-      <p><a href="/requests/new">Create request</a></p>
+      <div className="requester-filters">
+        <label htmlFor="request-status-filter">Status</label>
+        <select id="request-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
+          <option value="">All statuses</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="RETURNED">Returned</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="WITHDRAWN">Withdrawn</option>
+        </select>
+        <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
+      </div>
       {state === 'loading' && <p role="status">Loading requests…</p>}
       {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
-      {state === 'ready' && <ul className="request-list">{requests.map((item) => <li key={item.id}>
+      {state === 'ready' && <>
+        <div className="requester-list-columns" aria-hidden="true"><span>Request</span><span>Amount</span><span>Status</span></div>
+        <ul className="request-list" aria-label="Purchase requests">{requests.map((item) => <li key={item.id}>
         <a href={`/requests/${item.id}`}>{item.title}</a>
-        <span>{item.amount} {item.currency} · {item.status}</span>
-      </li>)}</ul>}
+        <span className="requester-amount">{item.amount} {item.currency}</span>
+        <span className="requester-status" data-status={item.status}>{item.status}</span>
+      </li>)}</ul>
+      </>}
     </>}
     {mode === 'new' && <form onSubmit={submit} aria-busy={submitting} noValidate>
       <label htmlFor="request-title">Title</label>
@@ -250,13 +258,13 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       {resubmitMessage && <p role="status">{resubmitMessage}</p>}
       {state === 'loading' && <p role="status">Loading request…</p>}
       {state === 'missing' && <p role="alert">Request not found.</p>}
-      {state === 'ready' && request && <div className="request-detail">
-        <h2>{request.title}</h2>
-        <p><strong>Status:</strong> {request.status}</p>
-        <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
-        <p><strong>Purpose:</strong> {request.purpose}</p>
-        <h3>History</h3>
-        <ol>{request.history.map((event) => <li key={event.id}>{event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason ? ` · ${event.reason}` : ''}</li>)}</ol>
+      {state === 'ready' && request && <div className="request-detail requester-detail">
+        <div className="requester-detail-summary">
+          <h2>{request.title}</h2>
+          <p><strong>Status:</strong> <span className="requester-status" data-status={request.status}>{request.status}</span></p>
+          <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
+          <p><strong>Purpose:</strong> {request.purpose}</p>
+        </div>
         {request.status === 'SUBMITTED' && (
           withdrawalOpen ? <form onSubmit={withdraw} aria-busy={withdrawing} noValidate>
             <label htmlFor="withdrawal-reason">Withdrawal reason</label>
@@ -270,7 +278,13 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
             <button type="button" disabled={withdrawing} onClick={closeWithdrawal}>Cancel</button>
           </form> : <button type="button" onClick={() => setWithdrawalOpen(true)}>Withdraw request</button>
         )}
-        {request.status === 'RETURNED' && <form onSubmit={resubmit} aria-busy={resubmitting} noValidate>
+        {request.status === 'RETURNED' && [...request.history].reverse().find((event) => event.type === 'RETURNED')?.reason && (
+          <aside className="requester-revision">
+            <strong>Revision requested</strong>
+            <p>{[...request.history].reverse().find((event) => event.type === 'RETURNED')?.reason}</p>
+          </aside>
+        )}
+        {request.status === 'RETURNED' && <form className="requester-resubmit" onSubmit={resubmit} aria-busy={resubmitting} noValidate>
           <h3>Edit and resubmit</h3>
           <label htmlFor="resubmit-title">Title</label>
           <input id="resubmit-title" value={title} onChange={(event) => changeResubmitField('title', event.target.value)}
@@ -286,6 +300,10 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
           {resubmitFields.amount && <p id="resubmit-amount-error" className="error" role="alert">{resubmitFields.amount}</p>}
           <button type="submit" disabled={resubmitting}>{resubmitting ? 'Resubmitting…' : 'Edit & Resubmit'}</button>
         </form>}
+        <div className="requester-history">
+          <h3>History</h3>
+          <ol>{request.history.map((event) => <li key={event.id}>{event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason ? ` · ${event.reason}` : ''}</li>)}</ol>
+        </div>
       </div>}
     </>}
     {state === 'error' && <><p role="alert">Could not load requests.</p><button onClick={() => { setState('loading'); setRetry((value) => value + 1); }}>Try again</button></>}

@@ -96,12 +96,19 @@ function App() {
     }
   }
 
+  const requesterWorkspace = screen === 'signed-in' && identity?.role === 'REQUESTER';
+  const reviewerWorkspace = screen === 'signed-in' && identity?.role === 'REVIEWER';
+
   return (
-    <main>
-      <section className={screen === 'signed-in' ? (identity?.role === 'REVIEWER' ? 'workspace-shell reviewer-shell' : 'workspace-shell') : undefined} aria-labelledby="page-title">
-        {screen === 'signed-in' && identity?.role === 'REVIEWER' ? <header className="review-header">
+    <main className={requesterWorkspace ? 'requester-app' : undefined}>
+      <section className={reviewerWorkspace ? 'workspace-shell reviewer-shell' : requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
+        {requesterWorkspace ? <header className="requester-app-header">
+          <span className="product">Purchase Requests</span>
+          <nav aria-label="Requester workspace"><a className="requester-nav-link" href="/requests" aria-current={window.location.pathname === '/requests' ? 'page' : undefined}>My Requests</a></nav>
+          <button type="button" onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
+        </header> : reviewerWorkspace ? <header className="review-header">
           <strong>Purchase Requests</strong>
-          <a href="/reviews">Review Queue</a>
+          <nav aria-label="Reviewer workspace"><a href="/reviews" aria-current={window.location.pathname === '/reviews' ? 'page' : undefined}>Review Queue</a></nav>
         </header> : <p className="product">Workflow and Approval System</p>}
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>
@@ -125,7 +132,7 @@ function App() {
           {identity.role === 'REQUESTER' ? <RequestWorkspace heading={heading} /> : <ReviewWorkspace heading={heading} />}
           <p role="status">Signed in as {identity.role === 'REQUESTER' ? 'Requester' : 'Reviewer'}.</p>
           {error && <p className="error" role="alert">{error}</p>}
-          <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
+          {!requesterWorkspace && <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>}
         </>}
         <p className="release-info">Release <code title={releaseCommit}>{releaseCommit === 'local' ? releaseCommit : releaseCommit.slice(0, 12)}</code></p>
       </section>
