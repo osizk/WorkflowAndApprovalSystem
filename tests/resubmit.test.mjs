@@ -156,8 +156,10 @@ test('TEST-27: resubmit trims and validates Unicode fields and exact satang with
 
     const invalidCases = [
       { name: 'short title', field: 'title', patch: { title: '😀😀' } },
+      { name: 'NUL in title', field: 'title', patch: { title: 'Revised\0 pens' } },
       { name: 'long title', field: 'title', patch: { title: 'x'.repeat(120) + '😀' } },
       { name: 'short purpose', field: 'purpose', patch: { purpose: '😀'.repeat(9) } },
+      { name: 'NUL in purpose', field: 'purpose', patch: { purpose: 'Purchase\0 office supplies' } },
       { name: 'long purpose', field: 'purpose', patch: { purpose: 'x'.repeat(2000) + '😀' } },
       { name: 'numeric amount', field: 'amount', patch: { amount: 12.34 } },
       { name: 'zero amount', field: 'amount', patch: { amount: '0.00' } },
@@ -220,5 +222,28 @@ test('TEST-29 (Resubmit): stale, wrong-state and out-of-scope attempts do not mu
     assert.equal(duplicate.status, 409);
     assert.equal((await duplicate.json()).error.code, 'REQUEST_CONFLICT');
     assert.deepEqual(await snapshot(candidate.id), before);
+  });
+});
+
+test('TEST-30 (Resubmit): a failed history insert rolls back every request change', async () => {
+  await withHarness(async ({ db, call, createRequest, returnRequest, owner, snapshot }) => {
+    const candidate = await createRequest();
+    const returned = await returnRequest(candidate, 1);
+    const before = await snapshot(candidate.id);
+    // No production code hook: the isolated database rejects the new event.
+    await db.$executeRaw`ALTER TABLE "request_events"
+      ADD CONSTRAINT "test_resubmit_event_failure" CHECK ("type" <> 'RESUBMITTED') NOT VALID`;
+    try {
+      const response = await call(owner, `/${candidate.id}/resubmit`, 'POST', {
+        title: 'Replacement pens',
+        purpose: 'Purchase new office supplies',
+        amount: '53.21',
+        version: returned.version,
+      });
+      assert.equal(response.status, 500);
+      assert.deepEqual(await snapshot(candidate.id), before);
+    } finally {
+      await db.$executeRaw`ALTER TABLE "request_events" DROP CONSTRAINT "test_resubmit_event_failure"`;
+    }
   });
 });

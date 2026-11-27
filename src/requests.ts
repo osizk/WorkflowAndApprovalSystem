@@ -22,6 +22,8 @@ function parsePurchase(body: unknown) {
   const purpose = typeof input.purpose === 'string' ? input.purpose.trim() : '';
   if ([...title].length < 3 || [...title].length > 120) fields.title = 'Enter 3 to 120 characters.';
   if ([...purpose].length < 10 || [...purpose].length > 2000) fields.purpose = 'Enter 10 to 2000 characters.';
+  if (title.includes('\0')) fields.title = 'Remove the null character from the title.';
+  if (purpose.includes('\0')) fields.purpose = 'Remove the null character from the purpose.';
   let amountSatang = 0;
   if (typeof input.amount === 'string' && /^\d+(?:\.\d{1,2})?$/.test(input.amount)) {
     const [whole, fraction = ''] = input.amount.split('.');
