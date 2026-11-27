@@ -278,6 +278,12 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
             <button type="button" disabled={withdrawing} onClick={closeWithdrawal}>Cancel</button>
           </form> : <button type="button" onClick={() => setWithdrawalOpen(true)}>Withdraw request</button>
         )}
+        {request.status === 'RETURNED' && [...request.history].reverse().find((event) => event.type === 'RETURNED')?.reason && (
+          <aside className="requester-revision">
+            <strong>Revision requested</strong>
+            <p>{[...request.history].reverse().find((event) => event.type === 'RETURNED')?.reason}</p>
+          </aside>
+        )}
         {request.status === 'RETURNED' && <form className="requester-resubmit" onSubmit={resubmit} aria-busy={resubmitting} noValidate>
           <h3>Edit and resubmit</h3>
           <label htmlFor="resubmit-title">Title</label>
