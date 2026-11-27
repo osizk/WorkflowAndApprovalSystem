@@ -229,11 +229,14 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       </div>
       {state === 'loading' && <p role="status">Loading requests…</p>}
       {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
-      {state === 'ready' && <ul className="request-list">{requests.map((item) => <li key={item.id}>
+      {state === 'ready' && <>
+        <div className="requester-list-columns" aria-hidden="true"><span>Request</span><span>Amount</span><span>Status</span></div>
+        <ul className="request-list" aria-label="Purchase requests">{requests.map((item) => <li key={item.id}>
         <a href={`/requests/${item.id}`}>{item.title}</a>
         <span className="requester-amount">{item.amount} {item.currency}</span>
         <span className="requester-status" data-status={item.status}>{item.status}</span>
-      </li>)}</ul>}
+      </li>)}</ul>
+      </>}
     </>}
     {mode === 'new' && <form onSubmit={submit} aria-busy={submitting} noValidate>
       <label htmlFor="request-title">Title</label>
