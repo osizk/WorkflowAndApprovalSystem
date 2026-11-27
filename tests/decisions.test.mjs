@@ -27,8 +27,8 @@ async function request() {
   });
 }
 
-function call(who, id, body) {
-  return fetch(`${base}/api/requests/${id}/decision`, {
+function call(who, id, body, action = 'decision') {
+  return fetch(`${base}/api/requests/${id}/${action}`, {
     method: 'POST',
     headers: { origin, ...(who && { cookie: who.cookie }), 'content-type': 'application/json' },
     body: JSON.stringify(body),
@@ -108,4 +108,47 @@ test('TEST-13: failed event insert rolls back the status update', async () => {
   assert.equal((await db.purchaseRequest.findUnique({ where: { id: item.id } })).status, 'SUBMITTED');
   const after = await db.requestEvent.findMany({ where: { requestId: item.id }, orderBy: { id: 'asc' } });
   assert.deepEqual(after, before);
+});
+
+test('TEST-22: reviewer returns a submitted request and records history', async () => {
+  const item = await request();
+  const response = await call(reviewer, item.id, { reason: '  Update quantity  ', version: 1 }, 'return');
+  assert.equal(response.status, 200);
+  const detail = (await response.json()).request;
+  assert.equal(detail.status, 'RETURNED');
+  assert.equal(detail.version, 2);
+  const saved = await db.purchaseRequest.findUniqueOrThrow({
+    where: { id: item.id },
+    include: { events: true },
+  });
+  assert.equal(saved.status, 'RETURNED');
+  assert.equal(saved.version, 2);
+  assert.equal(saved.events.length, 2);
+  const event = saved.events.find(({ type }) => type === 'RETURNED');
+  assert.equal(event?.reason, 'Update quantity');
+  assert.equal(event?.actorId, reviewer.id);
+});
+
+test('TEST-23: return reason validates trimmed Unicode boundaries', async () => {
+  for (const reason of [undefined, '   ', '😀'.repeat(501)]) {
+    const item = await request();
+    const response = await call(reviewer, item.id, { reason, version: 1 }, 'return');
+    assert.equal(response.status, 422);
+    const { error } = await response.json();
+    assert.equal(error.code, 'VALIDATION_ERROR');
+    assert.ok(error.fields.reason);
+    const saved = await db.purchaseRequest.findUniqueOrThrow({ where: { id: item.id } });
+    assert.equal(saved.status, 'SUBMITTED');
+    assert.equal(saved.version, 1);
+    assert.equal(await db.requestEvent.count({ where: { requestId: item.id } }), 1);
+  }
+  for (const reason of ['😀', '😀'.repeat(500)]) {
+    const item = await request();
+    const response = await call(reviewer, item.id, { reason: ' ' + reason + ' ', version: 1 }, 'return');
+    assert.equal(response.status, 200);
+    const event = await db.requestEvent.findFirstOrThrow({
+      where: { requestId: item.id, type: 'RETURNED' },
+    });
+    assert.equal(event.reason, reason);
+  }
 });
