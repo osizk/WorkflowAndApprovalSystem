@@ -127,8 +127,15 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     if (status !== undefined && selected === undefined) {
       return fail(res, 422, 'VALIDATION_ERROR', 'Check the request filters', { status: 'Choose a valid status.' });
     }
-    const requests = await db.purchaseRequest.findMany({ where: { ...where, status: selected }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }] });
-    res.json({ requests: requests.map(summarize) });
+    const requests = await db.purchaseRequest.findMany({
+      where: { ...where, status: selected },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      include: { requester: { select: { login: true } } },
+    });
+    res.json({ requests: requests.map((request) => ({
+      ...summarize(request),
+      ...(user.role === 'REVIEWER' && { requesterLogin: request.requester.login }),
+    })) });
   });
 
   app.get('/api/requests/:id', session, async (req, res) => {
@@ -139,10 +146,16 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     const scope = user.role === 'REQUESTER' ? { requesterId: user.id } : { reviewerId: user.id };
     const request = await db.purchaseRequest.findFirst({
       where: { id, ...scope },
-      include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } },
+      include: {
+        events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] },
+        requester: { select: { login: true } },
+      },
     });
     if (!request) return notFound();
-    return res.json({ request: requestDetail(request) });
+    return res.json({ request: {
+      ...requestDetail(request),
+      ...(user.role === 'REVIEWER' && { requesterLogin: request.requester.login }),
+    } });
   });
 
   app.post('/api/requests', session, async (req, res) => {

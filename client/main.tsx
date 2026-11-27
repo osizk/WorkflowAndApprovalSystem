@@ -97,14 +97,18 @@ function App() {
   }
 
   const requesterWorkspace = screen === 'signed-in' && identity?.role === 'REQUESTER';
+  const reviewerWorkspace = screen === 'signed-in' && identity?.role === 'REVIEWER';
 
   return (
     <main className={requesterWorkspace ? 'requester-app' : undefined}>
-      <section className={requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
+      <section className={reviewerWorkspace ? 'workspace-shell reviewer-shell' : requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
         {requesterWorkspace ? <header className="requester-app-header">
           <span className="product">Purchase Requests</span>
           <nav aria-label="Requester workspace"><a className="requester-nav-link" href="/requests" aria-current={window.location.pathname === '/requests' ? 'page' : undefined}>My Requests</a></nav>
           <button type="button" onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
+        </header> : reviewerWorkspace ? <header className="review-header">
+          <strong>Purchase Requests</strong>
+          <nav aria-label="Reviewer workspace"><a href="/reviews" aria-current={window.location.pathname === '/reviews' ? 'page' : undefined}>Review Queue</a></nav>
         </header> : <p className="product">Workflow and Approval System</p>}
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>

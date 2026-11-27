@@ -1,6 +1,8 @@
 import React, { useEffect, useState, type Ref } from 'react';
+import './reviewer.css';
 
-type Summary = { id: string; title: string; amount: string; currency: string; status: string };
+type Summary = { id: string; title: string; amount: string; currency: string; status: string; requesterLogin?: string };
+const thb = new Intl.NumberFormat('en-TH', { style: 'currency', currency: 'THB', minimumFractionDigits: 0 });
 type Detail = Summary & {
   purpose: string;
   version: number;
@@ -89,7 +91,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       }
       if (!response.ok) throw new Error('Decision failed');
       const data = await response.json() as { request: Detail };
-      setRequest(data.request);
+      setRequest({ ...data.request, requesterLogin: request.requesterLogin });
       setSaved(true);
     } catch {
       setError('Could not save the decision. Try again.');
@@ -98,10 +100,10 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     }
   }
 
-  return <div className="workspace">
-    <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? 'Review request' : 'Review queue'}</h1>
-    {id && <a href="/reviews">Back to review queue</a>}
-    {!id && <>
+  return <div className="workspace reviewer-page">
+    {id && <a className="review-back" href="/reviews">Back to review queue</a>}
+    <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? request?.title ?? 'Review request' : 'Review Queue'}</h1>
+    {!id && <div className="review-filters">
       <label htmlFor="review-status-filter">Status</label>
       <select id="review-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
         <option value="">All statuses</option>
@@ -112,7 +114,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
         <option value="WITHDRAWN">Withdrawn</option>
       </select>
       <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
-    </>}
+    </div>}
     {error && <p className="error" role="alert">{error}</p>}
     {saved && <p role="status">Decision saved.</p>}
     {state === 'loading' && <p role="status">Loading review information…</p>}
@@ -121,20 +123,32 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       <p role="alert">Could not load review information.</p>
       <button type="button" onClick={refresh}>Try again</button>
     </>}
-    {state === 'ready' && !id && (items.length ? <ul className="request-list">
-      {items.map((item) => <li key={item.id}>
-        <a href={'/reviews/' + item.id}>{item.title}</a>
-        <span>{item.amount} {item.currency} · {item.status}</span>
-      </li>)}
-    </ul> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
+    {state === 'ready' && !id && (items.length ? <div className="review-table-frame"><table className="review-table">
+      <thead><tr><th scope="col">Request</th><th scope="col">Requested by</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
+      <tbody>{items.map((item) => <tr key={item.id}>
+        <td><a href={'/reviews/' + item.id}>{item.title}</a></td>
+        <td>{item.requesterLogin ?? '—'}</td>
+        <td>{thb.format(Number(item.amount))}</td>
+        <td><span className="review-status" data-status={item.status}>{item.status}</span></td>
+      </tr>)}</tbody>
+    </table></div> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
     {state === 'ready' && request && <div className="request-detail">
-      <h2>{request.title}</h2>
-      <p><strong>Status:</strong> {request.status}</p>
-      <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
-      <p><strong>Purpose:</strong> {request.purpose}</p>
-      <h3>History</h3>
-      <ol>{request.history.map((event) => <li key={event.id}>
-        {event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason && ' · ' + event.reason}
+      <div className="review-detail-heading">
+        <p><strong>Status:</strong> <span className="review-status" data-status={request.status}>{request.status}</span></p>
+      </div>
+      <div className="review-facts">
+        <p><strong>Requested by</strong> {request.requesterLogin ?? '—'}</p>
+        <p><strong>Amount:</strong> {thb.format(Number(request.amount))}</p>
+        <p><strong>Purpose:</strong> {request.purpose}</p>
+      </div>
+      {request.status === 'RETURNED' && <aside className="review-return-note">
+        <strong>Revision requested</strong>
+        <div>{request.history.findLast((event) => event.type === 'RETURNED')?.reason}</div>
+      </aside>}
+      <h3>Activity</h3>
+      <ol className="review-history">{request.history.map((event) => <li key={event.id} data-status={event.type}>
+        <strong>{event.type}</strong> · <time dateTime={event.createdAt}>{new Date(event.createdAt).toLocaleString()}</time>
+        {event.reason && !(request.status === 'RETURNED' && event === request.history.findLast((entry) => entry.type === 'RETURNED')) && ' · ' + event.reason}
       </li>)}</ol>
       {request.status === 'SUBMITTED' && <div className="decision-controls" aria-busy={busy}>
         <label htmlFor="decision-reason">Reason</label>

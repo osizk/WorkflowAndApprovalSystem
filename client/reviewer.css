@@ -1,0 +1,112 @@
+.reviewer-page {
+  --review-border: #c8d0dd;
+  --review-muted: #edf0f5;
+}
+.review-filters, .review-detail-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+.review-filters { margin-block: 1rem; }
+.review-filters select {
+  font: inherit;
+  min-height: 44px;
+  min-width: min(180px, 100%);
+  padding: .4rem .65rem;
+  border: 1px solid var(--review-border);
+  border-radius: 8px;
+  background: #fafbfd;
+  color: inherit;
+}
+.review-filters button {
+  background: transparent;
+  border-color: transparent;
+  color: #526078;
+}
+.review-table-frame, .review-facts {
+  border: 1px solid var(--review-border);
+  border-radius: 8px;
+  background: #f9fafc;
+}
+.review-table-frame { overflow: hidden; }
+.review-table { width: 100%; border-spacing: 0; text-align: left; }
+.review-table th { background: var(--review-muted); }
+.review-table th, .review-table td {
+  padding: .65rem clamp(.3rem, 2vw, .85rem);
+  vertical-align: top;
+}
+.review-table td { border-top: 1px solid var(--review-border); }
+.review-table a { display: inline-block; }
+.review-status {
+  display: inline-block;
+  padding: .15rem .45rem;
+  border-radius: 1rem;
+  background: #e9eef4;
+  color: #334155;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.review-status[data-status="SUBMITTED"] { background: #dbe9ff; color: #0046c7; }
+.review-status[data-status="RETURNED"] { background: #ffebc5; color: #803800; }
+.review-status[data-status="APPROVED"] { background: #365878; color: #fff; }
+.review-status[data-status="REJECTED"] { background: #fce1e1; color: #802525; }
+.review-detail-heading h2, .review-detail-heading p { margin: 0; }
+.review-facts { margin-top: 1rem; padding-inline: .75rem; }
+.review-facts p { margin: 0; padding-block: .65rem; }
+.review-facts p + p { border-top: 1px solid var(--review-border); }
+.reviewer-page .review-history {
+  list-style: none;
+  padding-left: .65rem;
+}
+.review-history li {
+  position: relative;
+  border-left: 2px solid var(--review-border);
+  padding: .15rem 0 .85rem 1rem;
+}
+.review-history li::before {
+  content: "";
+  position: absolute;
+  left: -.4rem;
+  top: .45rem;
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background: #0965dc;
+}
+.review-history li[data-status="RETURNED"]::before { background: #e9a318; box-shadow: 0 0 0 2px #ffdaa0; }
+.review-history li:last-child { border-left-color: transparent; }
+main:has(.reviewer-shell) { background: #e3ebf4; align-items: start; }
+section.reviewer-shell {
+  color: #111a2e;
+  background: #f6f8fb;
+  border-color: #bdc8d9;
+  border-radius: 6px;
+  padding: 0 clamp(12px, 4vw, 26px) 24px;
+  min-height: min(740px, 90svh);
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid #cbd3e1;
+  margin-bottom: 1.4rem;
+}
+.review-header a { color: #004acb; background: #dce9ff; padding: .35rem .6rem; border-radius: 6px; }
+.reviewer-page h1 { font-size: clamp(1.65rem, 4vw, 2rem); }
+.reviewer-page a { color: #004acb; }
+.review-back { display: inline-block; margin-bottom: .5rem; }
+.review-facts p { display: grid; grid-template-columns: minmax(6.25rem, 30%) 1fr; gap: .5rem; }
+.review-facts strong, .review-history time { color: #475569; }
+.review-return-note { margin-block: 1rem; padding: .85rem 1rem; border: 1px solid #e5a020; border-radius: 8px; background: #fff1d7; }
+.review-return-note strong { color: #783400; }
+.reviewer-shell button:not(.review-filters button) { background: #0862dc; border-color: #0862dc; }
+.reviewer-shell :focus-visible { outline-color: #1266dd; }
+.reviewer-shell .release-info { color: #526078; }
+@media (max-width: 450px) {
+  .review-table { table-layout: fixed; font-size: .8rem; }
+  .review-status { font-size: .68rem; padding-inline: .25rem; }
+}
