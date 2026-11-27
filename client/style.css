@@ -184,3 +184,24 @@ button:disabled { opacity: .65; cursor: wait; }
   color: #70470b;
 }
 .requester-revision p { margin: .25rem 0 0; }
+
+.requester-app a.requester-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 44px;
+  padding: .45rem .8rem;
+  border: 1px solid #c9d8f4;
+  border-radius: 8px;
+  background: #f0f5ff;
+  color: #1946aa;
+  font-weight: 650;
+  text-decoration: none;
+}
+.requester-app a.requester-nav-link:hover,
+.requester-app a.requester-nav-link[aria-current="page"] {
+  border-color: #9eb9ef;
+  background: #e1ebff;
+}
+.requester-app a.requester-nav-link:focus-visible { outline-color: #2458d3; }
+.requester-back-link { margin-block: .4rem .2rem; }
