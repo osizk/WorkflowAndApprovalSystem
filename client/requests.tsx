@@ -213,7 +213,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
       {mode === 'list' && <a className="requester-create" href="/requests/new">Create request</a>}
     </div>
-    {mode !== 'list' && <a href="/requests">Back to my requests</a>}
+    {mode !== 'list' && <a className="requester-nav-link requester-back-link" href="/requests"><span aria-hidden="true">←</span> Back to my requests</a>}
     {mode === 'list' && <>
       <div className="requester-filters">
         <label htmlFor="request-status-filter">Status</label>
