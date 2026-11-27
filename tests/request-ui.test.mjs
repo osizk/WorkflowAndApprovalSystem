@@ -130,6 +130,7 @@ test('TEST-19: an owner withdraws a submitted request and the assigned reviewer 
     await reviewerPage.getByLabel('Password').fill(password);
     await reviewerPage.getByRole('button', { name: 'Sign in' }).click();
     await reviewerPage.waitForURL(`${origin}/reviews`);
+    await reviewerPage.getByLabel('Status', { exact: true }).selectOption('WITHDRAWN');
     await reviewerPage.getByRole('link', { name: title, exact: true }).click();
     await reviewerPage.waitForURL(`${origin}/reviews/${request.id}`);
     await reviewerPage.getByText('Status: WITHDRAWN').waitFor();
@@ -209,6 +210,11 @@ test('TEST-31: Return, edit and resubmit, stale-page refresh and final decision 
     await reviewerPage.getByText('Status: RETURNED').waitFor();
     await reviewerPage.getByText(returnReason, { exact: false }).waitFor();
     assert.equal(await reviewerPage.getByRole('button', { name: 'Return', exact: true }).count(), 0);
+    await reviewerPage.getByRole('link', { name: 'Back to review queue' }).click();
+    const queueStatus = reviewerPage.getByLabel('Status', { exact: true });
+    assert.equal(await queueStatus.inputValue(), 'SUBMITTED');
+    await reviewerPage.getByText('No requests match this status.').waitFor();
+    assert.equal(await reviewerPage.getByRole('link', { name: 'Original pens', exact: true }).count(), 0);
 
     await signIn(ownerPage, requester.login, '/requests');
     await ownerPage.goto(`${origin}/requests/${request.id}`);
@@ -230,6 +236,11 @@ test('TEST-31: Return, edit and resubmit, stale-page refresh and final decision 
     await ownerPage.getByText('Purchase updated office supplies', { exact: false }).waitFor();
     await ownerPage.getByText(returnReason, { exact: false }).waitFor();
     await ownerPage.getByText('RESUBMITTED ·', { exact: false }).waitFor();
+
+    await reviewerPage.reload();
+    assert.equal(await queueStatus.inputValue(), 'SUBMITTED');
+    const resubmittedLink = reviewerPage.getByRole('link', { name: 'Revised Lab supplies', exact: true });
+    assert.equal(await resubmittedLink.getAttribute('href'), '/reviews/' + request.id);
 
     await staleReviewerPage.getByRole('button', { name: 'Approve', exact: true }).click();
     await staleReviewerPage.getByText('This request changed. Review the latest status before trying again.').waitFor();
