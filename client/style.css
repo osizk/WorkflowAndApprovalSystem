@@ -212,6 +212,6 @@ button:disabled { opacity: .65; cursor: wait; }
 }
 .login-app section { border-color: #d8e1ec; }
 .login-app .product { color: #1946aa; }
-.login-app input { border-color: #a5b4c9; background: #fff; color: inherit; }
+.login-app input { border-color: #7588a3; background: #fff; color: inherit; }
 .login-app button { background: #2458d3; border-color: #2458d3; }
 .login-app :focus-visible { outline-color: #2458d3; }
