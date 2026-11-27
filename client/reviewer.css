@@ -74,3 +74,35 @@
 }
 .review-history li[data-status="RETURNED"]::before { background: #a85b00; }
 .review-history li:last-child { border-left-color: transparent; }
+main:has(.reviewer-shell) { background: #e5edf5; align-items: start; }
+section.reviewer-shell {
+  color: #121c30;
+  background: #f8fafc;
+  border-color: #becbda;
+  border-radius: 6px;
+  padding: 0 clamp(12px, 4vw, 26px) 24px;
+  min-height: min(740px, 90svh);
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid #c7d2df;
+  margin-bottom: 1.4rem;
+}
+.review-header a { color: #064ec8; background: #deebff; padding: .35rem .6rem; border-radius: 6px; }
+.reviewer-page h1 { font-size: clamp(1.65rem, 4vw, 2rem); }
+.reviewer-page a, .review-filters button { color: #064ec8; }
+.review-back { display: inline-block; margin-bottom: .5rem; }
+.review-facts p { display: grid; grid-template-columns: minmax(6.25rem, 30%) 1fr; gap: .5rem; }
+.review-facts strong, .review-history time { color: #475569; }
+.review-return-note { margin-block: 1rem; padding: .85rem 1rem; border: 1px solid #c98011; border-radius: 8px; background: #fff2d8; }
+.review-return-note strong { color: #783a00; }
+.reviewer-page .decision-actions button:first-child { background: #0659dc; border-color: #0659dc; }
+@media (max-width: 450px) {
+  .review-table { table-layout: fixed; font-size: .8rem; }
+  .review-status { font-size: .68rem; padding-inline: .25rem; }
+}

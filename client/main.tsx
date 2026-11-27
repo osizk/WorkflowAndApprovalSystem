@@ -98,8 +98,11 @@ function App() {
 
   return (
     <main>
-      <section className={screen === 'signed-in' ? 'workspace-shell' : undefined} aria-labelledby="page-title">
-        <p className="product">Workflow and Approval System</p>
+      <section className={screen === 'signed-in' ? (identity?.role === 'REVIEWER' ? 'workspace-shell reviewer-shell' : 'workspace-shell') : undefined} aria-labelledby="page-title">
+        {screen === 'signed-in' && identity?.role === 'REVIEWER' ? <header className="review-header">
+          <strong>Purchase Requests</strong>
+          <a href="/reviews">Review Queue</a>
+        </header> : <p className="product">Workflow and Approval System</p>}
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>
           <h1 id="page-title" tabIndex={-1} ref={heading}>Session unavailable</h1>

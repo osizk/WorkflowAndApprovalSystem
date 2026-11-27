@@ -1,7 +1,8 @@
 import React, { useEffect, useState, type Ref } from 'react';
 import './reviewer.css';
 
-type Summary = { id: string; title: string; amount: string; currency: string; status: string };
+type Summary = { id: string; title: string; amount: string; currency: string; status: string; requesterLogin?: string };
+const thb = new Intl.NumberFormat('en-TH', { style: 'currency', currency: 'THB', minimumFractionDigits: 0 });
 type Detail = Summary & {
   purpose: string;
   version: number;
@@ -90,7 +91,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       }
       if (!response.ok) throw new Error('Decision failed');
       const data = await response.json() as { request: Detail };
-      setRequest(data.request);
+      setRequest({ ...data.request, requesterLogin: request.requesterLogin });
       setSaved(true);
     } catch {
       setError('Could not save the decision. Try again.');
@@ -100,8 +101,8 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   }
 
   return <div className="workspace reviewer-page">
-    <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? 'Review request' : 'Review queue'}</h1>
-    {id && <a href="/reviews">Back to review queue</a>}
+    {id && <a className="review-back" href="/reviews">Back to review queue</a>}
+    <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? request?.title ?? 'Review request' : 'Review Queue'}</h1>
     {!id && <div className="review-filters">
       <label htmlFor="review-status-filter">Status</label>
       <select id="review-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
@@ -123,25 +124,31 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       <button type="button" onClick={refresh}>Try again</button>
     </>}
     {state === 'ready' && !id && (items.length ? <div className="review-table-frame"><table className="review-table">
-      <thead><tr><th scope="col">Request</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
+      <thead><tr><th scope="col">Request</th><th scope="col">Requested by</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
       <tbody>{items.map((item) => <tr key={item.id}>
         <td><a href={'/reviews/' + item.id}>{item.title}</a></td>
-        <td>{item.amount} {item.currency}</td>
+        <td>{item.requesterLogin ?? '—'}</td>
+        <td>{thb.format(Number(item.amount))}</td>
         <td><span className="review-status" data-status={item.status}>{item.status}</span></td>
       </tr>)}</tbody>
     </table></div> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
     {state === 'ready' && request && <div className="request-detail">
       <div className="review-detail-heading">
-        <h2>{request.title}</h2>
         <p><strong>Status:</strong> <span className="review-status" data-status={request.status}>{request.status}</span></p>
       </div>
       <div className="review-facts">
-        <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
+        <p><strong>Requested by</strong> {request.requesterLogin ?? '—'}</p>
+        <p><strong>Amount:</strong> {thb.format(Number(request.amount))}</p>
         <p><strong>Purpose:</strong> {request.purpose}</p>
       </div>
-      <h3>History</h3>
+      {request.status === 'RETURNED' && <aside className="review-return-note">
+        <strong>Revision requested</strong>
+        <div>{request.history.findLast((event) => event.type === 'RETURNED')?.reason}</div>
+      </aside>}
+      <h3>Activity</h3>
       <ol className="review-history">{request.history.map((event) => <li key={event.id} data-status={event.type}>
-        {event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason && ' · ' + event.reason}
+        <strong>{event.type}</strong> · <time dateTime={event.createdAt}>{new Date(event.createdAt).toLocaleString()}</time>
+        {event.reason && !(request.status === 'RETURNED' && event === request.history.findLast((entry) => entry.type === 'RETURNED')) && ' · ' + event.reason}
       </li>)}</ol>
       {request.status === 'SUBMITTED' && <div className="decision-controls" aria-busy={busy}>
         <label htmlFor="decision-reason">Reason</label>
