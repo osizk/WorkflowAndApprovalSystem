@@ -35,11 +35,16 @@ test('F-03: reviewer rejects an assigned request and reads persisted history', {
       requesterId: requester.id, reviewerId: reviewer.id, title: 'Paper', purpose: 'Office supplies', amountSatang: 120,
       events: { create: { actorId: requester.id, type: 'SUBMITTED' } },
     } });
+    const returned = await db.purchaseRequest.create({ data: {
+      requesterId: requester.id, reviewerId: reviewer.id, title: 'Return candidate', purpose: 'Office supplies', amountSatang: 120,
+      events: { create: { actorId: requester.id, type: 'SUBMITTED' } },
+    } });
     await page.goto(origin + '/login');
     await page.getByLabel('Login').fill(reviewer.login);
     await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Sign in' }).click();
     await page.waitForURL(origin + '/reviews');
+    assert.equal(await page.getByLabel('Status', { exact: true }).inputValue(), 'SUBMITTED');
     await page.getByRole('link', { name: 'Pens' }).click();
     await page.waitForURL(origin + '/reviews/' + assigned.id);
     await page.getByRole('button', { name: 'Reject' }).click();
@@ -60,6 +65,31 @@ test('F-03: reviewer rejects an assigned request and reads persisted history', {
     await page.getByRole('button', { name: 'Approve' }).click();
     await page.getByText('Status: APPROVED').waitFor();
     assert.equal(await db.requestEvent.count({ where: { requestId: approval.id, type: 'APPROVED' } }), 1);
+    await page.goto(origin + '/reviews/' + returned.id);
+    await page.getByRole('button', { name: 'Return', exact: true }).click();
+    await page.getByText('A return reason is required.').waitFor();
+    await page.getByLabel('Reason').fill('Revise the quantity');
+    await page.getByRole('button', { name: 'Return', exact: true }).click();
+    await page.getByText('Status: RETURNED').waitFor();
+    await page.reload();
+    await page.getByText('Status: RETURNED').waitFor();
+    await page.getByText('Revise the quantity', { exact: false }).waitFor();
+    assert.equal(await page.getByRole('button', { name: 'Return', exact: true }).count(), 0);
+    const withdrawn = await db.purchaseRequest.create({ data: {
+      requesterId: requester.id, reviewerId: reviewer.id, title: 'Withdrawn fixture',
+      purpose: 'Office supplies', amountSatang: 120, status: 'WITHDRAWN',
+    } });
+    await page.getByRole('link', { name: 'Back to review queue' }).click();
+    await page.getByText('No requests match this status.').waitFor();
+    const filter = page.getByLabel('Status', { exact: true });
+    await filter.selectOption('RETURNED');
+    await page.getByRole('link', { name: 'Return candidate' }).waitFor();
+    await filter.selectOption('WITHDRAWN');
+    assert.equal(await page.getByRole('link', { name: 'Withdrawn fixture' }).getAttribute('href'), '/reviews/' + withdrawn.id);
+    await page.getByRole('button', { name: 'Clear filter' }).click();
+    await page.getByRole('link', { name: 'Pens' }).waitFor();
+    assert.equal(await filter.inputValue(), '');
+    assert.equal(await page.getByRole('link', { name: 'Hidden request' }).count(), 0);
     await page.goto(origin + '/reviews/' + hidden.id);
     await page.getByText('Request not found.').waitFor();
   } finally {

@@ -17,7 +17,7 @@ test('F-02: guarded submission, scoped retrieval and durable history', async () 
     users.push(user.id);
     const token = randomBytes(32).toString('hex');
     await db.session.create({ data: { userId: user.id, tokenDigest: createHash('sha256').update(token).digest('hex'), expiresAt: new Date(Date.now() + 60000) } });
-    return { id: user.id, cookie: 'session=' + token };
+    return { id: user.id, login: user.login, cookie: 'session=' + token };
   }
   try {
     const owner = await account('REQUESTER');
@@ -67,18 +67,21 @@ test('F-02: guarded submission, scoped retrieval and durable history', async () 
 
     assert.equal((await call(owner, '/invalid-id')).status, 404);
     await db.$disconnect();
-    for (const [who, visible, privateRequest] of [
+    for (const [who, visible, privateRequest, requesterLogin] of [
       [owner, request, otherRequest],
       [other, otherRequest, request],
-      [assigned, request, otherRequest],
-      [unrelated, otherRequest, request],
+      [assigned, request, otherRequest, owner.login],
+      [unrelated, otherRequest, request, other.login],
     ]) {
-      assert.deepEqual(await (await call(who, '/' + visible.id)).json(), { request: visible });
+      const expected = requesterLogin === undefined ? visible : { ...visible, requesterLogin };
+      assert.deepEqual(await (await call(who, '/' + visible.id)).json(), { request: expected });
       assert.equal((await call(who, '/' + privateRequest.id)).status, 404);
       const list = await call(who);
       assert.equal(list.status, 200);
       const { requests } = await list.json();
       assert.deepEqual(requests.map(({ id }) => id), [visible.id]);
+      assert.equal(requests[0].requesterLogin, requesterLogin);
+      assert.equal(Object.hasOwn(requests[0], 'requesterLogin'), requesterLogin !== undefined);
       assert.equal('history' in requests[0], false);
     }
     const upper = await call(owner, '', 'POST', { title: 'x'.repeat(120), purpose: 'x'.repeat(2000), amount: '1000000.00' });
@@ -172,14 +175,14 @@ test('AC-15 to AC-18, AC-20 and AC-21: requester withdrawal API and persistence'
       const item = await createRequest('Competing transitions');
       const results = await Promise.all([
         call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' }),
-        call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' }),
+        call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed', version: item.version }),
       ]);
       assert.deepEqual(results.map(({ status }) => status).sort(), [200, 409]);
       const decisionWon = results[1].status === 200;
       const expected = decisionWon ? (decision === 'APPROVE' ? 'APPROVED' : 'REJECTED') : 'WITHDRAWN';
       const retry = decisionWon
         ? await call(owner, `/${item.id}/withdraw`, 'POST', { reason: 'No longer needed' })
-        : await call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed' });
+        : await call(reviewer, `/${item.id}/decision`, 'POST', { decision, reason: 'Reviewed', version: item.version });
       assert.equal(retry.status, 409);
       const stored = await db.purchaseRequest.findUnique({ where: { id: item.id }, include: { events: true } });
       assert.equal(stored.status, expected);
