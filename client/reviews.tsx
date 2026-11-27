@@ -13,6 +13,8 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   const api = id ? '/api/requests/' + encodeURIComponent(id) : '/api/requests';
   const [state, setState] = useState<LoadState>('loading');
   const [items, setItems] = useState<Summary[]>([]);
+  const [statusFilter, setStatusFilter] = useState('SUBMITTED');
+  const listQuery = !id && statusFilter ? '?' + new URLSearchParams({ status: statusFilter }) : '';
   const [request, setRequest] = useState<Detail>();
   const [revision, setRevision] = useState(0);
   const [reason, setReason] = useState('');
@@ -26,9 +28,15 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     setRevision((value) => value + 1);
   }
 
+  function changeStatusFilter(value: string) {
+    if (value === statusFilter) return;
+    setState('loading');
+    setStatusFilter(value);
+  }
+
   useEffect(() => {
     const controller = new AbortController();
-    fetch(api, { signal: controller.signal }).then(async (response) => {
+    fetch(api + listQuery, { signal: controller.signal }).then(async (response) => {
       if (response.status === 401) return window.location.replace('/login');
       if (response.status === 404) return setState('missing');
       if (!response.ok) throw new Error('Load failed');
@@ -41,7 +49,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       if (!controller.signal.aborted) setState('error');
     });
     return () => controller.abort();
-  }, [api, id, revision]);
+  }, [api, id, listQuery, revision]);
 
   async function decide(decision: 'APPROVE' | 'REJECT' | 'RETURN') {
     if (busy || !request || request.status !== 'SUBMITTED') return;
@@ -93,6 +101,18 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   return <div className="workspace">
     <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? 'Review request' : 'Review queue'}</h1>
     {id && <a href="/reviews">Back to review queue</a>}
+    {!id && <>
+      <label htmlFor="review-status-filter">Status</label>
+      <select id="review-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
+        <option value="">All statuses</option>
+        <option value="SUBMITTED">Submitted</option>
+        <option value="RETURNED">Returned</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+        <option value="WITHDRAWN">Withdrawn</option>
+      </select>
+      <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
+    </>}
     {error && <p className="error" role="alert">{error}</p>}
     {saved && <p role="status">Decision saved.</p>}
     {state === 'loading' && <p role="status">Loading review information…</p>}
@@ -106,7 +126,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
         <a href={'/reviews/' + item.id}>{item.title}</a>
         <span>{item.amount} {item.currency} · {item.status}</span>
       </li>)}
-    </ul> : <p role="status">No requests are assigned to you.</p>)}
+    </ul> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
     {state === 'ready' && request && <div className="request-detail">
       <h2>{request.title}</h2>
       <p><strong>Status:</strong> {request.status}</p>
