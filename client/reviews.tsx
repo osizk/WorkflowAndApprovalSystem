@@ -1,4 +1,5 @@
 import React, { useEffect, useState, type Ref } from 'react';
+import './reviewer.css';
 
 type Summary = { id: string; title: string; amount: string; currency: string; status: string };
 type Detail = Summary & {
@@ -98,10 +99,10 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     }
   }
 
-  return <div className="workspace">
+  return <div className="workspace reviewer-page">
     <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? 'Review request' : 'Review queue'}</h1>
     {id && <a href="/reviews">Back to review queue</a>}
-    {!id && <>
+    {!id && <div className="review-filters">
       <label htmlFor="review-status-filter">Status</label>
       <select id="review-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
         <option value="">All statuses</option>
@@ -112,7 +113,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
         <option value="WITHDRAWN">Withdrawn</option>
       </select>
       <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
-    </>}
+    </div>}
     {error && <p className="error" role="alert">{error}</p>}
     {saved && <p role="status">Decision saved.</p>}
     {state === 'loading' && <p role="status">Loading review information…</p>}
@@ -121,19 +122,25 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       <p role="alert">Could not load review information.</p>
       <button type="button" onClick={refresh}>Try again</button>
     </>}
-    {state === 'ready' && !id && (items.length ? <ul className="request-list">
-      {items.map((item) => <li key={item.id}>
-        <a href={'/reviews/' + item.id}>{item.title}</a>
-        <span>{item.amount} {item.currency} · {item.status}</span>
-      </li>)}
-    </ul> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
+    {state === 'ready' && !id && (items.length ? <div className="review-table-frame"><table className="review-table">
+      <thead><tr><th scope="col">Request</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
+      <tbody>{items.map((item) => <tr key={item.id}>
+        <td><a href={'/reviews/' + item.id}>{item.title}</a></td>
+        <td>{item.amount} {item.currency}</td>
+        <td><span className="review-status" data-status={item.status}>{item.status}</span></td>
+      </tr>)}</tbody>
+    </table></div> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
     {state === 'ready' && request && <div className="request-detail">
-      <h2>{request.title}</h2>
-      <p><strong>Status:</strong> {request.status}</p>
-      <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
-      <p><strong>Purpose:</strong> {request.purpose}</p>
+      <div className="review-detail-heading">
+        <h2>{request.title}</h2>
+        <p><strong>Status:</strong> <span className="review-status" data-status={request.status}>{request.status}</span></p>
+      </div>
+      <div className="review-facts">
+        <p><strong>Amount:</strong> {request.amount} {request.currency}</p>
+        <p><strong>Purpose:</strong> {request.purpose}</p>
+      </div>
       <h3>History</h3>
-      <ol>{request.history.map((event) => <li key={event.id}>
+      <ol className="review-history">{request.history.map((event) => <li key={event.id} data-status={event.type}>
         {event.type} · {new Date(event.createdAt).toLocaleString()}{event.reason && ' · ' + event.reason}
       </li>)}</ol>
       {request.status === 'SUBMITTED' && <div className="decision-controls" aria-busy={busy}>
