@@ -95,7 +95,7 @@ button:disabled { opacity: .65; cursor: wait; }
   font-weight: 700;
 }
 .requester-status[data-status="RETURNED"] { background: #fef0c7; color: #653b0d; }
-.requester-status[data-status="APPROVED"] { background: #d9f0e3; color: #174b37; }
+.requester-status[data-status="APPROVED"] { background: #365878; color: #fff; }
 .requester-status[data-status="REJECTED"] { background: #fce1e1; color: #802525; }
 @media (max-width: 520px) {
   .requester-list-page .request-list li { grid-template-columns: minmax(0, 1fr) auto; }
