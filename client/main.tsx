@@ -103,7 +103,7 @@ function App() {
       <section className={requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
         {requesterWorkspace ? <header className="requester-app-header">
           <span className="product">Purchase Requests</span>
-          <nav aria-label="Requester workspace"><a href="/requests">My Requests</a></nav>
+          <nav aria-label="Requester workspace"><a className="requester-nav-link" href="/requests" aria-current={window.location.pathname === '/requests' ? 'page' : undefined}>My Requests</a></nav>
           <button type="button" onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
         </header> : <p className="product">Workflow and Approval System</p>}
         {screen === 'loading' && <p role="status">Checking your session…</p>}
