@@ -203,3 +203,18 @@ test('TEST-28: decisions require a valid version and reject stale versions', asy
     assert.equal((await current.json()).request.status, decision === 'APPROVE' ? 'APPROVED' : 'REJECTED');
   }
 });
+
+test('TEST-24 (Return): enforce reviewer role and assignment', async () => {
+  const item = await request();
+  const payload = { reason: 'Update quantity', version: 1 };
+  assert.equal((await call(null, item.id, payload, 'return')).status, 401);
+  assert.equal((await call(requester, item.id, payload, 'return')).status, 403);
+  assert.equal((await call(unrelated, item.id, payload, 'return')).status, 404);
+  const saved = await db.purchaseRequest.findUniqueOrThrow({
+    where: { id: item.id },
+    include: { events: true },
+  });
+  assert.equal(saved.status, 'SUBMITTED');
+  assert.equal(saved.version, 1);
+  assert.deepEqual(saved.events.map(({ type }) => type), ['SUBMITTED']);
+});
