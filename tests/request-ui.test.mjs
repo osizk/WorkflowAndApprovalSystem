@@ -50,6 +50,16 @@ test('F-02: browser submits and retrieves a saved request', { timeout: 30000 }, 
     assert.equal((await db.purchaseRequest.findUnique({ where: { id }, include: { events: true } })).events.length, 1);
     await page.getByRole('link', { name: 'Back to my requests' }).click();
     await page.getByRole('link', { name: 'Pens' }).waitFor();
+    const statusFilter = page.getByLabel('Status', { exact: true });
+    assert.equal(await statusFilter.inputValue(), '');
+    await statusFilter.selectOption('WITHDRAWN');
+    await page.getByText('No requests match this status.').waitFor();
+    assert.equal(await page.getByRole('link', { name: 'Pens' }).count(), 0);
+    await statusFilter.selectOption('SUBMITTED');
+    await page.getByRole('link', { name: 'Pens' }).waitFor();
+    await page.getByRole('button', { name: 'Clear filter' }).click();
+    await page.getByRole('link', { name: 'Pens' }).waitFor();
+    assert.equal(await statusFilter.inputValue(), '');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
   } finally {
     await browser?.close();
