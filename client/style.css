@@ -205,3 +205,13 @@ button:disabled { opacity: .65; cursor: wait; }
 }
 .requester-app a.requester-nav-link:focus-visible { outline-color: #2458d3; }
 .requester-back-link { margin-block: .4rem .2rem; }
+
+.login-app {
+  background: #f5f7fb;
+  color: #18263b;
+}
+.login-app section { border-color: #d8e1ec; }
+.login-app .product { color: #1946aa; }
+.login-app input { border-color: #7588a3; background: #fff; color: inherit; }
+.login-app button { background: #2458d3; border-color: #2458d3; }
+.login-app :focus-visible { outline-color: #2458d3; }
