@@ -13,6 +13,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
   const mode = path === '/requests/new' ? 'new' : path === '/requests' ? 'list' : 'detail';
   const [state, setState] = useState<'loading' | 'ready' | 'empty' | 'missing' | 'error'>(mode === 'new' ? 'ready' : 'loading');
   const [retry, setRetry] = useState(0);
+  const [statusFilter, setStatusFilter] = useState('');
   const [requests, setRequests] = useState<Summary[]>([]);
   const [request, setRequest] = useState<Detail>();
   const [title, setTitle] = useState('');
@@ -28,11 +29,18 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
   const [withdrawing, setWithdrawing] = useState(false);
   const [withdrawn, setWithdrawn] = useState(false);
 
+  function changeStatusFilter(value: string) {
+    if (value === statusFilter) return;
+    setState('loading');
+    setStatusFilter(value);
+  }
+
   useEffect(() => {
     if (mode === 'new') return;
     const controller = new AbortController();
     const url = mode === 'list' ? '/api/requests' : `/api/requests/${encodeURIComponent(path.slice('/requests/'.length))}`;
-    fetch(url, { signal: controller.signal }).then(async (response) => {
+    const filter = mode === 'list' && statusFilter ? '?' + new URLSearchParams({ status: statusFilter }) : '';
+    fetch(url + filter, { signal: controller.signal }).then(async (response) => {
       if (response.status === 401) return signInAgain();
       if (response.status === 404) return setState('missing');
       if (!response.ok) throw new Error('Request load failed');
@@ -47,7 +55,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       }
     }).catch(() => { if (!controller.signal.aborted) setState('error'); });
     return () => controller.abort();
-  }, [mode, path, retry]);
+  }, [mode, path, retry, statusFilter]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -141,9 +149,19 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     <h1 id="page-title" tabIndex={-1} ref={heading}>{mode === 'list' ? 'My requests' : mode === 'new' ? 'New request' : 'Request detail'}</h1>
     {mode !== 'list' && <a href="/requests">Back to my requests</a>}
     {mode === 'list' && <>
+      <label htmlFor="request-status-filter">Status</label>
+      <select id="request-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
+        <option value="">All statuses</option>
+        <option value="SUBMITTED">Submitted</option>
+        <option value="RETURNED">Returned</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+        <option value="WITHDRAWN">Withdrawn</option>
+      </select>
+      <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
       <p><a href="/requests/new">Create request</a></p>
       {state === 'loading' && <p role="status">Loading requests…</p>}
-      {state === 'empty' && <p role="status">You have no requests yet.</p>}
+      {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
       {state === 'ready' && <ul className="request-list">{requests.map((item) => <li key={item.id}>
         <a href={`/requests/${item.id}`}>{item.title}</a>
         <span>{item.amount} {item.currency} · {item.status}</span>
