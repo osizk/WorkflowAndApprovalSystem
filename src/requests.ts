@@ -23,6 +23,8 @@ function parsePurchase(body: unknown) {
   const purpose = typeof input.purpose === 'string' ? input.purpose.trim() : '';
   if ([...title].length < 3 || [...title].length > 120) fields.title = 'Enter 3 to 120 characters.';
   if ([...purpose].length < 10 || [...purpose].length > 2000) fields.purpose = 'Enter 10 to 2000 characters.';
+  if (title.includes('\0')) fields.title = 'Remove the null character from the title.';
+  if (purpose.includes('\0')) fields.purpose = 'Remove the null character from the purpose.';
   let amountSatang = 0;
   if (typeof input.amount === 'string' && /^\d+(?:\.\d{1,2})?$/.test(input.amount)) {
     const [whole, fraction = ''] = input.amount.split('.');
@@ -32,6 +34,22 @@ function parsePurchase(body: unknown) {
     fields.amount = 'Enter THB 0.01 to 1,000,000.00 with at most two decimal places.';
   }
   return Object.keys(fields).length ? { fields } : { value: { title, purpose, amountSatang } };
+}
+
+function parseResubmission(body: unknown) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { fields: { body: 'Provide a resubmission object.' } };
+  }
+  const input = body as Record<string, unknown>;
+  const { version, ...purchase } = input;
+  const parsedPurchase = parsePurchase(purchase);
+  if (!isRequestVersion(version)) {
+    const fields: Fields = 'fields' in parsedPurchase ? { ...parsedPurchase.fields } : {};
+    fields.version = 'Enter a valid request version.';
+    return { fields };
+  }
+  if ('fields' in parsedPurchase) return { fields: parsedPurchase.fields };
+  return { value: { ...parsedPurchase.value, version } };
 }
 
 function isRequestVersion(version: unknown): version is number {
@@ -170,6 +188,38 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
       });
       if (updated.count !== 1) return null;
       await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: 'RETURNED', reason } });
+      return tx.purchaseRequest.findUniqueOrThrow({
+        where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } },
+      });
+    });
+    if (!result) return fail(res, 409, 'REQUEST_CONFLICT', 'Request changed. Reload and try again.');
+    return res.json({ request: requestDetail(result) });
+  });
+
+  app.post('/api/requests/:id/resubmit', session, async (req, res) => {
+    const user = (req as AuthRequest).authUser!;
+    if (user.role !== 'REQUESTER') return fail(res, 403, 'FORBIDDEN', 'Not allowed');
+    const id = req.params.id;
+    const notFound = () => fail(res, 404, 'NOT_FOUND', 'Request not found');
+    if (typeof id !== 'string' || !uuidPattern.test(id)) return notFound();
+    const ownerScope = { id, requesterId: user.id };
+    const existing = await db.purchaseRequest.findFirst({ where: ownerScope, select: { id: true } });
+    if (!existing) return notFound();
+    const parsed = parseResubmission(req.body);
+    if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the resubmission fields', parsed.fields);
+    const result = await db.$transaction(async (tx) => {
+      const updated = await tx.purchaseRequest.updateMany({
+        where: { ...ownerScope, status: 'RETURNED', version: parsed.value.version },
+        data: {
+          title: parsed.value.title,
+          purpose: parsed.value.purpose,
+          amountSatang: parsed.value.amountSatang,
+          status: 'SUBMITTED',
+          version: { increment: 1 },
+        },
+      });
+      if (updated.count !== 1) return null;
+      await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: 'RESUBMITTED' } });
       return tx.purchaseRequest.findUniqueOrThrow({
         where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } },
       });
