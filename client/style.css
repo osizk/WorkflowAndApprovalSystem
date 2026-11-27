@@ -117,3 +117,59 @@ button:disabled { opacity: .65; cursor: wait; }
 .requester-history ol { margin-bottom: 0; }
 .requester-history li + li { margin-top: .5rem; }
 .requester-resubmit { margin: 0; }
+
+.requester-app {
+  display: block;
+  background: #f3f6fb;
+  color: #18263b;
+  padding: clamp(12px, 4vw, 40px);
+}
+.requester-app .workspace-shell {
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding: clamp(16px, 4vw, 36px);
+  border-color: #d8e1ec;
+}
+.requester-app-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .6rem 1.4rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid #d8e1ec;
+}
+.requester-app-header .product { margin: 0; color: #162c4b; }
+.requester-app-header nav { flex: 1; }
+.requester-app-header a, .requester-app .workspace a { color: #244e90; }
+.requester-app button, .requester-app .requester-create {
+  border-color: #2d5ba0;
+  background: #2d5ba0;
+  color: #fff;
+}
+.requester-app-header button, .requester-app .requester-filters button {
+  background: #fff;
+  color: #244e90;
+}
+.requester-app .requester-filters, .requester-app .requester-detail-summary { background: #eef3fa; }
+.requester-app .requester-filters select { border-color: #a5b4c9; }
+.requester-app .request-list li,
+.requester-app .requester-detail-summary,
+.requester-app .requester-history,
+.requester-app .requester-resubmit { border-color: #d8e1ec; }
+.requester-list-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9rem 8rem;
+  gap: 1rem;
+  padding: .75rem;
+  margin-top: 1rem;
+  background: #eef3fa;
+  border-radius: 8px;
+  font-weight: 650;
+}
+@media (min-width: 521px) {
+  .requester-list-page .request-list li { grid-template-columns: minmax(0, 1fr) 9rem 8rem; }
+}
+@media (max-width: 520px) {
+  .requester-list-columns { display: none; }
+}
