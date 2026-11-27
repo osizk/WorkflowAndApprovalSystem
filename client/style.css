@@ -120,7 +120,7 @@ button:disabled { opacity: .65; cursor: wait; }
 
 .requester-app {
   display: block;
-  background: #f3f6fb;
+  background: #f5f7fb;
   color: #18263b;
   padding: clamp(12px, 4vw, 40px);
 }
@@ -141,17 +141,17 @@ button:disabled { opacity: .65; cursor: wait; }
 }
 .requester-app-header .product { margin: 0; color: #162c4b; }
 .requester-app-header nav { flex: 1; }
-.requester-app-header a, .requester-app .workspace a { color: #244e90; }
+.requester-app-header a, .requester-app .workspace a { color: #1946aa; }
 .requester-app button, .requester-app .workspace a.requester-create {
-  border-color: #2d5ba0;
-  background: #2d5ba0;
+  border-color: #2458d3;
+  background: #2458d3;
   color: #fff;
 }
 .requester-app-header button, .requester-app .requester-filters button {
   background: #fff;
-  color: #244e90;
+  color: #1946aa;
 }
-.requester-app .requester-filters, .requester-app .requester-detail-summary { background: #eef3fa; }
+.requester-app .requester-filters, .requester-app .requester-detail-summary { background: #f1f5fb; }
 .requester-app .requester-filters select { border-color: #a5b4c9; }
 .requester-app .request-list li,
 .requester-app .requester-detail-summary,
@@ -163,7 +163,7 @@ button:disabled { opacity: .65; cursor: wait; }
   gap: 1rem;
   padding: .75rem;
   margin-top: 1rem;
-  background: #eef3fa;
+  background: #f1f5fb;
   border-radius: 8px;
   font-weight: 650;
 }
@@ -173,3 +173,14 @@ button:disabled { opacity: .65; cursor: wait; }
 @media (max-width: 520px) {
   .requester-list-columns { display: none; }
 }
+
+.requester-app .requester-status[data-status="SUBMITTED"] { background: #e4edff; color: #1946aa; }
+.requester-app .requester-status[data-status="RETURNED"] { background: #fff0cf; color: #80500b; }
+.requester-revision {
+  padding: .85rem 1rem;
+  background: #fff6e2;
+  border: 1px solid #efd8a3;
+  border-radius: 10px;
+  color: #70470b;
+}
+.requester-revision p { margin: .25rem 0 0; }
