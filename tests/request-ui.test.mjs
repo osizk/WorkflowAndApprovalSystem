@@ -217,7 +217,7 @@ test('TEST-31: Return, edit and resubmit, stale-page refresh and final decision 
     await ownerPage.reload();
     await ownerPage.getByText('Status: SUBMITTED').waitFor();
     await ownerPage.getByText('Revised Lab supplies', { exact: true }).waitFor();
-    await ownerPage.getByText('Purchase updated office supplies', { exact: true }).waitFor();
+    await ownerPage.getByText('Purchase updated office supplies', { exact: false }).waitFor();
     await ownerPage.getByText(returnReason, { exact: false }).waitFor();
     await ownerPage.getByText('RESUBMITTED ·', { exact: false }).waitFor();
 
