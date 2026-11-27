@@ -1,8 +1,9 @@
-import type { PrismaClient, PurchaseRequest, RequestEvent } from '@prisma/client';
+import type { PrismaClient, PurchaseRequest, RequestEvent, RequestStatus } from '@prisma/client';
 import type { Express, RequestHandler, Response } from 'express';
 import type { AuthRequest } from './auth.js';
 
 type Fields = Record<string, string>;
+const filterableStatuses: readonly RequestStatus[] = ['SUBMITTED', 'RETURNED', 'APPROVED', 'REJECTED', 'WITHDRAWN'];
 const uuidPattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 
 function fail(res: Response, status: number, code: string, message: string, fields?: Fields) {
@@ -103,7 +104,12 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
   app.get('/api/requests', session, async (req, res) => {
     const user = (req as AuthRequest).authUser!;
     const where = user.role === 'REQUESTER' ? { requesterId: user.id } : { reviewerId: user.id };
-    const requests = await db.purchaseRequest.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }] });
+    const status = req.query.status;
+    const selected = filterableStatuses.find((value) => value === status);
+    if (status !== undefined && selected === undefined) {
+      return fail(res, 422, 'VALIDATION_ERROR', 'Check the request filters', { status: 'Choose a valid status.' });
+    }
+    const requests = await db.purchaseRequest.findMany({ where: { ...where, status: selected }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }] });
     res.json({ requests: requests.map(summarize) });
   });
 
