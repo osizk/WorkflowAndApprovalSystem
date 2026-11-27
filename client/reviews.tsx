@@ -3,6 +3,7 @@ import React, { useEffect, useState, type Ref } from 'react';
 type Summary = { id: string; title: string; amount: string; currency: string; status: string };
 type Detail = Summary & {
   purpose: string;
+  version: number;
   history: { id: string; type: string; createdAt: string; reason: string | null }[];
 };
 type LoadState = 'loading' | 'ready' | 'missing' | 'error';
@@ -42,7 +43,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     return () => controller.abort();
   }, [api, id, revision]);
 
-  async function decide(decision: 'APPROVE' | 'REJECT') {
+  async function decide(decision: 'APPROVE' | 'REJECT' | 'RETURN') {
     if (busy || !request || request.status !== 'SUBMITTED') return;
     setError('');
     setReasonError('');
@@ -51,23 +52,31 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
       setReasonError('A rejection reason is required.');
       return;
     }
+    if (decision === 'RETURN' && !trimmed) {
+      setReasonError('A return reason is required.');
+      return;
+    }
     setBusy(true);
     try {
-      const response = await fetch(api + '/decision', {
+      const response = await fetch(api + (decision === 'RETURN' ? '/return' : '/decision'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision, ...(trimmed && { reason: trimmed }) }),
+        body: JSON.stringify(decision === 'RETURN'
+          ? { reason: trimmed, version: request.version }
+          : { decision, version: request.version, ...(trimmed && { reason: trimmed }) }),
       });
       if (response.status === 401) return window.location.replace('/login');
       if (response.status === 404) return setState('missing');
       if (response.status === 409) {
-        setError('This request was already decided. The latest status is being loaded.');
+        setError('This request changed. Review the latest status before trying again.');
+        setReason('');
         refresh();
         return;
       }
       if (response.status === 422) {
         const { error: validation } = await response.json();
-        setReasonError(validation.fields?.reason ?? 'Check the decision reason.');
+        if (validation.fields?.reason) setReasonError(validation.fields.reason);
+        else setError(validation.message ?? 'Could not save the action.');
         return;
       }
       if (!response.ok) throw new Error('Decision failed');
@@ -111,11 +120,12 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
         <label htmlFor="decision-reason">Reason</label>
         <textarea id="decision-reason" value={reason} onChange={(event) => setReason(event.target.value)}
           aria-invalid={!!reasonError} aria-describedby={reasonError ? 'reason-help reason-error' : 'reason-help'} />
-        <p id="reason-help">Required to reject. Optional to approve.</p>
+        <p id="reason-help">Required to reject or return. Optional to approve.</p>
         {reasonError && <p id="reason-error" className="error" role="alert">{reasonError}</p>}
         <div className="decision-actions">
           <button type="button" disabled={busy} onClick={() => void decide('APPROVE')}>Approve</button>
           <button type="button" disabled={busy} onClick={() => void decide('REJECT')}>Reject</button>
+          <button type="button" disabled={busy} onClick={() => void decide('RETURN')}>Return</button>
         </div>
         {busy && <p role="status">Saving decision…</p>}
       </div>}
