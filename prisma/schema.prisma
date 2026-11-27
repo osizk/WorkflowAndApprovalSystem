@@ -17,6 +17,8 @@ enum RequestStatus {
   APPROVED
   REJECTED
   WITHDRAWN
+  RETURNED
+  RESUBMITTED
 }
 
 model User {
@@ -63,6 +65,7 @@ model PurchaseRequest {
   purpose      String        @db.VarChar(2000)
   amountSatang Int           @map("amount_satang")
   status       RequestStatus @default(SUBMITTED)
+  version      Int           @default(1)
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz
   requester    User          @relation("RequestOwner", fields: [requesterId], references: [id], onDelete: Restrict)
   reviewer     User          @relation("RequestReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
