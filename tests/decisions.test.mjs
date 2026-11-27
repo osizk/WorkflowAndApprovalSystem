@@ -218,3 +218,41 @@ test('TEST-24 (Return): enforce reviewer role and assignment', async () => {
   assert.equal(saved.version, 1);
   assert.deepEqual(saved.events.map(({ type }) => type), ['SUBMITTED']);
 });
+
+test('TEST-32: status filters preserve requester and reviewer scope and ordering', async () => {
+  const statuses = ['SUBMITTED', 'RETURNED', 'APPROVED', 'REJECTED', 'WITHDRAWN'];
+  const fixtures = [];
+  for (const [index, status] of statuses.entries()) {
+    const createdAt = new Date(Date.UTC(2026, 10, 28, 0, index));
+    const common = { title: 'Filter fixture', purpose: 'Office supplies', amountSatang: 100, status, createdAt };
+    fixtures.push(await db.purchaseRequest.create({
+      data: { ...common, requesterId: requester.id, reviewerId: reviewer.id },
+    }));
+    await db.purchaseRequest.create({
+      data: { ...common, requesterId: otherRequester.id, reviewerId: unrelated.id },
+    });
+  }
+  const fixtureIds = new Set(fixtures.map(({ id }) => id));
+  for (const account of [requester, reviewer]) {
+    const list = (suffix = '') => fetch(base + '/api/requests' + suffix, { headers: { cookie: account.cookie } });
+    for (const item of fixtures) {
+      const response = await list('?status=' + item.status);
+      assert.equal(response.status, 200);
+      const { requests } = await response.json();
+      assert.ok(requests.some(({ id }) => id === item.id));
+      assert.ok(requests.every(({ status, title, id }) => status === item.status &&
+        (title !== 'Filter fixture' || fixtureIds.has(id))));
+    }
+
+    const { requests } = await (await list()).json();
+    assert.deepEqual(requests.filter(({ title }) => title === 'Filter fixture').map(({ id }) => id),
+      fixtures.map(({ id }) => id).reverse());
+    for (const suffix of ['?status=INVALID', '?status=', '?status=SUBMITTED&status=SUBMITTED']) {
+      const response = await list(suffix);
+      assert.equal(response.status, 422);
+      const { error } = await response.json();
+      assert.equal(error.code, 'VALIDATION_ERROR');
+      assert.ok(error.fields.status);
+    }
+  }
+});
