@@ -98,7 +98,7 @@ function App() {
 
   return (
     <main>
-      <section className={screen === 'signed-in' && identity?.role === 'REQUESTER' ? 'workspace-shell' : undefined} aria-labelledby="page-title">
+      <section className={screen === 'signed-in' ? 'workspace-shell' : undefined} aria-labelledby="page-title">
         <p className="product">Workflow and Approval System</p>
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>
