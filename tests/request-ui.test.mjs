@@ -130,6 +130,7 @@ test('TEST-19: an owner withdraws a submitted request and the assigned reviewer 
     await reviewerPage.getByLabel('Password').fill(password);
     await reviewerPage.getByRole('button', { name: 'Sign in' }).click();
     await reviewerPage.waitForURL(`${origin}/reviews`);
+    await reviewerPage.getByLabel('Status', { exact: true }).selectOption('WITHDRAWN');
     await reviewerPage.getByRole('link', { name: title, exact: true }).click();
     await reviewerPage.waitForURL(`${origin}/reviews/${request.id}`);
     await reviewerPage.getByText('Status: WITHDRAWN').waitFor();
