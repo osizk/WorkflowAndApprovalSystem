@@ -172,3 +172,34 @@ test('TEST-25: Return and Withdraw commit only the winning transition', async ()
   assert.equal(saved.events.length, 2);
   assert.equal(saved.events.find(({ type }) => type !== 'SUBMITTED')?.type, saved.status);
 });
+
+test('TEST-28: decisions require a valid version and reject stale versions', async () => {
+  for (const decision of ['APPROVE', 'REJECT']) {
+    const item = await request();
+    const body = { decision, ...(decision === 'REJECT' && { reason: 'Not needed' }) };
+    for (const version of [undefined, '1', 0, 1.5]) {
+      const response = await call(reviewer, item.id, { ...body, version });
+      assert.equal(response.status, 422);
+      const { error } = await response.json();
+      assert.equal(error.code, 'VALIDATION_ERROR');
+      assert.ok(error.fields.version);
+    }
+
+    // Model a newer submitted revision; the full Return/Resubmit flow is covered by S2-02.
+    await db.purchaseRequest.update({ where: { id: item.id }, data: { version: 3 } });
+    const stale = await call(reviewer, item.id, { ...body, version: 1 });
+    assert.equal(stale.status, 409);
+    assert.equal((await stale.json()).error.code, 'DECISION_CONFLICT');
+    const saved = await db.purchaseRequest.findUniqueOrThrow({
+      where: { id: item.id },
+      include: { events: true },
+    });
+    assert.equal(saved.status, 'SUBMITTED');
+    assert.equal(saved.version, 3);
+    assert.deepEqual(saved.events.map(({ type }) => type), ['SUBMITTED']);
+
+    const current = await call(reviewer, item.id, { ...body, version: 3 });
+    assert.equal(current.status, 200);
+    assert.equal((await current.json()).request.status, decision === 'APPROVE' ? 'APPROVED' : 'REJECTED');
+  }
+});
