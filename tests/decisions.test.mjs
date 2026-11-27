@@ -152,3 +152,23 @@ test('TEST-23: return reason validates trimmed Unicode boundaries', async () => 
     assert.equal(event.reason, reason);
   }
 });
+
+test('TEST-25: Return and Withdraw commit only the winning transition', async () => {
+  const item = await request();
+  const [returned, withdrawn] = await Promise.all([
+    call(reviewer, item.id, { version: 1, reason: 'Update quantity' }, 'return'),
+    call(requester, item.id, { version: 1, reason: 'No longer needed' }, 'withdraw'),
+  ]);
+  assert.deepEqual([returned.status, withdrawn.status].sort(), [200, 409]);
+  const returnWon = returned.ok;
+  const conflict = await (returnWon ? withdrawn : returned).json();
+  assert.equal(conflict.error.code, returnWon ? 'WITHDRAWAL_CONFLICT' : 'REQUEST_CONFLICT');
+  const saved = await db.purchaseRequest.findUniqueOrThrow({
+    where: { id: item.id },
+    include: { events: true },
+  });
+  assert.equal(saved.status, returnWon ? 'RETURNED' : 'WITHDRAWN');
+  assert.equal(saved.version, returnWon ? 2 : 1);
+  assert.equal(saved.events.length, 2);
+  assert.equal(saved.events.find(({ type }) => type !== 'SUBMITTED')?.type, saved.status);
+});
