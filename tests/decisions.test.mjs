@@ -31,7 +31,7 @@ function call(who, id, body, action = 'decision') {
   return fetch(`${base}/api/requests/${id}/${action}`, {
     method: 'POST',
     headers: { origin, ...(who && { cookie: who.cookie }), 'content-type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify(action === 'decision' ? { version: 1, ...body } : body),
   });
 }
 
