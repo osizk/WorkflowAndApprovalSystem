@@ -33,13 +33,17 @@ function parsePurchase(body: unknown) {
   return Object.keys(fields).length ? { fields } : { value: { title, purpose, amountSatang } };
 }
 
+function isRequestVersion(version: unknown): version is number {
+  return typeof version === 'number' && Number.isInteger(version) && version >= 1 && version <= 2147483647;
+}
+
 function parseDecision(body: unknown) {
   const fields: Fields = {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return { fields: { body: 'Provide a decision object.' } };
   }
   const input = body as Record<string, unknown>;
-  if (Object.keys(input).some((key) => !['decision', 'reason'].includes(key))) fields.body = 'Unexpected decision fields.';
+  if (Object.keys(input).some((key) => !['decision', 'reason', 'version'].includes(key))) fields.body = 'Unexpected decision fields.';
   if (input.decision !== 'APPROVE' && input.decision !== 'REJECT') fields.decision = 'Choose APPROVE or REJECT.';
   let reason: string | null = null;
   if (Object.hasOwn(input, 'reason')) {
@@ -50,9 +54,11 @@ function parseDecision(body: unknown) {
     }
   }
   if (input.decision === 'REJECT' && !reason) fields.reason = 'A rejection reason is required.';
+  const version = input.version;
+  if (!isRequestVersion(version)) return { fields: { ...fields, version: 'Enter a valid request version.' } };
   if (Object.keys(fields).length) return { fields };
   const status: 'APPROVED' | 'REJECTED' = input.decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
-  return { value: { status, reason } };
+  return { value: { status, reason, version } };
 }
 
 function parseTransitionReason(body: unknown, allowMissingVersion: boolean) {
@@ -69,7 +75,7 @@ function parseTransitionReason(body: unknown, allowMissingVersion: boolean) {
     fields.reason = 'Enter 1 to 500 characters.';
   }
   const version = allowMissingVersion && !Object.hasOwn(input, 'version') ? 1 : input.version;
-  if (typeof version !== 'number' || !Number.isInteger(version) || version < 1 || version > 2147483647) {
+  if (!isRequestVersion(version)) {
     fields.version = 'Enter a valid request version.';
     return { fields };
   }
@@ -208,14 +214,14 @@ export function mountRequestRoutes(app: Express, db: PrismaClient, session: Requ
     if (!parsed.value) return fail(res, 422, 'VALIDATION_ERROR', 'Check the decision fields', parsed.fields);
     const result = await db.$transaction(async (tx) => {
       const updated = await tx.purchaseRequest.updateMany({
-        where: { id, reviewerId: user.id, requesterId: { not: user.id }, status: 'SUBMITTED' },
+        where: { id, reviewerId: user.id, requesterId: { not: user.id }, status: 'SUBMITTED', version: parsed.value.version },
         data: { status: parsed.value.status },
       });
       if (updated.count !== 1) return null;
       await tx.requestEvent.create({ data: { requestId: id, actorId: user.id, type: parsed.value.status, reason: parsed.value.reason } });
       return tx.purchaseRequest.findUniqueOrThrow({ where: { id }, include: { events: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } } });
     });
-    if (!result) return fail(res, 409, 'DECISION_CONFLICT', 'Request has already been decided');
+    if (!result) return fail(res, 409, 'DECISION_CONFLICT', 'Request changed. Reload and try again.');
     return res.json({ request: requestDetail(result) });
   });
 }
