@@ -49,7 +49,7 @@
 }
 .review-status[data-status="SUBMITTED"] { background: #dbe9ff; color: #0046c7; }
 .review-status[data-status="RETURNED"] { background: #ffebc5; color: #803800; }
-.review-status[data-status="APPROVED"] { background: #e6e3ff; color: #43328c; }
+.review-status[data-status="APPROVED"] { background: #365878; color: #fff; }
 .review-status[data-status="REJECTED"] { background: #fce1e1; color: #802525; }
 .review-detail-heading h2, .review-detail-heading p { margin: 0; }
 .review-facts { margin-top: 1rem; padding-inline: .75rem; }
