@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type FormEvent, type Ref } from 'react';
 
 type Summary = { id: string; title: string; amount: string; currency: string; status: string; createdAt: string };
-type Detail = Summary & { purpose: string; history: { id: string; type: string; createdAt: string; reason: string | null }[] };
+type Detail = Summary & { purpose: string; version: number; history: { id: string; type: string; createdAt: string; reason: string | null }[] };
 type ApiError = { error?: { code?: string; fields?: Record<string, string> } };
 
 function signInAgain() {
@@ -105,7 +105,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       const response = await fetch(`/api/requests/${encodeURIComponent(request.id)}/withdraw`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason }),
+        body: JSON.stringify({ reason, version: request.version }),
       });
       if (response.status === 401) return signInAgain();
       if (response.status === 404) {
