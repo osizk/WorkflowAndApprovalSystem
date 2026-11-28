@@ -75,7 +75,7 @@ Executed at `2dbace0d22106f77042d509403b8d23845ee7fe2` with `npm run test:sprint
 | --- | --- | --- |
 | AC-37 / TEST-37 | [#85](https://github.com/osizk/WorkflowAndApprovalSystem/issues/85), Pex | [decision-summary-ui.test.mjs](../tests/decision-summary-ui.test.mjs), “TEST-37: role totals, successful zeros and independence from list controls”. Passed with contract mocks. |
 | AC-38 / TEST-38 | #85, Pex | Same file, “TEST-38: pending, server and network errors, keyboard retry and expired session”. Passed with contract mocks. |
-| AC-39 / TEST-39 | #85, Pex | [Browser journey](../tests/decision-summary-journey.test.mjs) exercises both roles against the real API and PostgreSQL. CI result pending. |
+| AC-39 / TEST-39 | #85, Pex | [Browser journey](../tests/decision-summary-journey.test.mjs) exercises both roles against the real API and PostgreSQL. Passed in integrated CI. |
 
 Run the focused checks with `npm run build` and `node --test tests/decision-summary-ui.test.mjs` (`WORKFLOW_BROWSER_CHANNEL=msedge`). The running Sprint 2 browser bundle rendered both roles before production edits. RED on `faf83c7f6d7e95b1e9c30cce64cdc39204806e9a` had 0 passed, 2 failed, 0 skipped because the Approved label and the summary loading message were absent. GREEN on `36df657d653a3e3e6bead63ac8a3096d88217ab9` had 2 passed, 0 failed, 0 skipped. Build passed on that same GREEN commit.
 
@@ -84,3 +84,5 @@ The GREEN commit also passed Prisma client generation and all five migrations on
 ```sh
 node --test --test-concurrency=1 tests/test-db.test.mjs tests/auth.test.mjs tests/auth-safety.test.mjs tests/auth-ui.test.mjs tests/requests.test.mjs tests/resubmit.test.mjs tests/request-ui.test.mjs tests/decisions.test.mjs tests/review-ui.test.mjs tests/journey.test.mjs tests/health.test.mjs tests/decision-summary-ui.test.mjs
 ```
+
+Integrated CI on `1710bcc367a2f15977bc49f7b01ee6a70f14a4bb` ran `npm run test:sprint1` with Chromium and isolated PostgreSQL 16. TEST-35–39 passed, with 35 passed, 0 failed, and 0 skipped overall. TEST-39 verified both workspaces showed (Approved, Rejected) = (0, 0) at baseline, after Return and after Resubmit, then (1, 0) after Approve and after reload. Docker build also passed. [CI evidence](https://github.com/osizk/WorkflowAndApprovalSystem/actions/runs/46147789601).
