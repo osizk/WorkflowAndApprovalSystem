@@ -94,7 +94,6 @@
 .review-facts strong, .review-history time { color: #475569; }
 .review-return-note { margin-block: 1rem; padding: .85rem 1rem; border: 1px solid #e5a020; border-radius: 8px; background: #fff1d7; }
 .review-return-note strong { color: #783400; }
-.reviewer-shell button:not(.review-filters button) { background: #0862dc; border-color: #0862dc; }
 .reviewer-shell :focus-visible { outline-color: #1266dd; }
 .reviewer-shell .release-info { color: #526078; }
 @media (max-width: 450px) {
