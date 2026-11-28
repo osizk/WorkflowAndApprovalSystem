@@ -7,7 +7,7 @@
 | F-03 Review and history | 1 | FR-04–06; BR-02, BR-05–08; NFR-01–02, NFR-04–05 | F-01, F-02, transaction support | AC-09–13 / TEST-09–13 |
 | F-04 Return/revise/resubmit | 2 | FR-07 | F-02, F-03 | Later contract |
 | F-05 Filter work lists | 2 | FR-09 | F-02, F-03 | Later contract |
-| F-06 Decision summaries | 3 | FR-10 | F-03 | Later contract |
+| F-06 Decision summaries | 3 | FR-10 | F-03 | [F-06 v1.0](sprints/sprint-3/contracts.md). API checks TEST-35–36 passed in CI. Integrated TEST-39 is tracked in #98. |
 | Release checks | 1 | NFR-06; cross-feature NFR-01, NFR-03–04 | F-01–03 | AC-14 / TEST-14 |
 | Additional approval stages | Unscheduled | FR-08 candidate | Scope approval | Outside baseline |
 
@@ -59,3 +59,12 @@ Kane reported the full Issue #11 run on exact 055892d: migration, Prisma client 
 The release at [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c) passed all 13 Sprint 1 tests with zero failures or skips. PostgreSQL schema checks rolled back their fixtures. A second seed run preserved the stored rows. Both npm audit modes reported zero vulnerabilities at verification time.
 
 AC-14 keyboard replay on the released app used Edge at 1440 px and 390 px. At both widths Tab and Enter reached the labeled controls for sign-in, submission, approval, sign-out and retrieval. Visible focus and the field-associated title error were checked. The checked views had no horizontal overflow. The Requester retrieved the approved request with both history events. The automated journey independently verified persistence across application restart.
+
+## Sprint 3 decision summary API
+
+| Acceptance criterion / test | Evidence |
+| --- | --- |
+| AC-35 / TEST-35 | [API test file](../tests/decision-summary-api.test.mjs). PostgreSQL coverage with synthetic records verifies scoped counts for Requester and Reviewer, exclusion of nonfinal statuses, and zero totals. |
+| AC-36 / TEST-36 | [API test file](../tests/decision-summary-api.test.mjs). Injected repository failure verifies 500 INTERNAL_ERROR. Missing and expired synthetic sessions verify 401 AUTH_REQUIRED before aggregation. |
+
+Executed at `2dbace0d22106f77042d509403b8d23845ee7fe2` with `npm run test:sprint1` in [CI run 46142157155](https://github.com/osizk/WorkflowAndApprovalSystem/actions/runs/46142157155). Both tests passed. The full suite recorded 32 passed, 0 failed, and 0 skipped. Integrated TEST-39 remains tracked in [PR #98](https://github.com/osizk/WorkflowAndApprovalSystem/pull/98).
