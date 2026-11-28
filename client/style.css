@@ -118,13 +118,13 @@ button:disabled { opacity: .65; cursor: wait; }
 .requester-history li + li { margin-top: .5rem; }
 .requester-resubmit { margin: 0; }
 
-.requester-app {
+.workspace-app {
   display: block;
   background: #f5f7fb;
   color: #18263b;
   padding: clamp(12px, 4vw, 40px);
 }
-.requester-app .workspace-shell {
+.workspace-app .workspace-shell {
   width: min(100%, 1120px);
   margin-inline: auto;
   padding: clamp(16px, 4vw, 36px);

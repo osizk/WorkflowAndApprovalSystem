@@ -100,7 +100,7 @@ function App() {
   const reviewerWorkspace = screen === 'signed-in' && identity?.role === 'REVIEWER';
 
   return (
-    <main className={requesterWorkspace ? 'requester-app' : screen === 'login' ? 'login-app' : undefined}>
+    <main className={requesterWorkspace ? 'workspace-app requester-app' : reviewerWorkspace ? 'workspace-app' : screen === 'login' ? 'login-app' : undefined}>
       <section className={reviewerWorkspace ? 'workspace-shell reviewer-shell' : requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
         {requesterWorkspace ? <header className="requester-app-header">
           <span className="product">Purchase Requests</span>
