@@ -1,4 +1,4 @@
-import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote } from './workspace-ui';
+import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, Pagination, usePagination } from './workspace-ui';
 import React, { useEffect, useState, type Ref } from 'react';
 import './reviewer.css';
 
@@ -16,6 +16,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   const [state, setState] = useState<LoadState>('loading');
   const [items, setItems] = useState<Summary[]>([]);
   const [statusFilter, setStatusFilter] = useState('SUBMITTED');
+  const pagination = usePagination(items);
   const listQuery = !id && statusFilter ? '?' + new URLSearchParams({ status: statusFilter }) : '';
   const [request, setRequest] = useState<Detail>();
   const [revision, setRevision] = useState(0);
@@ -34,6 +35,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     if (value === statusFilter) return;
     setState('loading');
     setStatusFilter(value);
+    pagination.setPage(1);
   }
 
   useEffect(() => {
@@ -116,13 +118,14 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     </>}
     {state === 'ready' && !id && (items.length ? <div className="review-table-frame"><table className="review-table">
       <thead><tr><th scope="col">Request</th><th scope="col">Requested by</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
-      <tbody>{items.map((item) => <tr key={item.id}>
+      <tbody>{pagination.visible.map((item) => <tr key={item.id}>
         <td><a href={'/reviews/' + item.id}>{item.title}</a></td>
         <td className="review-requester">{item.requesterLogin ?? '—'}</td>
         <td>{formatAmount(item.amount)}</td>
         <td><StatusBadge status={item.status} /></td>
       </tr>)}</tbody>
     </table></div> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
+    {state === 'ready' && !id && items.length > 0 && <Pagination pagination={pagination} />}
     {state === 'ready' && request && <div className="request-detail">
       <div className="review-detail-heading">
         <p><strong>Status:</strong> <StatusBadge status={request.status} /></p>

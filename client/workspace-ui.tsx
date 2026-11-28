@@ -1,4 +1,38 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+export function usePagination<T>(rows: T[]) {
+  const [size, setSize] = useState(10);
+  const [selected, setPage] = useState(1);
+  const total = rows.length;
+  const pages = Math.max(1, Math.ceil(total / size));
+  const page = Math.min(selected, pages);
+  const start = (page - 1) * size;
+  return {
+    visible: rows.slice(start, start + size), page, pages, size, total, start, setPage,
+    changeSize(value: number) { setSize(value); setPage(1); },
+  };
+}
+
+export function Pagination({ pagination }: { pagination: ReturnType<typeof usePagination<unknown>> }) {
+  const { page, pages, size, total, start, changeSize, setPage } = pagination;
+  const numbers = [...new Set([1, page - 1, page, page + 1, pages])]
+    .filter((value) => value >= 1 && value <= pages).sort((a, b) => a - b);
+  return <div className="workspace-pagination">
+    <label>Rows per page <select value={size} onChange={(event) => changeSize(Number(event.target.value))}>
+      {[10, 15, 30].map((value) => <option key={value}>{value}</option>)}
+    </select></label>
+    <p role="status">{total ? `${start + 1}–${Math.min(start + size, total)} of ${total} requests` : '0 requests'}</p>
+    {pages > 1 && <nav aria-label="Pagination">
+      <button className="secondary-action" type="button" disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</button>
+      {numbers.map((number, index) => <React.Fragment key={number}>
+        {index > 0 && number - numbers[index - 1] > 1 && <span aria-hidden="true">…</span>}
+        <button className="secondary-action" type="button" aria-label={`Page ${number}`}
+          aria-current={number === page ? 'page' : undefined} onClick={() => setPage(number)}>{number}</button>
+      </React.Fragment>)}
+      <button className="secondary-action" type="button" disabled={page === pages} onClick={() => setPage(page + 1)}>Next</button>
+    </nav>}
+  </div>;
+}
 
 const statuses = ['SUBMITTED', 'RETURNED', 'APPROVED', 'REJECTED', 'WITHDRAWN'];
 const money = new Intl.NumberFormat('en-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

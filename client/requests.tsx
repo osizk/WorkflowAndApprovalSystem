@@ -1,4 +1,4 @@
-import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, FormErrors } from './workspace-ui';
+import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, FormErrors, Pagination, usePagination } from './workspace-ui';
 import React, { useEffect, useState, type FormEvent, type Ref } from 'react';
 
 type Summary = { id: string; title: string; amount: string; currency: string; status: string; createdAt: string };
@@ -16,6 +16,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
   const [retry, setRetry] = useState(0);
   const [statusFilter, setStatusFilter] = useState('');
   const [requests, setRequests] = useState<Summary[]>([]);
+  const pagination = usePagination(requests);
   const [request, setRequest] = useState<Detail>();
   const [title, setTitle] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -38,6 +39,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
     if (value === statusFilter) return;
     setState('loading');
     setStatusFilter(value);
+    pagination.setPage(1);
   }
 
   useEffect(() => {
@@ -223,11 +225,12 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
       {state === 'ready' && <>
         <div className="requester-list-columns" aria-hidden="true"><span>Request</span><span>Amount</span><span>Status</span></div>
-        <ul className="request-list" aria-label="Purchase requests">{requests.map((item) => <li key={item.id}>
+        <ul className="request-list" aria-label="Purchase requests">{pagination.visible.map((item) => <li key={item.id}>
         <a href={`/requests/${item.id}`}>{item.title}</a>
         <span className="requester-amount">{formatAmount(item.amount)}</span>
         <StatusBadge status={item.status} />
       </li>)}</ul>
+        <Pagination pagination={pagination} />
       </>}
     </>}
     {mode === 'new' && <form className="request-form" onSubmit={submit} aria-busy={submitting} noValidate>

@@ -302,6 +302,18 @@ button:disabled { opacity: .65; cursor: wait; }
 .request-form button { justify-self: start; }
 .form-errors { padding: .75rem; border: 2px solid #a32626; border-radius: 8px; color: #852020; }
 .form-errors ul { margin-bottom: 0; }
+.workspace-pagination, .workspace-pagination nav, .workspace-pagination label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.workspace-pagination { margin-block: 1rem; justify-content: space-between; }
+.workspace-pagination p { margin: 0; color: #475569; }
+.workspace-pagination select { font: inherit; min-height: 44px; border: 1px solid #7588a3; border-radius: 8px; background: white; }
+.workspace-pagination nav button { min-width: 44px; }
+.workspace-app .workspace-pagination [aria-current="page"] { background: var(--ui-blue); color: white; }
+.workspace-pagination button:disabled { cursor: default; }
 @media (max-width: 520px) {
   .review-table-frame { border: 0; background: transparent; }
   .review-table, .review-table tbody { display: block; }
