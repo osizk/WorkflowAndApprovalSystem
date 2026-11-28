@@ -102,14 +102,16 @@ function App() {
   return (
     <main className={requesterWorkspace ? 'workspace-app requester-app' : reviewerWorkspace ? 'workspace-app' : screen === 'login' ? 'login-app' : undefined}>
       <section className={reviewerWorkspace ? 'workspace-shell reviewer-shell' : requesterWorkspace ? 'workspace-shell' : undefined} aria-labelledby="page-title">
-        {requesterWorkspace ? <header className="requester-app-header">
+        {(requesterWorkspace || reviewerWorkspace) ? <header className="workspace-header">
           <span className="product">Purchase Requests</span>
-          <nav aria-label="Requester workspace"><a className="requester-nav-link" href="/requests" aria-current={window.location.pathname === '/requests' ? 'page' : undefined}>My Requests</a></nav>
-          <button type="button" onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
-        </header> : reviewerWorkspace ? <header className="review-header">
-          <strong>Purchase Requests</strong>
-          <nav aria-label="Reviewer workspace"><a href="/reviews" aria-current={window.location.pathname === '/reviews' ? 'page' : undefined}>Review Queue</a></nav>
-        </header> : <p className="product">Workflow and Approval System</p>}
+          <nav aria-label={requesterWorkspace ? 'Requester workspace' : 'Reviewer workspace'}>
+            <a className="workspace-nav-link" href={requesterWorkspace ? '/requests' : '/reviews'}
+              aria-current={window.location.pathname === (requesterWorkspace ? '/requests' : '/reviews') ? 'page' : undefined}>
+              {requesterWorkspace ? 'My Requests' : 'Review Queue'}
+            </a>
+          </nav>
+          <button className="secondary-action" type="button" onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>
+        </header> : <p className="product">Purchase Requests</p>}
         {screen === 'loading' && <p role="status">Checking your session…</p>}
         {screen === 'unavailable' && <>
           <h1 id="page-title" tabIndex={-1} ref={heading}>Session unavailable</h1>
@@ -132,7 +134,6 @@ function App() {
           {identity.role === 'REQUESTER' ? <RequestWorkspace heading={heading} /> : <ReviewWorkspace heading={heading} />}
           <p role="status">Signed in as {identity.role === 'REQUESTER' ? 'Requester' : 'Reviewer'}.</p>
           {error && <p className="error" role="alert">{error}</p>}
-          {!requesterWorkspace && <button onClick={signOut} disabled={busy}>{busy ? 'Signing out…' : 'Sign out'}</button>}
         </>}
         <p className="release-info">Release <code title={releaseCommit}>{releaseCommit === 'local' ? releaseCommit : releaseCommit.slice(0, 12)}</code></p>
       </section>
