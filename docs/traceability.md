@@ -7,7 +7,7 @@
 | F-03 Review and history | 1 | FR-04–06; BR-02, BR-05–08; NFR-01–02, NFR-04–05 | F-01, F-02, transaction support | AC-09–13 / TEST-09–13 |
 | F-04 Return/revise/resubmit | 2 | FR-07 | F-02, F-03 | Later contract |
 | F-05 Filter work lists | 2 | FR-09 | F-02, F-03 | Later contract |
-| F-06 Decision summaries | 3 | FR-10 | F-03 | Later contract |
+| F-06 Decision summaries | 3 | FR-10 | F-03 | [F-06 v1.0](sprints/sprint-3/contracts.md). Browser checks TEST-37–38 passed with a mocked summary API. TEST-35–36 and TEST-39 await #82 integration. |
 | Release checks | 1 | NFR-06; cross-feature NFR-01, NFR-03–04 | F-01–03 | AC-14 / TEST-14 |
 | Additional approval stages | Unscheduled | FR-08 candidate | Scope approval | Outside baseline |
 
@@ -59,3 +59,20 @@ Kane reported the full Issue #11 run on exact 055892d: migration, Prisma client 
 The release at [7c3f8a7](https://github.com/osizk/WorkflowAndApprovalSystem/commit/7c3f8a73f424dc8d5e1f27cb6ff38db8af562a8c) passed all 13 Sprint 1 tests with zero failures or skips. PostgreSQL schema checks rolled back their fixtures. A second seed run preserved the stored rows. Both npm audit modes reported zero vulnerabilities at verification time.
 
 AC-14 keyboard replay on the released app used Edge at 1440 px and 390 px. At both widths Tab and Enter reached the labeled controls for sign-in, submission, approval, sign-out and retrieval. Visible focus and the field-associated title error were checked. The checked views had no horizontal overflow. The Requester retrieved the approved request with both history events. The automated journey independently verified persistence across application restart.
+
+## Sprint 3 decision summary (F-06 v1.0, FR-10)
+
+| Acceptance criterion / test | Issue / owner | Actual test and result |
+| --- | --- | --- |
+| AC-35 / TEST-35 and AC-36 / TEST-36 | [#82](https://github.com/osizk/WorkflowAndApprovalSystem/issues/82), Kane | API and database verification pending from #82. |
+| AC-37 / TEST-37 | [#85](https://github.com/osizk/WorkflowAndApprovalSystem/issues/85), Pex | [decision-summary-ui.test.mjs](../tests/decision-summary-ui.test.mjs), “TEST-37: role totals, successful zeros and independence from list controls”. Passed with contract mocks. |
+| AC-38 / TEST-38 | #85, Pex | Same file, “TEST-38: pending, server and network errors, keyboard retry and expired session”. Passed with contract mocks. |
+| AC-39 / TEST-39 | #85, Pex | Not run. Requires the real summary endpoint from #82 and a disposable PostgreSQL database for the Return → Resubmit → Approve → reload journey. |
+
+Run the focused checks with `npm run build` and `node --test tests/decision-summary-ui.test.mjs` (`WORKFLOW_BROWSER_CHANNEL=msedge`). The running Sprint 2 browser bundle rendered both roles before production edits. RED on `faf83c7f6d7e95b1e9c30cce64cdc39204806e9a` had 0 passed, 2 failed, 0 skipped because the Approved label and the summary loading message were absent. GREEN on `36df657d653a3e3e6bead63ac8a3096d88217ab9` had 2 passed, 0 failed, 0 skipped. Build passed on that same GREEN commit.
+
+The GREEN commit also passed Prisma client generation and all five migrations on a disposable local PostgreSQL 18 database. Node 24.14.0 and Edge (390 px for the focused checks) ran the regression with 32 passed, 0 failed and 0 skipped. After build and `node scripts/test-db.mjs`, the regression command was:
+
+```sh
+node --test --test-concurrency=1 tests/test-db.test.mjs tests/auth.test.mjs tests/auth-safety.test.mjs tests/auth-ui.test.mjs tests/requests.test.mjs tests/resubmit.test.mjs tests/request-ui.test.mjs tests/decisions.test.mjs tests/review-ui.test.mjs tests/journey.test.mjs tests/health.test.mjs tests/decision-summary-ui.test.mjs
+```

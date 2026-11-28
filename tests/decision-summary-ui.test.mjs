@@ -1,4 +1,4 @@
-﻿import assert from 'node:assert/strict';
+import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { chromium } from 'playwright';
 import { startBrowserServer, stopBrowserServer } from './browser-server.mjs';
@@ -125,4 +125,3 @@ test('TEST-38: pending, server and network errors, keyboard retry and expired se
   await expiredPage.waitForURL(origin + '/login');
   await expiredPage.getByRole('heading', { name: 'Sign in', exact: true }).waitFor();
 });
-
