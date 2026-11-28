@@ -119,6 +119,20 @@ export function requestDetail(request: PurchaseRequest & { events: RequestEvent[
 }
 
 export function mountRequestRoutes(app: Express, db: PrismaClient, session: RequestHandler) {
+  app.get('/api/requests/decision-summary', session, async (req, res) => {
+    const user = (req as AuthRequest).authUser!;
+    const scope = user.role === 'REQUESTER' ? { requesterId: user.id } : { reviewerId: user.id };
+    const counts = await db.purchaseRequest.groupBy({
+      by: ['status'],
+      where: { ...scope, status: { in: ['APPROVED', 'REJECTED'] } },
+      _count: { _all: true },
+    });
+    res.json({
+      approved: counts.find(({ status }) => status === 'APPROVED')?._count._all ?? 0,
+      rejected: counts.find(({ status }) => status === 'REJECTED')?._count._all ?? 0,
+    });
+  });
+
   app.get('/api/requests', session, async (req, res) => {
     const user = (req as AuthRequest).authUser!;
     const where = user.role === 'REQUESTER' ? { requesterId: user.id } : { reviewerId: user.id };
