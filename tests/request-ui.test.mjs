@@ -34,7 +34,9 @@ test('F-02: browser submits and retrieves a saved request', { timeout: 30000 }, 
     await page.getByLabel('Purpose').fill('Office supplies');
     await page.getByLabel('Amount (THB)').fill('0.01');
     await page.getByRole('button', { name: 'Submit request' }).click();
-    await page.getByText('Enter 3 to 120 characters.').waitFor();
+    assert.equal(await page.locator('#title-error').innerText(), 'Enter 3 to 120 characters.');
+    await page.locator('.form-errors').getByRole('link', { name: 'Title: Enter 3 to 120 characters.' }).click();
+    assert.equal(await page.getByLabel('Title').evaluate((input) => input === document.activeElement), true);
     await page.getByLabel('Title').fill('Pens');
     await page.getByRole('button', { name: 'Submit request' }).click();
     await page.getByText('No eligible reviewer is available. Try again later.').waitFor();
@@ -61,6 +63,37 @@ test('F-02: browser submits and retrieves a saved request', { timeout: 30000 }, 
     await page.getByRole('link', { name: 'Pens' }).waitFor();
     assert.equal(await statusFilter.inputValue(), '');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
+    await db.purchaseRequest.createMany({ data: Array.from({ length: 24 }, (_, index) => ({
+      requesterId: requester.id, reviewerId: reviewer.id,
+      title: 'Pagination fixture ' + index, purpose: 'Office supplies', amountSatang: 120,
+      status: index < 12 ? 'SUBMITTED' : 'RETURNED',
+    })) });
+    await page.reload();
+    const reviewPage = await browser.newPage();
+    reviewPage.setDefaultTimeout(5000);
+    await reviewPage.goto(origin + '/login');
+    await reviewPage.getByLabel('Login').fill(reviewer.login);
+    await reviewPage.getByLabel('Password').fill(password);
+    await reviewPage.getByRole('button', { name: 'Sign in' }).click();
+    await reviewPage.waitForURL(origin + '/reviews');
+    for (const [workspace, total] of [[page, 25], [reviewPage, 13]]) {
+      const controls = workspace.locator('.workspace-pagination');
+      const first = controls.getByText('1–10 of ' + total + ' requests', { exact: true });
+      const second = controls.getByText('11–' + Math.min(20, total) + ' of ' + total + ' requests', { exact: true });
+      const next = controls.getByRole('button', { name: 'Next', exact: true });
+      await first.waitFor();
+      await next.click();
+      await second.waitFor();
+      const jump = controls.getByLabel('Go to page');
+      await jump.fill('1');
+      await jump.press('Enter');
+      await first.waitFor();
+      await next.click();
+      await second.waitFor();
+      await workspace.getByLabel('Status', { exact: true }).selectOption('RETURNED');
+      await controls.getByText('1–10 of 12 requests', { exact: true }).waitFor();
+      assert.equal(await controls.getByRole('button', { name: 'Page 1', exact: true }).getAttribute('aria-current'), 'page');
+    }
   } finally {
     await browser?.close();
     await stopBrowserServer(server);
