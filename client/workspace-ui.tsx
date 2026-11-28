@@ -15,6 +15,9 @@ export function usePagination<T>(rows: T[]) {
 
 export function Pagination({ pagination }: { pagination: ReturnType<typeof usePagination<unknown>> }) {
   const { page, pages, size, total, start, changeSize, setPage } = pagination;
+  const [target, setTarget] = useState('');
+  const targetPage = Number(target);
+  const validTarget = /^\d+$/.test(target) && targetPage >= 1 && targetPage <= pages;
   const numbers = [...new Set([1, page - 1, page, page + 1, pages])]
     .filter((value) => value >= 1 && value <= pages).sort((a, b) => a - b);
   return <div className="workspace-pagination">
@@ -31,6 +34,17 @@ export function Pagination({ pagination }: { pagination: ReturnType<typeof usePa
       </React.Fragment>)}
       <button className="secondary-action" type="button" disabled={page === pages} onClick={() => setPage(page + 1)}>Next</button>
     </nav>}
+    {pages > 1 && <form className="pagination-jump" onSubmit={(event) => {
+      event.preventDefault();
+      if (!validTarget) return;
+      setPage(targetPage);
+      setTarget('');
+    }}>
+      <label>Go to page <input type="text" inputMode="numeric" value={target}
+        onChange={(event) => setTarget(event.target.value)} aria-invalid={target !== '' && !validTarget} /></label>
+      <button className="secondary-action" type="submit" disabled={!validTarget}>Go</button>
+      {target !== '' && !validTarget && <span className="error" role="status">Enter a whole number from 1 to {pages}.</span>}
+    </form>}
   </div>;
 }
 
