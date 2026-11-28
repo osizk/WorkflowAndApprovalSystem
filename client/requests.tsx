@@ -1,4 +1,4 @@
-import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, FormErrors, Pagination, usePagination } from './workspace-ui';
+import { DecisionSummary, StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, FormErrors, Pagination, usePagination } from './workspace-ui';
 import React, { useEffect, useState, type FormEvent, type Ref } from 'react';
 
 type Summary = { id: string; title: string; amount: string; currency: string; status: string; createdAt: string };
@@ -220,6 +220,7 @@ export function RequestWorkspace({ heading }: { heading: Ref<HTMLHeadingElement>
       {mode === 'list' && <a className="requester-create" href="/requests/new">Create request</a>}
     </div>
     {mode === 'list' && <>
+      <DecisionSummary />
       <StatusFilter id="request-status-filter" value={statusFilter} onChange={changeStatusFilter} />
       {state === 'loading' && <p role="status">Loading requests…</p>}
       {state === 'empty' && <p role="status">{statusFilter ? 'No requests match this status.' : 'You have no requests yet.'}</p>}
