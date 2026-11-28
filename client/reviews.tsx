@@ -1,8 +1,8 @@
+import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, Pagination, usePagination } from './workspace-ui';
 import React, { useEffect, useState, type Ref } from 'react';
 import './reviewer.css';
 
 type Summary = { id: string; title: string; amount: string; currency: string; status: string; requesterLogin?: string };
-const thb = new Intl.NumberFormat('en-TH', { style: 'currency', currency: 'THB', minimumFractionDigits: 0 });
 type Detail = Summary & {
   purpose: string;
   version: number;
@@ -16,6 +16,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   const [state, setState] = useState<LoadState>('loading');
   const [items, setItems] = useState<Summary[]>([]);
   const [statusFilter, setStatusFilter] = useState('SUBMITTED');
+  const pagination = usePagination(items);
   const listQuery = !id && statusFilter ? '?' + new URLSearchParams({ status: statusFilter }) : '';
   const [request, setRequest] = useState<Detail>();
   const [revision, setRevision] = useState(0);
@@ -34,6 +35,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     if (value === statusFilter) return;
     setState('loading');
     setStatusFilter(value);
+    pagination.setPage(1);
   }
 
   useEffect(() => {
@@ -100,21 +102,12 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     }
   }
 
+  const latestReturn = request?.status === 'RETURNED' ? request.history.findLast((event) => event.type === 'RETURNED') : undefined;
+
   return <div className="workspace reviewer-page">
     {id && <a className="review-back" href="/reviews">Back to review queue</a>}
     <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? request?.title ?? 'Review request' : 'Review Queue'}</h1>
-    {!id && <div className="review-filters">
-      <label htmlFor="review-status-filter">Status</label>
-      <select id="review-status-filter" value={statusFilter} onChange={(event) => changeStatusFilter(event.target.value)}>
-        <option value="">All statuses</option>
-        <option value="SUBMITTED">Submitted</option>
-        <option value="RETURNED">Returned</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-        <option value="WITHDRAWN">Withdrawn</option>
-      </select>
-      <button type="button" disabled={!statusFilter} onClick={() => changeStatusFilter('')}>Clear filter</button>
-    </div>}
+    {!id && <StatusFilter id="review-status-filter" value={statusFilter} onChange={changeStatusFilter} />}
     {error && <p className="error" role="alert">{error}</p>}
     {saved && <p role="status">Decision saved.</p>}
     {state === 'loading' && <p role="status">Loading review information…</p>}
@@ -125,31 +118,24 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
     </>}
     {state === 'ready' && !id && (items.length ? <div className="review-table-frame"><table className="review-table">
       <thead><tr><th scope="col">Request</th><th scope="col">Requested by</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead>
-      <tbody>{items.map((item) => <tr key={item.id}>
+      <tbody>{pagination.visible.map((item) => <tr key={item.id}>
         <td><a href={'/reviews/' + item.id}>{item.title}</a></td>
-        <td>{item.requesterLogin ?? '—'}</td>
-        <td>{thb.format(Number(item.amount))}</td>
-        <td><span className="review-status" data-status={item.status}>{item.status}</span></td>
+        <td className="review-requester">{item.requesterLogin ?? '—'}</td>
+        <td>{formatAmount(item.amount)}</td>
+        <td><StatusBadge status={item.status} /></td>
       </tr>)}</tbody>
     </table></div> : <p role="status">{statusFilter ? 'No requests match this status.' : 'No requests are assigned to you.'}</p>)}
+    {state === 'ready' && !id && items.length > 0 && <Pagination pagination={pagination} />}
     {state === 'ready' && request && <div className="request-detail">
       <div className="review-detail-heading">
-        <p><strong>Status:</strong> <span className="review-status" data-status={request.status}>{request.status}</span></p>
+        <p><strong>Status:</strong> <StatusBadge status={request.status} /></p>
       </div>
       <div className="review-facts">
         <p><strong>Requested by</strong> {request.requesterLogin ?? '—'}</p>
-        <p><strong>Amount:</strong> {thb.format(Number(request.amount))}</p>
+        <p><strong>Amount:</strong> {formatAmount(request.amount)}</p>
         <p><strong>Purpose:</strong> {request.purpose}</p>
       </div>
-      {request.status === 'RETURNED' && <aside className="review-return-note">
-        <strong>Revision requested</strong>
-        <div>{request.history.findLast((event) => event.type === 'RETURNED')?.reason}</div>
-      </aside>}
-      <h3>Activity</h3>
-      <ol className="review-history">{request.history.map((event) => <li key={event.id} data-status={event.type}>
-        <strong>{event.type}</strong> · <time dateTime={event.createdAt}>{new Date(event.createdAt).toLocaleString()}</time>
-        {event.reason && !(request.status === 'RETURNED' && event === request.history.findLast((entry) => entry.type === 'RETURNED')) && ' · ' + event.reason}
-      </li>)}</ol>
+      <RevisionNote event={latestReturn} />
       {request.status === 'SUBMITTED' && <div className="decision-controls" aria-busy={busy}>
         <label htmlFor="decision-reason">Reason</label>
         <textarea id="decision-reason" value={reason} onChange={(event) => setReason(event.target.value)}
@@ -163,6 +149,7 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
         </div>
         {busy && <p role="status">Saving decision…</p>}
       </div>}
+      <RequestHistory events={request.history} featured={latestReturn} />
     </div>}
   </div>;
 }
