@@ -1,4 +1,53 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+
+type DecisionTotals = { approved: number; rejected: number };
+
+export function DecisionSummary() {
+  const titleId = useId();
+  const [attempt, setAttempt] = useState(0);
+  const [result, setResult] = useState<DecisionTotals | 'loading' | 'error'>('loading');
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch('/api/requests/decision-summary', { signal: controller.signal }).then(async (response) => {
+      if (controller.signal.aborted) return;
+      if (response.status === 401) {
+        window.location.replace('/login');
+        return;
+      }
+      if (!response.ok) throw new Error('Decision summary load failed');
+      const totals: Partial<DecisionTotals> | null = await response.json();
+      if (controller.signal.aborted) return;
+      const { approved, rejected } = totals ?? {};
+      if (typeof approved !== 'number' || !Number.isInteger(approved) || approved < 0
+        || typeof rejected !== 'number' || !Number.isInteger(rejected) || rejected < 0) {
+        throw new Error('Invalid decision summary totals');
+      }
+      setResult({ approved, rejected });
+    }).catch(() => {
+      if (!controller.signal.aborted) setResult('error');
+    });
+    return () => controller.abort();
+  }, [attempt]);
+
+  return <section className="decision-summary" aria-labelledby={titleId}>
+    <h2 id={titleId}>Decision summary</h2>
+    <div role="status">
+      {result === 'loading' && <p>Loading decision summary…</p>}
+      {typeof result === 'object' && <dl>
+        <div><dt>Approved</dt><dd>{result.approved}</dd></div>
+        <div><dt>Rejected</dt><dd>{result.rejected}</dd></div>
+      </dl>}
+    </div>
+    {result === 'error' && <>
+      <p className="error" role="alert">Could not load decision summary.</p>
+      <button className="secondary-action" type="button" onClick={() => {
+        setResult('loading');
+        setAttempt((value) => value + 1);
+      }}>Retry</button>
+    </>}
+  </section>;
+}
 
 export function usePagination<T>(rows: T[]) {
   const [size, setSize] = useState(10);

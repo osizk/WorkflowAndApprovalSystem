@@ -1,4 +1,4 @@
-import { StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, Pagination, usePagination } from './workspace-ui';
+import { DecisionSummary, StatusFilter, StatusBadge, formatAmount, RequestHistory, RevisionNote, Pagination, usePagination } from './workspace-ui';
 import React, { useEffect, useState, type Ref } from 'react';
 import './reviewer.css';
 
@@ -107,7 +107,10 @@ export function ReviewWorkspace({ heading }: { heading: Ref<HTMLHeadingElement> 
   return <div className="workspace reviewer-page">
     {id && <a className="review-back" href="/reviews">Back to review queue</a>}
     <h1 id="page-title" ref={heading} tabIndex={-1}>{id ? request?.title ?? 'Review request' : 'Review Queue'}</h1>
-    {!id && <StatusFilter id="review-status-filter" value={statusFilter} onChange={changeStatusFilter} />}
+    {!id && <>
+      <DecisionSummary />
+      <StatusFilter id="review-status-filter" value={statusFilter} onChange={changeStatusFilter} />
+    </>}
     {error && <p className="error" role="alert">{error}</p>}
     {saved && <p role="status">Decision saved.</p>}
     {state === 'loading' && <p role="status">Loading review information…</p>}

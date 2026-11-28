@@ -241,6 +241,17 @@ button:disabled { opacity: .65; cursor: wait; }
   text-decoration: none;
 }
 .workspace-filters { padding: .75rem; margin-block: 1rem; background: var(--ui-panel); border-radius: 10px; }
+.decision-summary {
+  margin-block: 1rem;
+  padding: .75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: var(--ui-panel);
+}
+.decision-summary h2 { margin: 0 0 .5rem; font-size: 1rem; }
+.decision-summary p { margin: 0 0 .5rem; }
+.decision-summary dl { display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin: 0; }
+.decision-summary dd { margin: 0; font-size: 1.25rem; font-weight: 700; }
 .workspace-filters select {
   font: inherit;
   min-height: 44px;
